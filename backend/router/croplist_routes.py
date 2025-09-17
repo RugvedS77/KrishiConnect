@@ -1,0 +1,79 @@
+# router/croplist_routes.py
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from typing import List, Optional
+
+from database.postgresConn import get_db
+# FIX: Import models and schemas with aliases
+from models.all_model import CropList as CropListModel, User as UserModel, UserRole
+from schemas.all_schema import CropListResponse, CropListCreate, CropListUpdate, TokenData
+from auth import oauth2
+
+router = APIRouter(
+    prefix="/api/croplists",
+    tags=["Crop Lists"]
+)
+
+@router.post("/", response_model=CropListResponse, status_code=status.HTTP_201_CREATED)
+def create_croplist(
+    request: CropListCreate,
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user)
+):
+    user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.role != UserRole.farmer:
+        raise HTTPException(status_code=403, detail="Only farmers can create crop listings.")
+    
+    new_listing = CropListModel(**request.model_dump(), farmer_id=user.id)
+    db.add(new_listing)
+    db.commit()
+    db.refresh(new_listing)
+    return new_listing
+
+@router.put("/{list_id}", response_model=CropListResponse)
+def update_croplist(
+    list_id: int,
+    request: CropListUpdate,
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user)
+):
+    listing_query = db.query(CropListModel).filter(CropListModel.id == list_id)
+    listing = listing_query.first()
+    if not listing:
+        raise HTTPException(status_code=404, detail=f"Listing with ID {list_id} not found.")
+
+    user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+    if listing.farmer_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to update this listing.")
+    
+    listing_query.update(request.model_dump(exclude_unset=True))
+    db.commit()
+    return listing_query.first()
+
+@router.get("/", response_model=List[CropListResponse])
+def get_all_active_croplists(
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user),
+    crop_type: Optional[str] = None,
+    location: Optional[str] = None
+):
+    query = db.query(CropListModel).filter(CropListModel.status == 'active')
+    if crop_type:
+        query = query.filter(CropListModel.crop_type.ilike(f"%{crop_type}%"))
+    if location:
+        query = query.filter(CropListModel.location.ilike(f"%{location}%"))
+    return query.all()
+
+@router.get("/{list_id}", response_model=CropListResponse)
+def get_croplist_by_id(
+    list_id: int,
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user)
+):
+    listing = db.query(CropListModel).filter(CropListModel.id == list_id).first()
+    if not listing:
+        raise HTTPException(status_code=404, detail=f"Listing with ID {list_id} not found.")
+    return listing

@@ -8,6 +8,7 @@ from database.postgresConn import get_db
 # FIX: Import models and schemas with aliases
 from models.all_model import CropList as CropListModel, User as UserModel, UserRole
 from schemas.all_schema import CropListResponse, CropListCreate, CropListUpdate, TokenData
+from helpers.recommendation_engine import get_template_recommendation_with_llm
 from auth import oauth2
 
 router = APIRouter(
@@ -21,16 +22,26 @@ def create_croplist(
     db: Session = Depends(get_db),
     current_user: TokenData = Depends(oauth2.get_current_user)
 ):
+    # ... (your existing user and role check logic)
     user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if user.role != UserRole.farmer:
-        raise HTTPException(status_code=403, detail="Only farmers can create crop listings.")
+    if not user or user.role != UserRole.farmer:
+        raise HTTPException(status_code=403, detail="Only farmers can create listings.")
     
     new_listing = CropListModel(**request.model_dump(), farmer_id=user.id)
     db.add(new_listing)
     db.commit()
     db.refresh(new_listing)
+    
+    # Get the AI recommendation
+    recommendation_data = get_template_recommendation_with_llm(new_listing)
+    
+    # FIX: Save the recommendation to the database
+    if recommendation_data:
+        new_listing.recommended_template_name = recommendation_data.get("template_name")
+        new_listing.recommendation_reason = recommendation_data.get("reason")
+        db.commit()
+        db.refresh(new_listing)
+
     return new_listing
 
 @router.put("/{list_id}", response_model=CropListResponse)
@@ -65,7 +76,16 @@ def get_all_active_croplists(
         query = query.filter(CropListModel.crop_type.ilike(f"%{crop_type}%"))
     if location:
         query = query.filter(CropListModel.location.ilike(f"%{location}%"))
-    return query.all()
+
+    listings = query.all()
+        # FIX: Hide private recommendations from users who are not the owner
+    user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+    for listing in listings:
+        if listing.farmer_id != user.id:
+            listing.recommended_template_name = None
+            listing.recommendation_reason = None
+    
+    return listings
 
 @router.get("/{list_id}", response_model=CropListResponse)
 def get_croplist_by_id(
@@ -76,4 +96,12 @@ def get_croplist_by_id(
     listing = db.query(CropListModel).filter(CropListModel.id == list_id).first()
     if not listing:
         raise HTTPException(status_code=404, detail=f"Listing with ID {list_id} not found.")
+    # Hide the recommendation if the requester is not the owner
+    user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+
+    if listing.farmer_id != user.id:
+        listing.recommended_template_name = None
+        listing.recommendation_reason = None
+        
     return listing
+

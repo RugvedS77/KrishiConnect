@@ -40,10 +40,14 @@ class UserResponse(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
 # --- CropList Schemas ---
+class Recommendation(BaseModel):
+    template_name: str
+    reason: str
 
 class CropListBase(BaseModel):
     crop_type: str
     quantity: float
+    unit: str
     expected_price_per_unit: Decimal
     harvest_date: date
     location: str
@@ -51,7 +55,7 @@ class CropListBase(BaseModel):
     farming_practice: Optional[str] = None
     Soil_type: str
     irrigation_source: Optional[str] = None
-    photo_url: Optional[str] = None
+    img_url: Optional[str] = None
 
 class CropListCreate(CropListBase):
     pass
@@ -62,11 +66,15 @@ class CropListResponse(CropListBase):
     status: str
     created_at: datetime
     farmer: User
+    recommended_template_name: Optional[str] = None
+    recommendation_reason: Optional[str] = None
+    
     model_config = ConfigDict(from_attributes=True)
 
 class CropListUpdate(BaseModel):
     crop_type: Optional[str] = None
     quantity: Optional[float] = None
+    unit: Optional[str] = None
     status: Optional[str] = None
     # ADDED: New fields can also be updatable
     farming_practice: Optional[str] = None
@@ -96,6 +104,9 @@ class Transaction(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 # --- Contract & Milestone Schemas ---
+class MilestoneCreate(BaseModel):
+    update_text: Optional[str] = None
+    image_url: str # The public URL from Supabase is now a required string
 
 class Milestone(BaseModel):
     id: int
@@ -130,6 +141,15 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+# --- NEW SCHEMA for the Compliance Helper's response ---
+class AIAdvice(BaseModel):
+    id: int
+    contract_id: int
+    generated_at: datetime
+    advice_text: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 # This final call is important for Pydantic to resolve the relationship
 # between User and CropList correctly.

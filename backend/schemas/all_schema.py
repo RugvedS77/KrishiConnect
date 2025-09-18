@@ -104,16 +104,26 @@ class Transaction(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 # --- Contract & Milestone Schemas ---
-class MilestoneCreate(BaseModel):
-    update_text: Optional[str] = None
-    image_url: str # The public URL from Supabase is now a required string
-
 class Milestone(BaseModel):
     id: int
+    # ADDED: New fields
+    name: str
+    amount: Decimal
+    is_complete: bool # 'done' in the frontend
+    
     update_text: Optional[str] = None
     image_url: Optional[str] = None
+    ai_notes: Optional[str] = None
+    payment_released: bool # 'paid' in the frontend
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
+
+class MilestoneCreate(BaseModel):
+    # ADDED: name and amount are required when creating a milestone
+    name: str
+    amount: Decimal
+    update_text: Optional[str] = None
+    image_url: str
 
 class ContractBase(BaseModel):
     quantity_proposed: float
@@ -122,16 +132,26 @@ class ContractBase(BaseModel):
 
 class ContractCreate(ContractBase):
     listing_id: int
+    # ADDED: Allow buyer to specify payment terms when proposing
+    payment_terms: Optional[str] = 'final' # Can be 'milestone' or 'final'
 
 class ContractResponse(ContractBase):
     id: int
     status: str
+    # ADDED: Show payment terms in the response
+    payment_terms: str
     created_at: datetime
     listing: CropListResponse
     buyer: User
     farmer: User
     milestones: List[Milestone] = []
     model_config = ConfigDict(from_attributes=True)
+
+# NEW: A comprehensive response for the dashboard
+class ContractDashboardResponse(ContractResponse):
+    total_value: Decimal
+    escrow_amount: Decimal
+    amount_paid: Decimal
     
 # --- Auth Schemas ---
 
@@ -153,4 +173,4 @@ class AIAdvice(BaseModel):
 
 # This final call is important for Pydantic to resolve the relationship
 # between User and CropList correctly.
-UserResponse.model_rebuild()
+ContractResponse.model_rebuild()

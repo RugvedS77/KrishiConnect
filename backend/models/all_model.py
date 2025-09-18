@@ -3,7 +3,7 @@
 import enum
 from sqlalchemy import (
     Column, Integer, String, Float, Date, Enum,
-    ForeignKey, DateTime, Text, Numeric
+    ForeignKey, DateTime, Text, Numeric, Boolean
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -73,6 +73,8 @@ class Contract(Base):
     quantity_proposed = Column(Float, nullable=False)
     price_per_unit_agreed = Column(Numeric(10, 2), nullable=False)
     status = Column(Enum(ContractStatus), default=ContractStatus.pending_farmer_approval, nullable=False)
+    # ADDED: To define how payments are released ('milestone' or 'final')
+    payment_terms = Column(String, default="final", nullable=False)
     summary = Column(Text, nullable=True)
     # other_details = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -89,11 +91,17 @@ class Milestone(Base):
     __tablename__ = "milestones"
     id = Column(Integer, primary_key=True, index=True)
     contract_id = Column(Integer, ForeignKey("contracts.id"), nullable=False)
+    # ADDED: To store the milestone's name and value
+    name = Column(String, nullable=False)
+    amount = Column(Numeric(12, 2), nullable=False)
+    
     update_text = Column(String, nullable=True)
     image_url = Column(String, nullable=True)
-    # To store the AI analysis of the milestone image
-    ai_notes = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    ai_notes = Column(Text, nullable=True)
+    payment_released = Column(Boolean, default=False, nullable=False)
+    # ADDED: A "done" flag for the farmer to mark completion, which the buyer then verifies by paying.
+    is_complete = Column(Boolean, default=False, nullable=False)
     
     contract = relationship("Contract", back_populates="milestones")
 

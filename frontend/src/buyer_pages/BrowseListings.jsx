@@ -1,10 +1,11 @@
 // src/pages/BrowseListings.jsx
 
 import React, { useState } from 'react';
+// ✅ Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Wheat, Search, User, BarChart, Droplets, Camera, Info, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
-// --- Dummy Data with more details ---
+// --- Dummy Data (no change) ---
 const cropListings = [
     { 
         id: 1, name: 'Organic Wheat', quantity: '500 Tons', harvestDate: '2025-11-15', location: 'Punjab, IN', price: '$250/Ton', farmer: 'Raj Patel', farmer_id: 'FARM_PNJ_0012',
@@ -23,7 +24,7 @@ const cropListings = [
     },
 ];
 
-// --- MODAL COMPONENT for displaying detailed information ---
+// --- MODAL COMPONENT (no change) ---
 const CropDetailsModal = ({ crop, onClose }) => {
     const [mainImage, setMainImage] = useState(crop.photos[0]);
 
@@ -75,8 +76,18 @@ const CropDetailsModal = ({ crop, onClose }) => {
     );
 };
 
-// --- CARD COMPONENT (now simplified) ---
+// --- CARD COMPONENT (now with useNavigate) ---
 const CropListingCard = ({ crop, onViewDetails }) => {
+    // ✅ Get the navigate function from the hook
+    const navigate = useNavigate();
+
+    // ✅ Handle navigation
+    const handleProposeClick = () => {
+        // Use relative path: from '/buyer/browse' to '/buyer/propose/:id'
+        // This is cleaner as it doesn't hardcode '/buyer'
+        navigate(`../propose/${crop.id}`);
+    };
+
     return (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col">
             <img src={crop.photos[0]} alt={crop.name} className="w-full h-48 object-cover rounded-t-lg" />
@@ -95,12 +106,13 @@ const CropListingCard = ({ crop, onViewDetails }) => {
                     <button onClick={() => onViewDetails(crop)} className="text-sm font-semibold text-blue-600 hover:underline">
                         View Details
                     </button>
-                    <Link 
-                        to={`/propose/templates?cropId=${crop.id}`}
+                    {/* ✅ Changed from <Link> to <button> with onClick */}
+                    <button 
+                        onClick={handleProposeClick}
                         className="bg-green-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-700 text-sm text-center"
                     >
                         Propose Contract
-                    </Link>
+                    </button>
                 </div>
             </div>
         </div>

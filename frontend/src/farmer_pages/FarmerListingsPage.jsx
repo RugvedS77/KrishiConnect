@@ -33,7 +33,7 @@ export default function FarmerListingsPage() {
   const navigate = useNavigate();
 
   const handleListingClick = (id) => {
-    navigate(`/buyer-proposals/all-proposals`);
+    navigate(`all-proposals`);
     // Later you can do: navigate(`/buyer-proposals/${id}`);
   };
 

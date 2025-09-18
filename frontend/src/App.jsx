@@ -82,8 +82,9 @@ function App() {
       ),
       errorElement: <FarmerErrorPage />,
       children: [
-        { index: true, element: <Navigate to="dashboard" replace /> }, // ✅ redirect
-        { path: 'dashboard', element: <FarmerDashboard /> }, // ✅ FIXED
+        // { index: true, element: <Navigate to="dashboard" replace /> },
+        // { path: 'dashboard', element: <FarmerDashboard /> },
+        { index: true, element: <FarmerDashboard /> },
         { path: 'create-listing', element: <CreateListingPage /> },
         {
           path: 'buyer-proposals',
@@ -109,12 +110,14 @@ function App() {
         </BuyerProtectedRoute>
       ),
       children: [
-        { path: 'dashboard', element: <BuyerDashboard /> },
+        // { index: true, element: <Navigate to="dashboard" replace /> },
+        // { path: 'dashboard', element: <BuyerDashboard /> },
+        { index: true, element: <BuyerDashboard /> },
         { path: 'browse', element: <BrowseListings /> },
         { path: 'contracts', element: <OngoingContracts /> },
         { path: 'payments', element: <Payments /> },
         { path: 'profile', element: <BuyerProfile /> },
-        { path: 'propose/templates', element: <ContractTemplatesPage /> },
+        { path: 'propose/:cropId', element: <ContractTemplatesPage /> },
       ],
     },
   ]);
@@ -126,85 +129,3 @@ export default App;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const router = createBrowserRouter([
-//     // ---------- Public Routes ----------
-//     {
-//       path: '/',
-//       element: <LandingPage />,
-//       errorElement: <FarmerErrorPage />,
-//     },
-//     {
-//       path: '/login-farmer',
-//       element: <FarmerLoginPage />,
-//       children: [
-//         {
-//           path: '/farmer',
-//           element: (
-//             <FarmerProtectedRoute>
-//               <FarmerLayout />
-//             </FarmerProtectedRoute>
-//           ),
-//           errorElement: <FarmerErrorPage />,
-//           children: [
-//             { index: true, element: <FarmerDashboard /> },
-//             { path: 'create-listing', element: <CreateListingPage /> },
-//             {
-//               path: 'buyer-proposals',
-//               element: <Outlet />,
-//               children: [
-//                 { index: true, element: <FarmerListingsPage /> },
-//                 { path: 'all-proposals', element: <BuyerProposalsPage /> },
-//               ],
-//             },
-//             { path: 'ongoing-contracts', element: <OngoingContractsPage /> },
-//             { path: 'completed-contracts', element: <CompletedContractsPage /> },
-//             { path: 'profile', element: <ProfilePage /> },
-//             { path: 'support', element: <SupportPage /> },
-//           ],
-//         },
-//       ]
-//     },
-//     {
-//       path: '/login-buyer',
-//       element: <BuyerLoginPage />,
-//       children: [
-//         {
-//           path: '/buyer',
-//           element: (
-//             <BuyerProtectedRoute>
-//               <BuyerLayout />
-//             </BuyerProtectedRoute>
-//           ),
-//           children: [
-//             { index: true, element: <BuyerDashboard /> },
-//             { path: 'browse', element: <BrowseListings /> },
-//             { path: 'contracts', element: <OngoingContracts /> },
-//             { path: 'payments', element: <Payments /> },
-//             { path: 'profile', element: <BuyerProfile /> },
-//             { path: 'propose/templates', element: <ContractTemplatesPage /> },
-//           ],
-//         },
-//       ]
-//     },
-//   ]);

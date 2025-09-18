@@ -1,15 +1,18 @@
 // src/pages/ContractTemplatesPage.jsx
 
 import React, { useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+// ✅ CHANGED: Import useParams instead of useSearchParams
+import { useParams, Link } from 'react-router-dom';
 import { cropListings, buyerDetails } from '../assets/data'; // Import mock data
 import { ArrowLeft, Send } from 'lucide-react';
 
 const ContractTemplatesPage = () => {
-  const [searchParams] = useSearchParams();
+  // ✅ CHANGED: Use useParams to get the cropId from the URL
+  const { cropId: cropIdFromParams } = useParams();
   const [selectedTemplate, setSelectedTemplate] = useState('simple-supply'); // Default to first template
   
-  const cropId = parseInt(searchParams.get('cropId'));
+  // ✅ CHANGED: Parse the ID from the params
+  const cropId = parseInt(cropIdFromParams);
   const crop = cropListings.find(c => c.id === cropId);
 
   const templates = [
@@ -20,7 +23,8 @@ const ContractTemplatesPage = () => {
   ];
 
   if (!crop) {
-    return <div>Error: Crop not found.</div>;
+    // I've made the error slightly more helpful for debugging
+    return <div>Error: Crop not found. (Attempted to find ID: {cropIdFromParams})</div>;
   }
   
   const renderForm = () => {
@@ -36,7 +40,8 @@ const ContractTemplatesPage = () => {
   return (
     <div className="space-y-6">
       <header className="flex items-center space-x-3">
-        <Link to="/browse" className="p-2 rounded-full hover:bg-gray-200">
+        {/* ✅ CHANGED: Link is now relative, so it goes back to /buyer/browse */}
+        <Link to="../browse" className="p-2 rounded-full hover:bg-gray-200">
           <ArrowLeft size={24} />
         </Link>
         <div>
@@ -61,8 +66,7 @@ const ContractTemplatesPage = () => {
                 }`}
               >
                 {template.title}
-              </button>
-            ))}
+              </button>            ))}
           </div>
         </div>
 

@@ -5,17 +5,17 @@ export default function MilestoneStep({ name, status, isLast }) {
     switch (status) {
       case 'completed':
         return {
-          circle: 'bg-blue-600 border-blue-600',
+          circle: 'bg-green-600 border-green-600',
           icon: 'fa-check text-white',
-          line: 'bg-blue-600',
+          line: 'bg-green-600',
           text: 'text-gray-900 font-medium',
         };
       case 'in_progress':
         return {
-          circle: 'bg-white border-4 border-blue-600 animate-pulse',
+          circle: 'bg-white border-4 border-green-600 animate-pulse',
           icon: '',
           line: 'bg-gray-300',
-          text: 'text-blue-600 font-bold',
+          text: 'text-green-600 font-bold',
         };
       case 'pending':
       default:

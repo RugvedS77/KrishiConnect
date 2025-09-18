@@ -55,15 +55,15 @@ export default function SupportPage() {
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center">
-                <i className="fas fa-envelope text-blue-500 w-5 mr-3"></i>
+                <i className="fas fa-envelope text-green-500 w-5 mr-3"></i>
                 <span className="text-gray-700">support@agricontract.com</span>
               </div>
               <div className="flex items-center">
-                <i className="fas fa-phone text-blue-500 w-5 mr-3"></i>
+                <i className="fas fa-phone text-green-500 w-5 mr-3"></i>
                 <span className="text-gray-700">+91-22-12345678</span>
               </div>
             </div>
-            <button className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <button className="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
               Submit a Ticket
             </button>
           </div>
@@ -75,19 +75,19 @@ export default function SupportPage() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-blue-600 hover:underline flex items-center">
+                <a href="#" className="text-green-600 hover:underline flex items-center">
                   <i className="fas fa-book-open mr-2 text-sm"></i>
                   How to create an effective listing
                 </a>
               </li>
               <li>
-                <a href="#" className="text-blue-600 hover:underline flex items-center">
+                <a href="#" className="text-green-600 hover:underline flex items-center">
                   <i className="fas fa-book-open mr-2 text-sm"></i>
                   Understanding payment escrow
                 </a>
               </li>
               <li>
-                <a href="#" className="text-blue-600 hover:underline flex items-center">
+                <a href="#" className="text-green-600 hover:underline flex items-center">
                   <i className="fas fa-book-open mr-2 text-sm"></i>
                   How to handle contract disputes
                 </a>

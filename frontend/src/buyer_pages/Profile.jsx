@@ -30,7 +30,7 @@ const Profile = () => {
             <div className="w-20 h-20 rounded-full bg-green-200 flex items-center justify-center">
               <User className="text-green-700" size={40} />
             </div>
-            <h3 className="text-xl font-semibold mt-3 text-gray-800">John Doe</h3>
+            <h3 className="text-xl font-semibold mt-3 text-gray-800">Mayuresh Marade</h3>
             <p className="text-sm text-gray-500">Wholesaler</p>
           </div>
 

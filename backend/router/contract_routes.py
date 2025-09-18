@@ -124,59 +124,6 @@ def accept_contract(
     db.refresh(contract)
     return contract
 
-# --- NEW ENDPOINT ADDED BELOW ---
-
-# @router.post("/{contract_id}/compliance-check", response_model=ContractResponse)
-# def get_contract_compliance_advice(
-#     contract_id: int,
-#     db: Session = Depends(get_db),
-#     current_user: TokenData = Depends(oauth2.get_current_user)
-# ):
-#     """
-#     [FARMER ONLY] Triggers the Compliance Helper to generate advice for a contract.
-#     """
-#     farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
-#     contract = db.query(ContractModel).filter(ContractModel.id == contract_id).first()
-
-#     if not contract:
-#         raise HTTPException(status_code=404, detail="Contract not found.")
-    
-#     if contract.farmer_id != farmer.id:
-#         raise HTTPException(status_code=403, detail="You are not authorized to get advice for this contract.")
-        
-#     # # 1. Call the AI helper to generate the advice
-#     # advice_text = get_compliance_advice(contract, db)
-    
-#     # # 2. Save the new advice to the database
-#     # new_advice = AIAdviceModel(
-#     #     contract_id=contract.id,
-#     #     advice_text=advice_text
-#     # )
-
-#     if contract.status != ContractStatus.ongoing:
-#         raise HTTPException(status_code=400, detail="Contract is not ongoing.")
-        
-#     transactions = db.query(TransactionModel).filter(TransactionModel.contract_id == contract_id).all()
-#     escrowed_amount = sum(t.amount for t in transactions if t.type == 'escrow')
-#     released_amount = sum(t.amount for t in transactions if t.type == 'release')
-#     final_payment = escrowed_amount - released_amount
-
-#     if final_payment > 0:
-#         farmer_wallet = db.query(WalletModel).filter(WalletModel.user_id == contract.farmer_id).first()
-#         farmer_wallet.balance += final_payment
-#         release_transaction = TransactionModel(
-#             wallet_id=farmer_wallet.id,
-#             contract_id=contract.id,
-#             amount=final_payment,
-#             type="release"
-#         )
-#         db.add(release_transaction)
-    
-#     contract.status = ContractStatus.completed
-#     db.commit()
-#     db.refresh(contract)
-#     return contract
-
 
 # FIX: This endpoint had the wrong logic. It should generate and save advice.
 @router.post("/{contract_id}/compliance-check", response_model=AIAdviceSchema)

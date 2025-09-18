@@ -11,7 +11,7 @@ const Navbar = () => (
       {/* Logo */}
       <Link to="/" className="flex items-center space-x-2">
         <Leaf className="h-8 w-8 text-white" />
-        <span className="text-2xl font-bold text-white">Agri-Connector</span>
+        <span className="text-2xl font-bold text-white">KrishiConnect</span>
       </Link>
       
       {/* Login Buttons */}
@@ -195,12 +195,12 @@ const LandingPage = () => {
         <div className="container mx-auto px-6 text-center">
           <div className="flex justify-center items-center space-x-2 mb-4">
             <Leaf className="h-7 w-7 text-green-400" />
-            <span className="text-2xl font-bold">Agri-Connector</span>
+            <span className="text-2xl font-bold">KrishiConnect</span>
           </div>
           <p className="text-gray-400 max-w-lg mx-auto mb-6">
             Connecting the roots of agriculture with the branches of technology.
           </p>
-          <p className="text-gray-500">&copy; 2025 Agri-Connector. All Rights Reserved.</p>
+          <p className="text-gray-500">&copy; 2025 KrishiConnect. All Rights Reserved.</p>
         </div>
       </footer>
     </div>

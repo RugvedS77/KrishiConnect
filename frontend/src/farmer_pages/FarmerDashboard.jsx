@@ -85,8 +85,8 @@ export default function FarmerDashboard() {
               ₹{walletBalance}
             </p>
           </div>
-          <div className="bg-blue-100 p-3 rounded-full">
-             <Wallet className="h-8 w-8 text-blue-600" />
+          <div className="bg-green-100 p-3 rounded-full">
+             <Wallet className="h-8 w-8 text-green-600" />
           </div>
         </div>
 
@@ -100,8 +100,8 @@ export default function FarmerDashboard() {
               {ongoingContracts}
             </p>
           </div>
-          <div className="bg-blue-100 p-3 rounded-full">
-            <FileSignature className="h-8 w-8 text-blue-600" />
+          <div className="bg-green-100 p-3 rounded-full">
+            <FileSignature className="h-8 w-8 text-green-600" />
           </div>
         </div>
 
@@ -115,15 +115,15 @@ export default function FarmerDashboard() {
               {pendingProposals}
             </p>
           </div>
-          <div className="bg-blue-100 p-3 rounded-full">
-            <Inbox className="h-8 w-8 text-blue-600" />
+          <div className="bg-green-100 p-3 rounded-full">
+            <Inbox className="h-8 w-8 text-green-600" />
           </div>
         </div>
       </div>
 
       {/* --- Live Crop Prices Component --- */}
       <div className="w-full mx-auto p-6 bg-white shadow-lg rounded-xl mt-8">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
+        <h2 className="text-2xl font-bold mb-6 text-center text-green-700">
           🌾 Live Mandi Prices
         </h2>
 
@@ -133,7 +133,7 @@ export default function FarmerDashboard() {
           <div>
             <label className="block font-medium mb-1 text-sm text-gray-600">Crop:</label>
             <select
-              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
               value={cropName}
               onChange={(e) => setCropName(e.target.value)}
             >
@@ -150,7 +150,7 @@ export default function FarmerDashboard() {
           <div>
             <label className="block font-medium mb-1 text-sm text-gray-600">State:</label>
             <select
-              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
               value={state}
               onChange={(e) => {
                 setState(e.target.value);
@@ -170,7 +170,7 @@ export default function FarmerDashboard() {
           <div>
             <label className="block font-medium mb-1 text-sm text-gray-600">District:</label>
             <select
-              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
               disabled={!state}
@@ -186,7 +186,7 @@ export default function FarmerDashboard() {
         </div>
 
         <button
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md mb-6 transition-colors duration-300"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md mb-6 transition-colors duration-300"
           onClick={fetchCropPrices}
           disabled={loading}
         >
@@ -203,14 +203,14 @@ export default function FarmerDashboard() {
         {hasSearched && !loading && cropData.length > 0 && (
           <div className="overflow-x-auto">
             <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Results for <span className="text-blue-700">{cropName}</span> in{" "}
-              <span className="text-blue-700">
+              Results for <span className="text-green-700">{cropName}</span> in{" "}
+              <span className="text-green-700">
                 {district}, {state}
               </span>
             </h3>
 
             <table className="min-w-full border border-gray-300 rounded-md overflow-hidden">
-              <thead className="bg-blue-100 text-left">
+              <thead className="bg-green-100 text-left">
                 <tr>
                   <th className="py-2 px-4 border-b border-gray-300">📅 Date</th>
                   <th className="py-2 px-4 border-b border-gray-300">🏬 Mandi</th>

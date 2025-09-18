@@ -100,7 +100,7 @@ const BuyerSignupPage = () => {
         <div className="text-center mb-6">
           <Link to="/" className="flex items-center justify-center space-x-2">
             <Leaf className="h-8 w-8 text-green-600" />
-            <span className="text-2xl font-bold text-gray-800">Agri-Connector</span>
+            <span className="text-2xl font-bold text-gray-800">KrishiConnect</span>
           </Link>
         </div>
 
@@ -172,7 +172,7 @@ const BuyerSignupPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 shadow-sm"
                 required
-                minLength="8"
+                minLength="5"
               />
             </div>
           </div>

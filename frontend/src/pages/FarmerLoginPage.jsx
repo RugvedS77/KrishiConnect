@@ -89,7 +89,7 @@ const FarmerLoginPage = () => {
         <div className="text-center mb-6">
           <Link to="/" className="flex items-center justify-center space-x-2">
             <Leaf className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-800">Agri-Connector</span>
+            <span className="text-2xl font-bold text-gray-800">KrishiConnect</span>
           </Link>
         </div>
 

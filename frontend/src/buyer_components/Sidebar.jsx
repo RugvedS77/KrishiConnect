@@ -35,7 +35,7 @@ const Sidebar = () => {
   return (
     <aside className="w-64 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col">
       <div className="h-16 flex items-center px-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-green-700">AgriConnect</h1>
+        <h1 className="text-xl font-bold text-green-700">KrishiConnect</h1>
       </div>
       <nav className="flex-1 py-6 px-4 space-y-2">
         {navLinks.map((link) => (
@@ -55,7 +55,7 @@ const Sidebar = () => {
         <Link to="profile" className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-all duration-200">
           <img src={ProfilePic} alt="Buyer Profile" className="h-10 w-10 rounded-full object-cover" />
           <div>
-            <p className="font-semibold text-sm text-gray-800">John Doe</p>
+            <p className="font-semibold text-sm text-gray-800">Mayuresh Marade</p>
             <p className="text-xs text-gray-500">Wholesaler</p>
           </div>
         </Link>

@@ -123,7 +123,7 @@ class MilestoneCreate(BaseModel):
     name: str
     amount: Decimal
     update_text: Optional[str] = None
-    image_url: str
+    image_url: Optional[str] = None
 
 class ContractBase(BaseModel):
     quantity_proposed: float

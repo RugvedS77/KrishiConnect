@@ -18,7 +18,7 @@ function CustomLink({ to, icon, children, end = false }) {
     <Link
       to={to}
       className={`py-3 px-4 rounded flex items-center w-full text-left transition-all duration-200
-        ${match ? "bg-blue-600" : "hover:bg-gray-700 hover:translate-x-1"}`}
+        ${match ? "bg-green-600" : "hover:bg-gray-700 hover:translate-x-1"}`}
     >
       <i className={`fas ${icon} mr-3 w-5 text-center`} aria-hidden="true"></i>
       {children}
@@ -38,7 +38,7 @@ export default function Sidebar() {
       <div>
         {/* Logo */}
         <h1 className="text-2xl font-bold mb-6 flex items-center">
-          <i className="fas fa-seedling mr-2"></i> AgriContract
+          <i className="fas fa-seedling mr-2"></i> KrishiConnect
         </h1>
 
         {/* Nav links */}

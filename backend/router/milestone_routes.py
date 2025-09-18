@@ -32,7 +32,8 @@ def create_milestone_for_contract(contract_id: int, request: MilestoneCreate, db
     if not contract or contract.farmer_id != farmer.id:
         raise HTTPException(status_code=403, detail="You are not authorized to update this contract.")
 
-    ai_analysis_notes = analyze_milestone_image(request.image_url)
+    # ai_analysis_notes = analyze_milestone_image(request.image_url)
+    
 
     new_milestone = MilestoneModel(
         contract_id=contract_id,
@@ -40,7 +41,7 @@ def create_milestone_for_contract(contract_id: int, request: MilestoneCreate, db
         amount=request.amount,
         update_text=request.update_text,
         image_url=request.image_url,
-        ai_notes=ai_analysis_notes,
+        ai_notes=None,
         is_complete=True
     )
     db.add(new_milestone)

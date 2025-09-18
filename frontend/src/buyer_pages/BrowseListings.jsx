@@ -8,19 +8,19 @@ import { MapPin, Calendar, Wheat, Search, User, BarChart, Droplets, Camera, Info
 // --- Dummy Data (no change) ---
 const cropListings = [
     { 
-        id: 1, name: 'Organic Wheat', quantity: '500 Tons', harvestDate: '2025-11-15', location: 'Punjab, IN', price: '$250/Ton', farmer: 'Raj Patel', farmer_id: 'FARM_PNJ_0012',
+        id: 1, name: 'Organic Wheat', quantity: '500 Tons', harvestDate: '2025-11-15', location: 'Punjab, IN', price: 'Rs.250/Ton', farmer: 'Raj Patel', farmer_id: 'FARM_PNJ_0012',
         farming_practices: 'Certified Organic, No-Till Farming, Crop Rotation', soil_type: 'Alluvial Loam', irrigation_sources: 'Canal Irrigation, Rainwater Harvesting',
-        photos: ['https://images.unsplash.com/photo-1593322199273-c624c9455325?w=500', 'https://images.unsplash.com/photo-1542223616-740d5dff7f56?w=500', 'https://images.unsplash.com/photo-1627852359227-a57929109e8a?w=500']
+        photos: ['https://mittalorganics.com/cdn/shop/files/3_86b1af86-7b6e-41b6-9182-4596dc663b44.webp?v=1704383045&width=1445', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZdMFupkwcW7lhpV-uODtL3um12C_9OIiNnQ&s', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6xnFwqX7E__knVtY6RMquz-pblKWuvt1anQ&s']
     },
     { 
-        id: 2, name: 'Basmati Rice', quantity: '1200 Tons', harvestDate: '2025-12-01', location: 'Haryana, IN', price: '$800/Ton', farmer: 'Anita Kaur', farmer_id: 'FARM_HR_0089',
+        id: 2, name: 'Basmati Rice', quantity: '1200 Tons', harvestDate: '2025-12-01', location: 'Haryana, IN', price: 'Rs.800/Ton', farmer: 'Anita Kaur', farmer_id: 'FARM_HR_0089',
         farming_practices: 'Integrated Pest Management (IPM), Drip Irrigation', soil_type: 'Clay Loam', irrigation_sources: 'Tube Well',
-        photos: ['https://images.unsplash.com/photo-1586201375765-c128505293de?w=500', 'https://images.unsplash.com/photo-1536384459935-ace3552088f1?w=500']
+        photos: ['https://www.jiomart.com/images/product/original/rvscgaafd3/platone-pusa-basmati-paddy-1692-rice-seeds-for-sowing-farming-agriculture-1-kg-pack-of1-product-images-orvscgaafd3-p598232261-0-202302081805.jpg?im=Resize=(1000,1000)', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1mdTgxTOzPOD8dowveHOrAWG6dKklOA6igHeeKE4DjYD7LkdRJcpzLk7po3f7W_y01uY&usqp=CAU']
     },
     { 
-        id: 3, name: 'Fresh Tomatoes', quantity: '200 Tons', harvestDate: '2025-10-25', location: 'Maharashtra, IN', price: '$400/Ton', farmer: 'Suresh Rao', farmer_id: 'FARM_MH_0145',
+        id: 3, name: 'Fresh Tomatoes', quantity: '200 Tons', harvestDate: '2025-10-25', location: 'Maharashtra, IN', price: 'Rs.400/Ton', farmer: 'Suresh Rao', farmer_id: 'FARM_MH_0145',
         farming_practices: 'Greenhouse Farming, Organic Fertilizers', soil_type: 'Red Sandy Soil', irrigation_sources: 'Drip Irrigation',
-        photos: ['https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=500', 'https://images.unsplash.com/photo-1561138299-323262a3a1ad?w=500', 'https://images.unsplash.com/photo-1589924846366-9884586295ab?w=500']
+        photos: ['https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=500', 'https://www.richardjacksonsgarden.co.uk/wp-content/uploads/2021/04/AdobeStock_554658202_1200px.jpg.webp', 'https://www.bhg.com/thmb/q8rfs1JikMcnBN8StgjLdYFwHdE=/4000x0/filters:no_upscale():strip_icc()/BHG-Cherry-Tomato-Plant-1407386653-69dc42c014cb4fc1a9788e595cf000b7.jpg']
     },
 ];
 
@@ -47,9 +47,9 @@ const CropDetailsModal = ({ crop, onClose }) => {
                                 <img 
                                     key={index} 
                                     src={photo} 
-                                    alt={`Thumbnail ${index + 1}`} 
+                                    alt={`Thumbnail Rs.{index + 1}`} 
                                     onClick={() => setMainImage(photo)}
-                                    className={`w-20 h-20 object-cover rounded-md border-2 cursor-pointer ${mainImage === photo ? 'border-green-500' : 'border-transparent'}`} 
+                                    className={`w-20 h-20 object-cover rounded-md border-2 cursor-pointer Rs.{mainImage === photo ? 'border-green-500' : 'border-transparent'}`} 
                                 />
                             ))}
                          </div>
@@ -85,7 +85,7 @@ const CropListingCard = ({ crop, onViewDetails }) => {
     const handleProposeClick = () => {
         // Use relative path: from '/buyer/browse' to '/buyer/propose/:id'
         // This is cleaner as it doesn't hardcode '/buyer'
-        navigate(`../propose/${crop.id}`);
+        navigate(`../propose/Rs.{crop.id}`);
     };
 
     return (

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 // Corrected paths to match your structure
 import FormInput from "../farmer_components/CreateListing/FormInput";
 import FormSelect from "../farmer_components/CreateListing/FormSelect";
-import ImageUpload from "../farmer_components/CreateListing/ImageUpload";
-import { supabase } from "../supabaseClient"; // ✅ Ensure this path is correct
+// import ImageUpload from "../farmer_components/CreateListing/ImageUpload"; // Removed
+// import { supabase } from "../supabaseClient"; // Removed
 
 export default function CreateListingPage() {
   // --- 1. State ---
@@ -19,8 +19,8 @@ export default function CreateListingPage() {
     irrigationSource: "",
   });
 
-  const [imagePreviews, setImagePreviews] = useState([]);
-  const [isUploading, setIsUploading] = useState(false);
+  // const [imagePreviews, setImagePreviews] = useState([]); // Removed
+  const [isSubmitting, setIsSubmitting] = useState(false); // Renamed from isUploading
 
   // --- 2. Handle form field changes ---
   const handleChange = (e) => {
@@ -28,109 +28,30 @@ export default function CreateListingPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // --- 3. Upload images to Supabase ---
-  const uploadImages = async (session) => {
-    const imageUrls = [];
+  // --- 3. Upload images to Supabase --- (REMOVED)
 
-    // Set the user's session token on the Supabase client
-    // This is crucial for the upload policy to work
-    if (session) {
-      supabase.auth.setSession(session);
-    }
-
-    for (const preview of imagePreviews) {
-      const file = preview.fileObject;
-      const fileExtension = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random()
-        .toString(36)
-        .substring(2, 9)}.${fileExtension}`;
-      const filePath = `FarmerListing/${fileName}`;
-
-      // Upload image
-      const { data, error } = await supabase.storage
-        .from("CropImages")
-        .upload(filePath, file);
-
-      if (error) {
-        console.error("Error uploading image:", error);
-        return null;
-      }
-
-      // Get public URL
-      const { data: publicUrlData } = supabase.storage
-        .from("CropImages")
-        .getPublicUrl(data.path);
-
-      imageUrls.push(publicUrlData.publicUrl);
-    }
-    return imageUrls;
-  };
-
-  // --- 4. Handle form submit ---
+  // --- 4. Handle form submit (NOW MOCKED) ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsUploading(true);
+    setIsSubmitting(true);
 
-    if (imagePreviews.length === 0) {
-      alert("Please upload at least one image.");
-      setIsUploading(false);
-      return;
-    }
+    // --- Final data ---
+    // This is the data that *would* be sent to your backend
+    const finalData = {
+      ...formData,
+      quantity: `${formData.quantityValue} ${formData.quantityUnit}`,
+    };
 
-    // Get the user's session
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      alert("You must be logged in to create a listing.");
-      setIsUploading(false);
-      return;
-    }
+    // Clean up the object
+    delete finalData.quantityValue;
+    delete finalData.quantityUnit;
 
-    try {
-      // Pass the session to the upload function
-      const uploadedUrls = await uploadImages(session);
+    // --- Mock API request ---
+    console.log("Mock Submit - Final Data:", finalData);
 
-      if (!uploadedUrls) {
-        alert("Image upload failed. Please try again.");
-        setIsUploading(false);
-        return;
-      }
-
-      const imageUrlsAsString = uploadedUrls
-        .filter((url) => url !== null)
-        .join(",");
-
-      // --- Final data ---
-      const finalData = {
-        ...formData,
-        photo_url: imageUrlsAsString,
-        quantity: `${formData.quantityValue} ${formData.quantityUnit}`,
-      };
-
-      delete finalData.quantityValue;
-      delete finalData.quantityUnit;
-
-      // API request to your backend
-      const response = await fetch("http://localhost:8000/api/croplists/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Pass the token to your backend API
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(finalData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(
-          `HTTP error! status: ${response.status}. Detail: ${JSON.stringify(
-            errorData
-          )}`
-        );
-      }
-
-      const result = await response.json();
-      console.log("Listing created successfully:", result);
+    // Simulate network delay
+    setTimeout(() => {
+      console.log("Mock listing created successfully.");
       alert("Crop listing created successfully!");
 
       // Reset form
@@ -145,13 +66,12 @@ export default function CreateListingPage() {
         soilType: "",
         irrigationSource: "",
       });
-      setImagePreviews([]);
-    } catch (error) {
-      console.error("Submission failed:", error);
-      alert(`Submission failed: ${error.message}`);
-    } finally {
-      setIsUploading(false);
-    }
+      
+      // We no longer need to reset image previews
+      // setImagePreviews([]); // Removed
+      
+      setIsSubmitting(false);
+    }, 1500); // 1.5-second delay
   };
 
   // --- 5. Render ---
@@ -290,23 +210,25 @@ export default function CreateListingPage() {
           </div>
         </section>
 
-        {/* Image Upload */}
+        {/* Image Upload (REMOVED) */}
+        {/*
         <ImageUpload
           imagePreviews={imagePreviews}
           setImagePreviews={setImagePreviews}
         />
+        */}
 
         {/* Submit */}
         <div className="mt-8 text-right">
           <button
             type="submit"
-            disabled={isUploading}
-            className="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-base font-medium
-                         rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300
-                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                         disabled:bg-gray-400"
+            disabled={isSubmitting} // Changed from isUploading
+            className="inline-flex items-center px-6 py-3 bg-green-600 text-white text-base font-medium
+                       rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300
+                       focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                       disabled:bg-gray-400"
           >
-            {isUploading ? "Creating Listing..." : "Create Listing"}
+            {isSubmitting ? "Creating Listing..." : "Create Listing"}
           </button>
         </div>
       </form>

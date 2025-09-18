@@ -7,7 +7,7 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
       {/* Card Header: Contract Summary */}
       <div className="p-5 border-b border-gray-200">
         <div className="flex justify-between items-start">
-          <h2 className="text-2xl font-semibold text-blue-600">
+          <h2 className="text-2xl font-semibold text-green-600">
             {contract.buyerName}
           </h2>
           <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -43,11 +43,11 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
         {/* Right: Requirements & Uploads */}
         <div>
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <h4 className="font-semibold text-blue-800 flex items-center">
+            <h4 className="font-semibold text-green-800 flex items-center">
               <i className="fas fa-clipboard-list mr-2"></i>
               Buyer-specific Requirements
             </h4>
-            <p className="text-sm text-blue-700 mt-2">
+            <p className="text-sm text-green-700 mt-2">
               {contract.buyerRequirements}
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
             <div className="space-y-4">
               <textarea
                 rows="3"
-                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-green-500"
                 placeholder="Add a text update (optional)..."
               ></textarea>
 
@@ -70,13 +70,13 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-md file:border-0
                           file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
+                          file:bg-blue-50 file:text-green-700
                           hover:file:bg-blue-100"
               />
 
               <button
                 onClick={() => onSubmitUpdate(contract.id)}
-                className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 Submit Update
               </button>

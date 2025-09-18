@@ -54,7 +54,7 @@ export default function BuyerProposalsPage() {
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="mb-6 flex items-center text-blue-600 hover:text-blue-800 font-medium"
+        className="mb-6 flex items-center text-green-600 hover:text-green-800 font-medium"
       >
         <i className="fas fa-arrow-left mr-2"></i> Back
       </button>
@@ -75,7 +75,7 @@ export default function BuyerProposalsPage() {
               className="bg-white rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg"
             >
               <div className="p-5 border-b border-gray-200">
-                <h2 className="text-2xl font-semibold text-blue-600">
+                <h2 className="text-2xl font-semibold text-green-600">
                   {proposal.buyerName}
                 </h2>
                 <p className="text-sm text-gray-500">{proposal.buyerInfo}</p>
@@ -131,7 +131,7 @@ export default function BuyerProposalsPage() {
                 <button
                   type="button"
                   onClick={() => handleAccept(proposal.id)}
-                  className="px-5 py-2 rounded-md border border-transparent bg-blue-600 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+                  className="px-5 py-2 rounded-md border border-transparent bg-green-600 text-sm font-medium text-white shadow-sm hover:bg-green-700"
                 >
                   Accept
                 </button>

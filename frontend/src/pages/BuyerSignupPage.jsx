@@ -1,10 +1,10 @@
-// src/pages/FarmerLoginPage.jsx
+// src/pages/BuyerSignupPage.jsx
 
-import React, { useState } from "react"; // Import useState
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, Leaf } from "lucide-react";
+import { User, Mail, Lock, Leaf } from "lucide-react";
 
-// --- Reusable SVG Icons for Social Login (Unchanged) ---
+// --- Reusable SVG Icons for Social Login ---
 const GoogleIcon = () => (
   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M22.56 12.25C22.56 11.45 22.49 10.68 22.36 9.94H12V14.28H17.96C17.67 15.63 17.03 16.8 16.14 17.48V20.2H19.83C21.66 18.57 22.56 15.69 22.56 12.25Z" fill="#4285F4"/>
@@ -24,87 +24,118 @@ const MicrosoftIcon = () => (
 );
 
 
-const FarmerLoginPage = () => {
+const BuyerSignupPage = () => {
   const navigate = useNavigate();
   
   // --- State for controlled inputs, loading, and errors ---
-  const [email, setEmail] = useState("mayuresh@gmail.com");
-  const [password, setPassword] = useState("12345");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // --- Handle API Login ---
-  const handleLogin = async (e) => {
+  // --- Handle API Signup ---
+  const handleSignup = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
-    // FastAPI's OAuth2PasswordRequestForm expects 'username' and 'password'
-    // in a form-urlencoded body, not JSON.
-    const formData = new URLSearchParams();
-    formData.append('username', email);
-    formData.append('password', password);
+    // Backend expects a JSON body for user creation
+    const userData = {
+      name: name, // Using 'name' to align with Buyer login
+      email: email,
+      password: password,
+      role: "buyer" // Set the role for the buyer
+    };
 
     try {
-      const response = await fetch("http://localhost:8000/api/auth/login", {
+      const response = await fetch("http://localhost:8000/api/users/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
-        body: formData,
+        body: JSON.stringify(userData),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        // Handle HTTP errors (like 401 Unauthorized)
-        throw new Error(data.detail || "Incorrect email or password");
+        let errorMsg = `Error: ${response.status} ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.detail || errorMsg;
+        } catch (jsonError) {
+          console.warn("Could not parse error response as JSON.");
+        }
+        throw new Error(errorMsg);
       }
 
-      // --- Login Successful ---
-      localStorage.setItem("farmerAuth", "true"); // Farmer-specific auth
-      localStorage.setItem("authToken", data.access_token); // Store the token
-      
-      console.log("Successful farmer login. Token stored.");
-      navigate("/farmer", { replace: true }); // Farmer-specific navigation
+      // --- Signup Successful ---
+      const data = await response.json();
+      console.log("Signup successful:", data);
+      setSuccess("Account created successfully! Redirecting to login...");
+
+      // Redirect to login page after a short delay
+      setTimeout(() => {
+        navigate("/login-buyer"); 
+      }, 2000);
 
     } catch (err) {
-      // Handle network errors or errors thrown from response check
       setError(err.message);
-      console.error("Login failed:", err.message);
+      console.error("Signup failed:", err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    // --- Full Screen Centering Container (Unchanged) ---
+    // --- Full Screen Centering Container with Buyer-themed Gradient ---
     <div
-      className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-gray-100"
+      className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-green-600 to-gray-900"
     >
-      {/* --- Centered Login Card (Unchanged) --- */}
+      {/* --- Centered Signup Card --- */}
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 sm:p-12">
         
-        {/* Logo (Unchanged) */}
+        {/* Logo */}
         <div className="text-center mb-6">
           <Link to="/" className="flex items-center justify-center space-x-2">
-            <Leaf className="h-8 w-8 text-blue-600" />
+            <Leaf className="h-8 w-8 text-green-600" />
             <span className="text-2xl font-bold text-gray-800">Agri-Connector</span>
           </Link>
         </div>
 
-        {/* Header (Unchanged) */}
+        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-gray-900">
-            Farmer Portal Login
+            Create a Buyer Account
           </h1>
           <p className="text-gray-600 mt-2">
-            Welcome back!
+            Start sourcing the best crops today.
           </p>
         </div>
 
-        {/* --- Form (Updated for state) --- */}
-        <form onSubmit={handleLogin} className="space-y-6">
+        {/* --- Signup Form --- */}
+        <form onSubmit={handleSignup} className="space-y-6">
+           {/* Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Full Name
+            </label>
+            <div className="relative mt-1">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 shadow-sm"
+                required
+              />
+            </div>
+          </div>
+        
           {/* Email Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -117,9 +148,9 @@ const FarmerLoginPage = () => {
               <input
                 type="email"
                 placeholder="you@example.com"
-                value={email} // Use value
-                onChange={(e) => setEmail(e.target.value)} // Add onChange
-                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 shadow-sm"
                 required
               />
             </div>
@@ -127,17 +158,9 @@ const FarmerLoginPage = () => {
 
           {/* Password Input */}
           <div>
-            <div className="flex justify-between items-center">
-              <label className="block text-sm font-medium text-gray-700">
+             <label className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <a
-                href="#"
-                className="text-sm text-blue-600 hover:text-blue-700 hover:underline transition-colors"
-              >
-                Forgot password?
-              </a>
-            </div>
             <div className="relative mt-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
@@ -145,38 +168,44 @@ const FarmerLoginPage = () => {
               <input
                 type="password"
                 placeholder="••••••••"
-                value={password} // Use value
-                onChange={(e) => setPassword(e.target.value)} // Add onChange
-                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 shadow-sm"
                 required
+                minLength="8"
               />
             </div>
           </div>
 
-          {/* --- Error Message Display --- */}
+          {/* --- Error and Success Message Display --- */}
           {error && (
             <p className="text-sm text-red-600 text-center">
               {error}
             </p>
           )}
+           {success && (
+            <p className="text-sm text-green-600 text-center">
+              {success}
+            </p>
+          )}
 
-          {/* Login Button (Updated with loading state) */}
+          {/* Signup Button */}
           <button
             type="submit"
-            disabled={isLoading} // Disable button when loading
-            className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
+            className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 shadow-lg hover:shadow-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading ? "Logging in..." : "Log In"}
+            {isLoading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
-        {/* --- Social Login Placeholder (Unchanged) --- */}
+        {/* --- Social Login Placeholder --- */}
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-gray-300"></span>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            <span className="px-2 bg-white text-gray-500">Or sign up with</span>
           </div>
         </div>
 
@@ -196,16 +225,15 @@ const FarmerLoginPage = () => {
             <span>Microsoft</span>
           </button>
         </div>
-        {/* --- End Social Login --- */}
 
-        {/* --- Sign Up Link (Unchanged) --- */}
+        {/* --- Login Link --- */}
         <p className="text-center text-sm text-gray-600 mt-8">
-          Don't have an account?{" "}
+          Already have an account?{" "}
           <Link
-            to="/signup-farmer" // Farmer-specific signup
-            className="font-medium text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+            to="/login-buyer"
+            className="font-medium text-green-600 hover:text-green-700 hover:underline transition-colors"
           >
-            Sign Up
+            Log In
           </Link>
         </p>
       </div>
@@ -213,4 +241,5 @@ const FarmerLoginPage = () => {
   );
 };
 
-export default FarmerLoginPage;
+export default BuyerSignupPage;
+

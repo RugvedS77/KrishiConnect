@@ -29,8 +29,14 @@ export default function CreateListingPage() {
   };
 
   // --- 3. Upload images to Supabase ---
-  const uploadImages = async () => {
+  const uploadImages = async (session) => {
     const imageUrls = [];
+
+    // Set the user's session token on the Supabase client
+    // This is crucial for the upload policy to work
+    if (session) {
+      supabase.auth.setSession(session);
+    }
 
     for (const preview of imagePreviews) {
       const file = preview.fileObject;
@@ -51,18 +57,12 @@ export default function CreateListingPage() {
       }
 
       // Get public URL
-      const { data: publicUrlData, error: urlError } = supabase.storage
+      const { data: publicUrlData } = supabase.storage
         .from("CropImages")
         .getPublicUrl(data.path);
 
-      if (urlError) {
-        console.error("Error getting public URL:", urlError);
-        imageUrls.push(null);
-      } else {
-        imageUrls.push(publicUrlData.publicUrl);
-      }
+      imageUrls.push(publicUrlData.publicUrl);
     }
-
     return imageUrls;
   };
 
@@ -77,8 +77,17 @@ export default function CreateListingPage() {
       return;
     }
 
+    // Get the user's session
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      alert("You must be logged in to create a listing.");
+      setIsUploading(false);
+      return;
+    }
+
     try {
-      const uploadedUrls = await uploadImages();
+      // Pass the session to the upload function
+      const uploadedUrls = await uploadImages(session);
 
       if (!uploadedUrls) {
         alert("Image upload failed. Please try again.");
@@ -100,12 +109,13 @@ export default function CreateListingPage() {
       delete finalData.quantityValue;
       delete finalData.quantityUnit;
 
-      // API request
+      // API request to your backend
       const response = await fetch("http://localhost:8000/api/croplists/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': `Bearer ${token}`,
+          // Pass the token to your backend API
+          'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(finalData),
       });
@@ -292,9 +302,9 @@ export default function CreateListingPage() {
             type="submit"
             disabled={isUploading}
             className="inline-flex items-center px-6 py-3 bg-blue-600 text-white text-base font-medium
-                       rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                       disabled:bg-gray-400"
+                         rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                         disabled:bg-gray-400"
           >
             {isUploading ? "Creating Listing..." : "Create Listing"}
           </button>

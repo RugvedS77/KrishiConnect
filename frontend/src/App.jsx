@@ -13,9 +13,11 @@ import CompletedContractsPage from './farmer_pages/CompletedContractsPage';
 import ProfilePage from './farmer_pages/ProfilePage';
 import SupportPage from './farmer_pages/SupportPage';
 import FarmerListingsPage from './farmer_pages/FarmerListingsPage';
+import FarmerSignupPage from './pages/FarmerSignupPage';
 
 // ------------------- Buyer Imports -------------------
 import BuyerLayout from './buyer_components/Layout';
+import BuyerSignupPage from './pages/BuyerSignupPage';
 import BuyerDashboard from './buyer_pages/BuyerDashboard';
 import BrowseListings from './buyer_pages/BrowseListings';
 import OngoingContracts from './buyer_pages/OngoingContracts';
@@ -71,7 +73,14 @@ function App() {
       path: '/login-buyer',
       element: <BuyerLoginPage />,
     },
-
+    {
+      path: '/signup-farmer',
+      element: <FarmerSignupPage />,
+    },
+    {
+      path: '/signup-buyer',
+      element: <BuyerSignupPage />,
+    },
     // ---------- Farmer Routes (Protected) ----------
     {
       path: '/farmer',

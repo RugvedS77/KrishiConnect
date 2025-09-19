@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
-import { PlusCircle, X, Loader } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { PlusCircle, X, Loader2 as Loader } from 'lucide-react';
+import { useAuthStore } from '../authStore';
+import { Link } from 'react-router-dom'; // Import Link
 
-// Mock data updated to INR (₹) and whole numbers
-const initialTransactions = [
-  { date: '2025-09-18', desc: 'Payment Released for Contract #104', amount: '-₹12,200', status: 'Pending' },
-  { date: '2025-09-17', desc: 'Payment Released for Contract #103', amount: '-₹40,000', status: 'Completed' },
-  { date: '2025-09-15', desc: 'Advance for Contract #2 (Basmati Rice)', amount: '-₹80,000', status: 'Completed' },
-  { date: '2025-09-10', desc: 'Funds Added via Wire Transfer', amount: '+₹5,00,000', status: 'Completed' },
-  { date: '2025-09-01', desc: 'Payment Released for Contract #101', amount: '-₹37,500', status: 'Completed' },
-  { date: '2025-08-25', desc: 'Advance for Contract #1 (Organic Wheat)', amount: '-₹25,000', status: 'Completed' },
-  { date: '2025-08-20', desc: 'Funds Added via Bank Deposit', amount: '+₹1,00,000', status: 'Completed' },
-];
-
-// --- Add Funds Modal Component ---
+// --- Add Funds Modal Component (Updated to handle live API) ---
 const AddFundsModal = ({ onClose, onAddFunds }) => {
   const [amount, setAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const numericAmount = parseInt(amount, 10); // Use parseInt for whole numbers
+    const numericAmount = parseInt(amount, 10);
     if (!numericAmount || numericAmount <= 0) {
-      alert('Please enter a valid amount.');
+      setError('Please enter a valid positive amount.');
       return;
     }
 
-    // Simulate API call
     setIsSubmitting(true);
-    setTimeout(() => {
-      onAddFunds(numericAmount);
+    setError(null);
+
+    try {
+      await onAddFunds(numericAmount);
+      onClose(); // Close the modal on success
+    } catch (err) {
+      setError(err.message); // Show API error in the modal
+    } finally {
       setIsSubmitting(false);
-      onClose();
-    }, 1000); // 1-second delay
+    }
   };
 
   return (
@@ -61,11 +57,11 @@ const AddFundsModal = ({ onClose, onAddFunds }) => {
                 htmlFor="amount"
                 className="block text-sm font-medium text-gray-700"
               >
-                Amount (INR) {/* Changed to INR */}
+                Amount (INR)
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500 sm:text-sm">₹</span> {/* Changed to ₹ */}
+                  <span className="text-gray-500 sm:text-sm">₹</span>
                 </div>
                 <input
                   type="number"
@@ -74,12 +70,13 @@ const AddFundsModal = ({ onClose, onAddFunds }) => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   className="w-full pl-7 pr-12 p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
-                  placeholder="5000" // Updated placeholder
+                  placeholder="5000"
                   min="1"
                   required
                 />
               </div>
             </div>
+            {error && <p className="text-sm text-red-600 text-center">{error}</p>}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -101,35 +98,39 @@ const AddFundsModal = ({ onClose, onAddFunds }) => {
   );
 };
 
-// --- Main Payments Component ---
-const Payments = () => {
-  // Initial balance calculated from mock data (all are integers)
-  const [balance, setBalance] = useState(415250);
-  const [transactions, setTransactions] = useState(initialTransactions);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+// --- Helper Functions to format API data ---
+const getTransactionDescription = (tx) => {
+  switch (tx.type) {
+    case 'deposit':
+      return 'Funds Added via Gateway';
+    case 'escrow':
+      return `Funds Locked for Contract #${tx.contract_id}`;
+    case 'release':
+      return `Funds Released for Contract #${tx.contract_id}`;
+    default:
+      return 'General Transaction';
+  }
+};
 
-  // Function to handle adding funds
-  const handleAddFunds = (amount) => {
-    // 1. Update the balance
-    setBalance((prevBalance) => prevBalance + amount);
+const getFormattedAmount = (tx) => {
+  const amount = parseFloat(tx.amount).toLocaleString('en-IN');
+  if (tx.type === 'deposit') {
+    return { text: `+₹${amount}`, class: 'text-green-600' };
+  }
+  if (tx.type === 'escrow') {
+    return { text: `-₹${amount}`, class: 'text-red-600' };
+  }
+  // This applies to a Farmer's 'release' or 'withdrawal'
+  if (tx.type === 'release') {
+     return { text: `+₹${amount}`, class: 'text-green-600' };
+  }
+   if (tx.type === 'withdrawal') {
+     return { text: `-₹${amount}`, class: 'text-red-600' };
+  }
+  return { text: `₹${amount}`, class: 'text-gray-800' };
+};
 
-    // 2. Create a new transaction record
-    const newTransaction = {
-      date: new Date().toISOString().split('T')[0],
-      desc: 'Funds Added via UPI/Card', // Updated description
-      amount: `+₹${amount.toLocaleString('en-IN')}`, // Formatted for INR
-      status: 'Completed',
-    };
-
-    // 3. Add the new transaction to the top of the list
-    setTransactions((prevTransactions) => [
-      newTransaction,
-      ...prevTransactions,
-    ]);
-  };
-
-  // Helper to get status tag styles
-  const getStatusClass = (status) => {
+const getStatusClass = (status) => {
     switch (status) {
       case 'Completed':
         return 'bg-green-100 text-green-800';
@@ -138,11 +139,86 @@ const Payments = () => {
       default:
         return 'bg-gray-100 text-gray-800';
     }
+};
+
+
+// --- Main Payments Component ---
+const Payments = () => {
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const token = useAuthStore((state) => state.token);
+
+  // --- API: Function to fetch ALL wallet and transaction data ---
+  const fetchPaymentData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    if (!token) {
+      setError("Please log in to view payments.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      
+      // --- FIX 1: Corrected API path for transactions ---
+      const [walletRes, transRes] = await Promise.all([
+        fetch("http://localhost:8000/api/wallet/me", { headers }),
+        fetch("http://localhost:8000/api/wallet/me/transactions", { headers }) // <-- ADDED /me/
+      ]);
+
+      if (!walletRes.ok || !transRes.ok) {
+        throw new Error("Failed to load payment data. (Wallet or Tx route failed)");
+      }
+
+      const walletData = await walletRes.json();
+      const transData = await transRes.json();
+
+      setBalance(parseFloat(walletData.balance));
+      setTransactions(transData);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    fetchPaymentData();
+  }, [fetchPaymentData]);
+
+  // --- API: Function to handle adding funds ---
+  const handleAddFunds = async (amount) => {
+    if (!token) {
+        throw new Error("Authentication expired. Please log in again.");
+    }
+
+    // --- FIX 2: Corrected API path for adding funds ---
+    const response = await fetch("http://localhost:8000/api/wallet/me/add-funds", { // <-- ADDED /me/ and -funds
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ amount: amount })
+    });
+
+    if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.detail || "Failed to add funds.");
+    }
+
+    // Success! Re-fetch all data to sync state.
+    await fetchPaymentData();
   };
+
 
   return (
     <>
-      {/* Render the modal if it's open */}
       {isModalOpen && (
         <AddFundsModal
           onClose={() => setIsModalOpen(false)}
@@ -158,13 +234,17 @@ const Payments = () => {
           </p>
         </header>
 
-        {/* Wallet Card - Removed 'border' */}
+        {/* Wallet Card */}
         <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between sm:items-center space-y-4 sm:space-y-0">
           <div>
             <p className="text-sm text-gray-500">Current Wallet Balance</p>
-            {/* Updated to show ₹ and use 'en-IN' locale for formatting */}
             <p className="text-3xl font-bold text-gray-800">
-              ₹{balance.toLocaleString('en-IN')}
+              {isLoading ? (
+                 <Loader size={28} className="animate-spin text-green-600 mt-1" />
+              ) : (
+                // Format balance to always show 2 decimal places
+                `₹${balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+              )}
             </p>
           </div>
           <button
@@ -176,9 +256,9 @@ const Payments = () => {
           </button>
         </div>
 
-        {/* Transaction History - Removed 'border' lines */}
+        {/* Transaction History */}
         <div className="bg-white rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold p-6"> {/* Removed border-b, increased padding */}
+          <h3 className="text-lg font-semibold p-6">
             Recent Transactions
           </h3>
           <div className="overflow-x-auto">
@@ -186,55 +266,64 @@ const Payments = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 font-medium text-gray-600">Date</th>
-                  <th className="px-6 py-3 font-medium text-gray-600">
-                    Description
-                  </th>
-                  <th className="px-6 py-3 font-medium text-gray-600">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 font-medium text-gray-600">
-                    Status
-                  </th>
+                  <th className="px-6 py-3 font-medium text-gray-600">Description</th>
+                  <th className="px-6 py-3 font-medium text-gray-600">Amount</th>
+                  <th className="px-6 py-3 font-medium text-gray-600">Status</th>
                 </tr>
               </thead>
-              {/* Removed divide-y */}
               <tbody>
-                {/* Sliced to show only the 5 most recent transactions */}
-                {transactions.slice(0, 5).map((tx, index) => (
-                  <tr key={index} className="border-b border-gray-50 last:border-b-0"> {/* Added ultra-light border */}
-                    <td className="px-6 py-5 text-gray-500 whitespace-nowrap">{tx.date}</td> {/* Increased py */}
-                    <td className="px-6 py-5 font-medium text-gray-800">
-                      {tx.desc}
-                    </td>
-                    <td
-                      className={`px-6 py-5 font-semibold whitespace-nowrap ${
-                        tx.amount.startsWith('-')
-                          ? 'text-red-600'
-                          : 'text-green-600'
-                      }`}
-                    >
-                      {tx.amount}
-                    </td>
-                    <td className="px-6 py-5 whitespace-nowrap">
-                      <span
-                        className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusClass(
-                          tx.status
-                        )}`}
-                      >
-                        {tx.status}
-                      </span>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="4" className="text-center p-8">
+                       <Loader size={24} className="animate-spin inline-block text-gray-500" />
                     </td>
                   </tr>
-                ))}
+                ) : error ? (
+                   <tr>
+                    <td colSpan="4" className="text-center p-8 text-red-600 font-medium">
+                       {error}
+                    </td>
+                  </tr>
+                ) : transactions.length === 0 ? (
+                    <tr>
+                        <td colSpan="4" className="text-center p-8 text-gray-500">
+                            No transactions found.
+                        </td>
+                    </tr>
+                ) : (
+                  transactions.slice(0, 5).map((tx) => {
+                    const formattedAmount = getFormattedAmount(tx);
+                    // Your backend Transaction model doesn't have a 'status' field, so we default to 'Completed'
+                    const status = 'Completed'; 
+                    return (
+                        <tr key={tx.id} className="border-b border-gray-50 last:border-b-0">
+                            <td className="px-6 py-5 text-gray-500 whitespace-nowrap">
+                                {new Date(tx.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                            </td>
+                            <td className="px-6 py-5 font-medium text-gray-800">
+                                {getTransactionDescription(tx)}
+                            </td>
+                            <td className={`px-6 py-5 font-semibold whitespace-nowrap ${formattedAmount.class}`}>
+                                {formattedAmount.text}
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap">
+                                <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusClass(status)}`}>
+                                    {status}
+                                </span>
+                            </td>
+                        </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
-          {/* Optional: Add a "View All" link if there are more than 5 transactions */}
+          
           {transactions.length > 5 && (
-            <div className="p-4 text-right bg-gray-50"> {/* Removed border-t */}
-              <a href="#" className="text-sm font-medium text-green-600 hover:underline">
+            <div className="p-4 text-right bg-gray-50">
+              <Link to="#" className="text-sm font-medium text-green-600 hover:underline">
                 View all transactions
-              </a>
+              </Link>
             </div>
           )}
         </div>

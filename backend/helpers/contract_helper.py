@@ -7,7 +7,7 @@ from models.all_model import Contract as ContractModel
 # Configure the API client (shares configuration with recommendation_engine)
 try:
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
     print(f"Error configuring Google AI: {e}")
     model = None

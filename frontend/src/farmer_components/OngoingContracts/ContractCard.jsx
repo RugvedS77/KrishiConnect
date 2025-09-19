@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react'; // <-- 1. IMPORT useState
 import MilestoneStep from './MilestoneStep';
 
-export default function ContractCard({ contract, onSubmitUpdate }) {
+// <-- 2. ACCEPT isSubmitting PROP
+export default function ContractCard({ contract, onSubmitUpdate, isSubmitting }) {
+  
+  // --- 3. ADD LOCAL STATE for the textarea ---
+  const [updateText, setUpdateText] = useState("");
+
+  const handleSubmit = () => {
+    // --- 4. PASS THE STATE (updateText) to the parent function ---
+    onSubmitUpdate(contract.id, updateText);
+    // Optionally clear the text after submit
+    // setUpdateText(""); 
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Card Header: Contract Summary */}
+      {/* Card Header (Unchanged) */}
       <div className="p-5 border-b border-gray-200">
         <div className="flex justify-between items-start">
           <h2 className="text-2xl font-semibold text-green-600">
@@ -21,9 +33,8 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
         </div>
       </div>
 
-      {/* Card Body */}
+      {/* Card Body (Unchanged Milestone Tracker) */}
       <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left: Milestone Tracker */}
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Milestone Progress
@@ -60,25 +71,22 @@ export default function ContractCard({ contract, onSubmitUpdate }) {
             <div className="space-y-4">
               <textarea
                 rows="3"
-                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-green-500"
-                placeholder="Add a text update (optional)..."
+                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-green-500 disabled:bg-gray-100"
+                placeholder="Add your text update for the buyer..."
+                value={updateText} // <-- 5. MAKE TEXTAREA CONTROLLED
+                onChange={(e) => setUpdateText(e.target.value)} // <-- 6. UPDATE STATE
+                disabled={isSubmitting} // <-- 7. DISABLE WHEN LOADING
               ></textarea>
 
-              <input
-                type="file"
-                className="block w-full text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-md file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-green-700
-                          hover:file:bg-blue-100"
-              />
+              {/* --- 8. IMAGE INPUT REMOVED as requested --- */}
 
               <button
-                onClick={() => onSubmitUpdate(contract.id)}
-                className="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                onClick={handleSubmit} // <-- 9. CALL LOCAL handleSubmit
+                disabled={isSubmitting} // <-- 10. DISABLE WHEN LOADING
+                className="w-full px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-gray-400"
               >
-                Submit Update
+                {/* 11. SHOW LOADING TEXT */}
+                {isSubmitting ? "Submitting..." : "Submit Update"}
               </button>
             </div>
           </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import ContractCard from './ContractCard';
 
-export default function ContractList({ contracts, onSubmitUpdate }) {
+// --- 1. ACCEPT isSubmitting PROP ---
+export default function ContractList({ contracts, onSubmitUpdate, isSubmitting }) {
   return (
     <div className="space-y-8">
       {contracts.map((contract) => (
@@ -9,6 +10,7 @@ export default function ContractList({ contracts, onSubmitUpdate }) {
           key={contract.id}
           contract={contract}
           onSubmitUpdate={onSubmitUpdate}
+          isSubmitting={isSubmitting} // <-- 2. PASS PROP DOWN
         />
       ))}
     </div>

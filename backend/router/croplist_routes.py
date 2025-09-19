@@ -1,4 +1,4 @@
-# router/croplist_routes.py
+# # router/croplist_routes.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -7,7 +7,10 @@ from typing import List, Optional
 from database.postgresConn import get_db
 # FIX: Import models and schemas with aliases
 from models.all_model import CropList as CropListModel, User as UserModel, UserRole
-from schemas.all_schema import CropListResponse, CropListCreate, CropListUpdate, TokenData
+from models.all_model import Contract as ContractModel, ContractStatus
+from schemas.all_schema import CropListResponse, CropListCreate, CropListUpdate, TokenData, ProposalAnalysis
+from helpers.proposal_analyzer import analyze_proposals
+
 from helpers.recommendation_engine import get_template_recommendation_with_llm
 from auth import oauth2
 
@@ -105,3 +108,40 @@ def get_croplist_by_id(
         
     return listing
 
+# --- NEW ENDPOINT ADDED BELOW ---
+
+@router.get("/{list_id}/analyze-proposals", response_model=ProposalAnalysis)
+def get_proposal_analysis(
+    list_id: int,
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user)
+):
+    """
+    [FARMER ONLY] Triggers the AI Proposal Analyzer for a specific crop listing.
+    """
+    user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+    listing = db.query(CropListModel).filter(CropListModel.id == list_id).first()
+
+    if not listing:
+        raise HTTPException(status_code=404, detail="Crop listing not found.")
+
+    # Authorization: Only the farmer who owns the listing can get an analysis.
+    if listing.farmer_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized to analyze proposals for this listing.")
+
+    # Fetch all pending proposals for this listing
+    proposals = db.query(ContractModel).filter(
+        ContractModel.listing_id == list_id,
+        ContractModel.status == ContractStatus.pending_farmer_approval
+    ).all()
+
+    if not proposals:
+        raise HTTPException(status_code=404, detail="No pending proposals found for this listing to analyze.")
+
+    # Call the AI helper to get the analysis
+    analysis = analyze_proposals(listing, proposals)
+
+    if "error" in analysis:
+        raise HTTPException(status_code=500, detail=analysis["error"])
+
+    return analysis

@@ -1,5 +1,6 @@
-
+import { useAuthStore } from './authStore';
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import './App.css';
 
 // ------------------- Farmer Imports -------------------
@@ -48,88 +49,108 @@ function FarmerLayout() {
  * --- Protected Route Wrappers ---
  */
 function FarmerProtectedRoute({ children }) {
-  const isFarmerLoggedIn = localStorage.getItem('farmerAuth') === 'true';
+  // Subscribes to the store. If farmerAuth changes (e.g., on logout), this component re-renders.
+  const isFarmerLoggedIn = useAuthStore((state) => state.farmerAuth);
   return isFarmerLoggedIn ? children : <Navigate to="/login-farmer" replace />;
 }
 
 function BuyerProtectedRoute({ children }) {
-  const isBuyerLoggedIn = localStorage.getItem('buyerAuth') === 'true';
+  // Subscribes to the store for buyer-specific auth flag.
+  const isBuyerLoggedIn = useAuthStore((state) => state.buyerAuth);
   return isBuyerLoggedIn ? children : <Navigate to="/login-buyer" replace />;
 }
 
-function App() {
-  const router = createBrowserRouter([
-    // ---------- Public Routes ----------
-    {
-      path: '/',
-      element: <LandingPage />,
-      errorElement: <FarmerErrorPage />,
-    },
-    {
-      path: '/login-farmer',
-      element: <FarmerLoginPage />,
-    },
-    {
-      path: '/login-buyer',
-      element: <BuyerLoginPage />,
-    },
-    {
-      path: '/signup-farmer',
-      element: <FarmerSignupPage />,
-    },
-    {
-      path: '/signup-buyer',
-      element: <BuyerSignupPage />,
-    },
-    // ---------- Farmer Routes (Protected) ----------
-    {
-      path: '/farmer',
-      element: (
-        <FarmerProtectedRoute>
-          <FarmerLayout />
-        </FarmerProtectedRoute>
-      ),
-      errorElement: <FarmerErrorPage />,
-      children: [
-        // { index: true, element: <Navigate to="dashboard" replace /> },
-        // { path: 'dashboard', element: <FarmerDashboard /> },
-        { index: true, element: <FarmerDashboard /> },
-        { path: 'create-listing', element: <CreateListingPage /> },
-        {
-          path: 'buyer-proposals',
-          element: <Outlet />,
-          children: [
-            { index: true, element: <FarmerListingsPage /> },
-            { path: 'all-proposals', element: <BuyerProposalsPage /> },
-          ],
-        },
-        { path: 'ongoing-contracts', element: <OngoingContractsPage /> },
-        { path: 'completed-contracts', element: <CompletedContractsPage /> },
-        { path: 'profile', element: <ProfilePage /> },
-        { path: 'support', element: <SupportPage /> },
-      ],
-    },
+const router = createBrowserRouter([
+  // ---------- Public Routes ----------
+  {
+    path: '/',
+    element: <LandingPage />,
+    errorElement: <FarmerErrorPage />,
+  },
+  {
+    path: '/login-farmer',
+    element: <FarmerLoginPage />,
+  },
+  {
+    path: '/login-buyer',
+    element: <BuyerLoginPage />,
+  },
+  {
+    path: '/signup-farmer',
+    element: <FarmerSignupPage />,
+  },
+  {
+    path: '/signup-buyer',
+    element: <BuyerSignupPage />,
+  },
+  // ---------- Farmer Routes (Protected) ----------
+  {
+    path: '/farmer',
+    element: (
+      <FarmerProtectedRoute>
+        <FarmerLayout />
+      </FarmerProtectedRoute>
+    ),
+    errorElement: <FarmerErrorPage />,
+    children: [
+      // { index: true, element: <Navigate to="dashboard" replace /> },
+      // { path: 'dashboard', element: <FarmerDashboard /> },
+      { index: true, element: <FarmerDashboard /> },
+      { path: 'create-listing', element: <CreateListingPage /> },
+      {
+        path: 'buyer-proposals',
+        element: <Outlet />,
+        children: [
+          { index: true, element: <FarmerListingsPage /> },
+          { path: 'proposals/:listingId', element: <BuyerProposalsPage /> },
+        ],
+      },
+      { path: 'ongoing-contracts', element: <OngoingContractsPage /> },
+      { path: 'completed-contracts', element: <CompletedContractsPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      { path: 'support', element: <SupportPage /> },
+    ],
+  },
 
-    // ---------- Buyer Routes (Protected) ----------
-    {
-      path: '/buyer',
-      element: (
-        <BuyerProtectedRoute>
-          <BuyerLayout />
-        </BuyerProtectedRoute>
-      ),
-      children: [
-        // { index: true, element: <Navigate to="dashboard" replace /> },
-        // { path: 'dashboard', element: <BuyerDashboard /> },
-        { index: true, element: <BuyerDashboard /> },
-        { path: 'browse', element: <BrowseListings /> },
-        { path: 'contracts', element: <OngoingContracts /> },
-        { path: 'payments', element: <Payments /> },
-        { path: 'profile', element: <BuyerProfile /> },
-        { path: 'propose/:cropId', element: <ContractTemplatesPage /> },
-      ],
-    },
-  ]);
+  // ---------- Buyer Routes (Protected) ----------
+  {
+    path: '/buyer',
+    element: (
+      <BuyerProtectedRoute>
+        <BuyerLayout />
+      </BuyerProtectedRoute>
+    ),
+    children: [
+      // { index: true, element: <Navigate to="dashboard" replace /> },
+      // { path: 'dashboard', element: <BuyerDashboard /> },
+      { index: true, element: <BuyerDashboard /> },
+      { path: 'browse', element: <BrowseListings /> },
+      { path: 'contracts', element: <OngoingContracts /> },
+      { path: 'payments', element: <Payments /> },
+      { path: 'profile', element: <BuyerProfile /> },
+      { path: 'propose/:cropId', element: <ContractTemplatesPage /> },
+    ],
+  },
+]);
+
+function App() {
+
+  const { checkAuth, loading } = useAuthStore((state) => ({
+    checkAuth: state.checkAuth,
+    loading: state.loading,
+  }));
+
+  useEffect(() => {
+    checkAuth(); // Run the check once when the app mounts
+  }, [checkAuth]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div>Loading Application...</div>
+      </div>
+    );
+  }
 
   return <RouterProvider router={router} />;
 }

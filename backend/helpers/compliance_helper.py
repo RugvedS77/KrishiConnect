@@ -9,7 +9,7 @@ from models.all_model import Contract as ContractModel, Transaction as Transacti
 # Configure the API client
 try:
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-1.5-flash')
 except Exception as e:
     print(f"Error configuring Google AI: {e}")
     model = None
@@ -19,7 +19,7 @@ def _gather_compliance_context(contract: ContractModel, db: Session) -> str:
 
     # 1. Get financial details
     transactions = db.query(TransactionModel).filter(TransactionModel.contract_id == contract.id).all()
-    total_value = contract.quantity_proposed * contract.price_per_unit_agreed
+    total_value = Decimal(contract.quantity_proposed) * contract.price_per_unit_agreed
     
     amount_paid = sum(t.amount for t in transactions if t.type == 'release')
     amount_in_escrow = sum(t.amount for t in transactions if t.type == 'escrow') - amount_paid

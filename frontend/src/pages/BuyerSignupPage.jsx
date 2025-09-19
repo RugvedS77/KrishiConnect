@@ -28,7 +28,7 @@ const BuyerSignupPage = () => {
   const navigate = useNavigate();
   
   // --- State for controlled inputs, loading, and errors ---
-  const [name, setName] = useState("");
+  const [full_name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -44,7 +44,7 @@ const BuyerSignupPage = () => {
 
     // Backend expects a JSON body for user creation
     const userData = {
-      name: name, // Using 'name' to align with Buyer login
+      full_name: full_name, // Using 'name' to align with Buyer login
       email: email,
       password: password,
       role: "buyer" // Set the role for the buyer
@@ -128,7 +128,7 @@ const BuyerSignupPage = () => {
               <input
                 type="text"
                 placeholder="Your Name"
-                value={name}
+                value={full_name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500 shadow-sm"
                 required

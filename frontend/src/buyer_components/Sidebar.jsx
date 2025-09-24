@@ -1,5 +1,5 @@
 import { Link, useMatch, useResolvedPath } from 'react-router-dom';
-import { LayoutDashboard, Search, FileText, Banknote, User, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Search, FileText, Banknote, User, Loader2, Truck} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../authStore'; // Adjust path as needed
 
@@ -58,6 +58,7 @@ const Sidebar = () => {
     { icon: <Search size={20} />, name: 'Browse Listings', path: 'browse' },
     { icon: <FileText size={20} />, name: 'My Contracts', path: 'contracts' },
     { icon: <Banknote size={20} />, name: 'Payments', path: 'payments' },
+    { icon: <Truck size={20} />, name: 'Logistics', path: 'logistics' },
   ];
 
   return (

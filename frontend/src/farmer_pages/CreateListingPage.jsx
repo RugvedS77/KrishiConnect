@@ -82,7 +82,7 @@ export default function CreateListingPage() {
         harvest_date: formData.harvestDate,
         location: formData.location,
         farming_practice: formData.farmingPractice,
-        Soil_type: formData.soilType, // Using lowercase to match the final backend model
+        soil_type: formData.soilType, // Using lowercase to match the final backend model
         irrigation_source: formData.irrigationSource,
         img_url: imageUrl, // Pass the URL to the backend
       };

@@ -51,6 +51,8 @@ const ContractTemplatesPage = () => {
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  const [error, setError] = useState(null);
+
   const { cropId } = useParams();
   const token = useAuthStore((state) => state.token);
   const authUser = useAuthStore((state) => state.user);
@@ -172,7 +174,7 @@ const ContractTemplatesPage = () => {
           listing_id: crop.id,
           quantity_proposed: parseFloat(currentData.quantity),
           price_per_unit_agreed: parseFloat(currentData.price),
-          payment_terms: 'milestone',
+          payment_terms: templates[0]["title"] + " : " + templates[0]["description"],
         };
       } else if (selectedTemplate === 'price-assurance') {
         const qty = parseFloat(currentData.farmingArea) * parseFloat(currentData.estimatedYield);
@@ -181,7 +183,7 @@ const ContractTemplatesPage = () => {
           listing_id: crop.id,
           quantity_proposed: qty,
           price_per_unit_agreed: parseFloat(currentData.fixedPrice),
-          payment_terms: 'milestone',
+          payment_terms: templates[1]["title"] + " : " + templates[1]["description"],
         };
       } else if (selectedTemplate === 'buyback-support') {
         totalValue = parseFloat(currentData.estimatedTotalValue);
@@ -190,7 +192,7 @@ const ContractTemplatesPage = () => {
           listing_id: crop.id,
           quantity_proposed: isNaN(qty) ? 0 : qty,
           price_per_unit_agreed: parseFloat(currentData.buybackPrice),
-          payment_terms: 'milestone',
+          payment_terms: templates[2]["title"] + " : " + templates[2]["description"],
         };
       } else if (selectedTemplate === 'milestone-payment') {
         totalValue = parseFloat(currentData.totalValue);
@@ -198,7 +200,7 @@ const ContractTemplatesPage = () => {
           listing_id: crop.id,
           quantity_proposed: 1,
           price_per_unit_agreed: totalValue,
-          payment_terms: 'milestone',
+          payment_terms: templates[3]["title"] + " : " + templates[3]["description"],
         };
       }
 

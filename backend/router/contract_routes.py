@@ -12,6 +12,7 @@ from models.all_model import (
     Contract as ContractModel,
     Transaction as TransactionModel,
     Wallet as WalletModel,
+    Milestone as MilestoneModel,
     UserRole,
     ContractStatus,
     AIAdvice as AIAdviceModel
@@ -39,6 +40,21 @@ def propose_contract(request: ContractCreate, db: Session = Depends(get_db), cur
     listing = db.query(CropListModel).filter(CropListModel.id == request.listing_id).first()
     if not listing:
         raise HTTPException(status_code=404, detail="Crop listing not found.")
+    
+        # --- NEW LOGIC ADDED HERE ---
+    # 1. Calculate the total value of the proposed contract
+    total_value = Decimal(request.quantity_proposed) * request.price_per_unit_agreed
+    
+    # 2. Get the buyer's wallet
+    buyer_wallet = db.query(WalletModel).filter(WalletModel.user_id == buyer.id).first()
+
+    # 3. Check if the wallet balance is sufficient
+    if not buyer_wallet or buyer_wallet.balance < total_value:
+        raise HTTPException(
+            status_code=400, # 400 Bad Request is appropriate here
+            detail=f"Insufficient wallet balance. You need ₹{total_value} but have ₹{buyer_wallet.balance}."
+        )
+    # --- END OF NEW LOGIC ---
     
     new_contract = ContractModel(
         listing_id=listing.id,
@@ -77,7 +93,13 @@ def accept_contract(contract_id: int, db: Session = Depends(get_db), current_use
         wallet_id=buyer_wallet.id, contract_id=contract.id, amount=total_value, type="escrow"
     )
     db.add(escrow_transaction)
+
+        # --- ADD THIS LOGIC ---
+    # 1. Update the contract's status to 'ongoing'
     contract.status = ContractStatus.ongoing
+    # 2. Update the original listing's status to 'closed'
+    contract.listing.status = 'closed'
+    # --------------------
     db.commit()
     db.refresh(contract)
     return contract
@@ -125,42 +147,63 @@ def get_contract_compliance_advice(contract_id: int, db: Session = Depends(get_d
     db.refresh(new_advice)
     return new_advice
 
-# --- THIS IS THE CORRECTED FUNCTION ---
+# # --- THIS IS THE CORRECTED FUNCTION ---
+# @router.get("/ongoing", response_model=List[ContractDashboardResponse])
+# def get_ongoing_contracts(db: Session = Depends(get_db), current_user: TokenData = Depends(oauth2.get_current_user)):
+#     """[BUYER & FARMER] Gets all ongoing contracts for the current user."""
+#     user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+#     contracts = db.query(ContractModel).options(
+#         joinedload(ContractModel.listing).joinedload(CropListModel.farmer),
+#         joinedload(ContractModel.buyer),
+#         joinedload(ContractModel.farmer),
+#         joinedload(ContractModel.milestones).joinedload(MilestoneModel.shipment)
+#     ).filter(
+#         (ContractModel.buyer_id == user.id) | (ContractModel.farmer_id == user.id),
+#         ContractModel.status == ContractStatus.ongoing
+#     ).all()
+    
+#     response = []
+#     for contract in contracts:
+#         financials = get_contract_financials(contract, db)
+#         response_item = ContractDashboardResponse.model_validate(contract, from_attributes=True).model_copy(update=financials)
+#         response.append(response_item)
+#     return response
+
 @router.get("/ongoing", response_model=List[ContractDashboardResponse])
-def get_ongoing_contracts(db: Session = Depends(get_db), current_user: TokenData = Depends(oauth2.get_current_user)):
+def get_ongoing_contracts(
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user),
+):
+    """[BUYER & FARMER] Gets all ongoing contracts for the current user."""
     user = db.query(UserModel).filter(UserModel.email == current_user.username).first()
-    
-    # 1. Your database query (this is unchanged and correct)
-    contracts = db.query(ContractModel).options(
-        joinedload(ContractModel.listing).joinedload(CropListModel.farmer),
-        joinedload(ContractModel.buyer),
-        joinedload(ContractModel.farmer),
-        joinedload(ContractModel.milestones) # Eager load all relationships
-    ).filter(
-        (ContractModel.buyer_id == user.id) | (ContractModel.farmer_id == user.id),
-        ContractModel.status == ContractStatus.ongoing
-    ).all()
-    
-    # 2. --- FIX: ADDED THIS LOOP ---
-    # We must iterate over the SQLAlchemy objects and manually add the 
-    # attributes that the ContractDashboardResponse schema requires.
-    
-    processed_contracts = []
+
+    contracts = (
+        db.query(ContractModel)
+        .options(
+            joinedload(ContractModel.listing).joinedload(CropListModel.farmer),
+            joinedload(ContractModel.buyer),
+            joinedload(ContractModel.farmer),
+            joinedload(ContractModel.milestones).joinedload(MilestoneModel.shipment),
+        )
+        .filter(
+            (ContractModel.buyer_id == user.id) | (ContractModel.farmer_id == user.id),
+            ContractModel.status == ContractStatus.ongoing,
+        )
+        .all()
+    )
+
+    response = []
     for contract in contracts:
-        # Get the financial dict
         financials = get_contract_financials(contract, db)
-        
+
         # Attach the calculated values as new attributes to the SA object
         contract.total_value = financials['total_value']
         contract.escrow_amount = financials['escrow_amount']
         contract.amount_paid = financials['amount_paid']
         
-        processed_contracts.append(contract)
+        response.append(contract)
 
-    # 3. Return the modified list of contract objects.
-    # FastAPI will now validate this list against List[ContractDashboardResponse],
-    # and Pydantic will successfully find all the required fields.
-    return processed_contracts
+    return response
 
 @router.get("/listing/{listing_id}", response_model=List[ContractResponse])
 def get_proposals_for_listing(listing_id: int, db: Session = Depends(get_db), current_user: TokenData = Depends(oauth2.get_current_user)):
@@ -215,7 +258,7 @@ def get_completed_contracts(db: Session = Depends(get_db), current_user: TokenDa
 
 # --- Add this new function to your router/contract_routes.py file ---
 
-@router.get("/proposals/pending-all", response_model=List[ContractResponse])
+@router.get("/proposals/pending", response_model=List[ContractResponse])
 def get_all_pending_proposals_for_farmer(
     db: Session = Depends(get_db),
     current_user: TokenData = Depends(oauth2.get_current_user)
@@ -288,20 +331,20 @@ def reject_contract(contract_id: int, db: Session = Depends(get_db), current_use
     db.refresh(contract)
     return contract
 
-@router.get("/proposals/pending", response_model=List[ContractResponse])
-def get_all_pending_proposals_for_farmer(
-    db: Session = Depends(get_db), 
-    current_user: TokenData = Depends(oauth2.get_current_user)
-):
-    """
-    [FARMER ONLY] Gets all contract proposals from all listings that are
-    pending this farmer's approval.
-    """
-    farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+# @router.get("/proposals/pending", response_model=List[ContractResponse])
+# def get_all_pending_proposals_for_farmer(
+#     db: Session = Depends(get_db), 
+#     current_user: TokenData = Depends(oauth2.get_current_user)
+# ):
+#     """
+#     [FARMER ONLY] Gets all contract proposals from all listings that are
+#     pending this farmer's approval.
+#     """
+#     farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
     
-    pending_proposals = db.query(ContractModel).filter(
-        ContractModel.farmer_id == farmer.id,
-        ContractModel.status == ContractStatus.pending_farmer_approval
-    ).all()
+#     pending_proposals = db.query(ContractModel).filter(
+#         ContractModel.farmer_id == farmer.id,
+#         ContractModel.status == ContractStatus.pending_farmer_approval
+#     ).all()
     
-    return pending_proposals
+#     return pending_proposals

@@ -15,6 +15,7 @@ import ProfilePage from './farmer_pages/ProfilePage';
 import SupportPage from './farmer_pages/SupportPage';
 import FarmerListingsPage from './farmer_pages/FarmerListingsPage';
 import FarmerSignupPage from './pages/FarmerSignupPage';
+import FarmLogisticsPage from './farmer_pages/Farmer_LogisticsPage';
 
 // ------------------- Buyer Imports -------------------
 import BuyerLayout from './buyer_components/Layout';
@@ -23,6 +24,7 @@ import BuyerDashboard from './buyer_pages/BuyerDashboard';
 import BrowseListings from './buyer_pages/BrowseListings';
 import OngoingContracts from './buyer_pages/OngoingContracts';
 import Payments from './buyer_pages/Payments';
+import BuyLogisticsPage from "./buyer_pages/Buyer_LogisticsPage"
 import BuyerProfile from './buyer_pages/Profile';
 import ContractTemplatesPage from './buyer_pages/ContractTemplatesPage';
 
@@ -107,6 +109,7 @@ const router = createBrowserRouter([
       },
       { path: 'ongoing-contracts', element: <OngoingContractsPage /> },
       { path: 'completed-contracts', element: <CompletedContractsPage /> },
+      { path: 'logistics', element: <FarmLogisticsPage/>},
       { path: 'profile', element: <ProfilePage /> },
       { path: 'support', element: <SupportPage /> },
     ],
@@ -127,6 +130,7 @@ const router = createBrowserRouter([
       { path: 'browse', element: <BrowseListings /> },
       { path: 'contracts', element: <OngoingContracts /> },
       { path: 'payments', element: <Payments /> },
+      { path: 'logistics', element: <BuyLogisticsPage/>},
       { path: 'profile', element: <BuyerProfile /> },
       { path: 'propose/:cropId', element: <ContractTemplatesPage /> },
     ],

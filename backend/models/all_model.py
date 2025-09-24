@@ -1,4 +1,4 @@
-# models/models.py
+# models/all_model.py
 
 import enum
 from sqlalchemy import (
@@ -6,13 +6,12 @@ from sqlalchemy import (
     ForeignKey, DateTime, Text, Numeric, Boolean
 )
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
-Base = declarative_base()
+# IMPORTANT: Import the single, shared Base object from your database file
+from database.postgresConn import Base
 
 # --- ENUMS ---
-
 class UserRole(str, enum.Enum):
     buyer = "buyer"
     farmer = "farmer"
@@ -26,7 +25,6 @@ class ContractStatus(str, enum.Enum):
     cancelled = "cancelled"
 
 # --- MODELS ---
-
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
@@ -47,16 +45,16 @@ class CropList(Base):
     id = Column(Integer, primary_key=True, index=True)
     farmer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     crop_type = Column(String, index=True, nullable=False)
-    quantity = Column(Float, nullable=False)  # in tons / KG/ Quintals
+    quantity = Column(Float, nullable=False)
     unit = Column(String, nullable=False)
-    expected_price_per_unit = Column(Numeric(10, 2), nullable=False)   #in rupe
+    expected_price_per_unit = Column(Numeric(10, 2), nullable=False)
     harvest_date = Column(Date, nullable=False)
     location = Column(String, nullable=False)
     farming_practice = Column(String, nullable=True)
-    Soil_type = Column(String, nullable=False)
+    soil_type = Column(String, nullable=False) # Standardized to lowercase
     status = Column(String, default="active", nullable=False)
     irrigation_source = Column(String, nullable=True)
-    img_url = Column(String, nullable=True)
+    img_url = Column(String, nullable=True) # Standardized name
     recommended_template_name = Column(String, nullable=True)
     recommendation_reason = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -73,37 +71,33 @@ class Contract(Base):
     quantity_proposed = Column(Float, nullable=False)
     price_per_unit_agreed = Column(Numeric(10, 2), nullable=False)
     status = Column(Enum(ContractStatus), default=ContractStatus.pending_farmer_approval, nullable=False)
-    # ADDED: To define how payments are released ('milestone' or 'final')
     payment_terms = Column(String, default="final", nullable=False)
     summary = Column(Text, nullable=True)
-    # other_details = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     listing = relationship("CropList", back_populates="contracts")
     buyer = relationship("User", foreign_keys=[buyer_id], back_populates="contracts_as_buyer")
     farmer = relationship("User", foreign_keys=[farmer_id], back_populates="contracts_as_farmer")
     milestones = relationship("Milestone", back_populates="contract", cascade="all, delete-orphan")
-    transactions = relationship("Transaction", back_populates="contract")
-    # Relationship to the new AIAdvice table
+    transactions = relationship("Transaction", back_populates="contract", cascade="all, delete-orphan")
     ai_advisories = relationship("AIAdvice", back_populates="contract", cascade="all, delete-orphan")
+    shipments = relationship("Shipment", back_populates="contract", cascade="all, delete-orphan")
 
 class Milestone(Base):
     __tablename__ = "milestones"
     id = Column(Integer, primary_key=True, index=True)
     contract_id = Column(Integer, ForeignKey("contracts.id"), nullable=False)
-    # ADDED: To store the milestone's name and value
     name = Column(String, nullable=False)
     amount = Column(Numeric(12, 2), nullable=False)
-    
+    is_complete = Column(Boolean, default=False, nullable=False)
+    payment_released = Column(Boolean, default=False, nullable=False)
     update_text = Column(String, nullable=True)
     image_url = Column(String, nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
     ai_notes = Column(Text, nullable=True)
-    payment_released = Column(Boolean, default=False, nullable=False)
-    # ADDED: A "done" flag for the farmer to mark completion, which the buyer then verifies by paying.
-    is_complete = Column(Boolean, default=False, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     contract = relationship("Contract", back_populates="milestones")
+    shipment = relationship("Shipment", back_populates="milestone", uselist=False, cascade="all, delete-orphan")
 
 class Wallet(Base):
     __tablename__ = "wallets"
@@ -126,7 +120,6 @@ class Transaction(Base):
     wallet = relationship("Wallet", back_populates="transactions")
     contract = relationship("Contract", back_populates="transactions")
 
-# ADDED: New table to store the detailed advice from the Compliance Helper
 class AIAdvice(Base):
     __tablename__ = "ai_advisories"
     id = Column(Integer, primary_key=True, index=True)
@@ -135,3 +128,17 @@ class AIAdvice(Base):
     advice_text = Column(Text, nullable=False)
 
     contract = relationship("Contract", back_populates="ai_advisories")
+
+class Shipment(Base):
+    __tablename__ = "shipments"
+    id = Column(Integer, primary_key=True, index=True)
+    contract_id = Column(Integer, ForeignKey("contracts.id"), nullable=False)
+    milestone_id = Column(Integer, ForeignKey("milestones.id"), unique=True, nullable=False)
+    logistics_provider = Column(String, nullable=True)
+    booking_id = Column(String, nullable=True)
+    status = Column(String, default="pending", nullable=False)
+    estimated_cost = Column(Numeric(10, 2), nullable=True)
+    tracking_url = Column(String, nullable=True)
+    
+    contract = relationship("Contract", back_populates="shipments")
+    milestone = relationship("Milestone", back_populates="shipment")

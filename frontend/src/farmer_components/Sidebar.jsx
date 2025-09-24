@@ -7,6 +7,7 @@ const pages = [
   { name: "buyer-proposals", icon: "fa-inbox" },
   { name: "ongoing-contracts", icon: "fa-file-signature" },
   { name: "completed-contracts", icon: "fa-history" },
+  { name: 'logistics', icon: "fa-truck" }
 ];
 
 // ✅ Reusable link component that handles active highlighting

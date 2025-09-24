@@ -181,6 +181,7 @@
 #     image_url: Optional[str] = None
 
 # schemas/all_schema.py
+# schemas/all_schema.py
 
 from pydantic import BaseModel, ConfigDict, EmailStr, model_validator
 from datetime import date, datetime
@@ -188,8 +189,6 @@ from decimal import Decimal
 from typing import List, Optional
 
 # --- Base Schemas for Nesting ---
-# These are defined first to be used as types in other schemas below.
-
 class User(BaseModel):
     id: int
     email: EmailStr
@@ -197,7 +196,7 @@ class User(BaseModel):
     role: str
     model_config = ConfigDict(from_attributes=True)
 
-class CropList(BaseModel):
+class CropListResponseForNesting(BaseModel):
     id: int
     crop_type: str
     quantity: float
@@ -220,7 +219,7 @@ class UserCreate(UserBase):
 class UserResponse(UserBase):
     id: int
     created_at: datetime
-    lists: List[CropList] = []
+    lists: List[CropListResponseForNesting] = []
     model_config = ConfigDict(from_attributes=True)
 
 # --- CropList Schemas ---
@@ -232,7 +231,7 @@ class CropListBase(BaseModel):
     harvest_date: date
     location: str
     farming_practice: Optional[str] = None
-    Soil_type: str
+    soil_type: str
     irrigation_source: Optional[str] = None
     img_url: Optional[str] = None
 
@@ -255,7 +254,7 @@ class CropListUpdate(BaseModel):
     unit: Optional[str] = None
     status: Optional[str] = None
     farming_practice: Optional[str] = None
-    Soil_type: Optional[str] = None
+    soil_type: Optional[str] = None
     irrigation_source: Optional[str] = None
     img_url: Optional[str] = None
 
@@ -278,6 +277,39 @@ class Transaction(BaseModel):
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
+# --- Logistics & Shipment Schemas ---
+class QuoteRequest(BaseModel):
+    pickup_address: str
+    dropoff_address: str
+    vehicle_type: str
+
+class QuoteResponse(BaseModel):
+    quote_id: str
+    estimated_cost: Decimal
+    logistics_provider: str
+
+class BookingRequest(BaseModel):
+    quote_id: str
+    estimated_cost: Decimal
+    logistics_provider: str
+    
+class Shipment(BaseModel):
+    id: int
+    contract_id: int
+    milestone_id: int
+    logistics_provider: Optional[str] = None
+    booking_id: Optional[str] = None
+    status: str
+    estimated_cost: Optional[Decimal] = None
+    tracking_url: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+class TrackingResponse(BaseModel):
+    id: int
+    booking_id: str
+    tracking_url :str
+    status: str
+
 # --- Milestone Schemas ---
 class Milestone(BaseModel):
     id: int
@@ -289,15 +321,14 @@ class Milestone(BaseModel):
     image_url: Optional[str] = None
     ai_notes: Optional[str] = None
     created_at: datetime
+    shipment: Optional[Shipment] = None
     model_config = ConfigDict(from_attributes=True)
 
 class MilestoneCreate(BaseModel):
-    """Schema for a BUYER to create the milestone structure."""
     name: str
     amount: Decimal
 
 class MilestoneUpdateByFarmer(BaseModel):
-    """Schema for a FARMER to submit their update for a milestone."""
     update_text: Optional[str] = None
     image_url: Optional[str] = None
 
@@ -353,7 +384,7 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 # --- Final Rebuild ---
-# This is no longer strictly necessary with the single-file structure,
-# but it does no harm and is good practice for complex nested models.
+# This helps Pydantic resolve the nested relationships correctly.
 UserResponse.model_rebuild()
 ContractResponse.model_rebuild()
+Milestone.model_rebuild()

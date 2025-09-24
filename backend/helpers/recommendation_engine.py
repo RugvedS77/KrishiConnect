@@ -49,7 +49,7 @@ def get_template_recommendation_with_llm(listing: CropListModel) -> dict:
     - Expected Price per Unit: {listing.expected_price_per_unit} INR
     - Farming Practice: {listing.farming_practice or 'Not specified'}
     - Location: {listing.location}
-    - Soil Type: {listing.Soil_type}
+    - Soil Type: {listing.soil_type}
 
     Your response MUST be a clean JSON object with exactly two keys: "template_name" (the full name of the best template) and "reason" (a brief, simple, one-sentence explanation written directly to the farmer explaining *why* this template is best for them and protects their interests).
     """

@@ -47,7 +47,7 @@ export const useAuthStore = create((set, get) => ({
    * LOGIN (MODIFIED):
    * Now accepts a 'roleHint' (e.g., 'farmer' or 'buyer') from the component.
    */
-  login: async (email, password, roleHint) => { // <-- roleHint ADDED
+  login: async (email, password, userRole) => { // <-- roleHint ADDED
     set({ loading: true }); 
 
     const formData = new URLSearchParams();
@@ -67,23 +67,24 @@ export const useAuthStore = create((set, get) => ({
       }
 
       const token = data.access_token;
-      const decoded = jwtDecode(token); // We still decode for 'sub' and 'exp'
+      const decoded = jwtDecode(token);// We still decode for 'sub' and 'exp'
 
+      const userRole = data.userRole;
       // --- KEY CHANGES ---
       localStorage.setItem('authToken', token);
-      localStorage.setItem('userRole', roleHint); // <-- ADDED: Save the role hint
+      localStorage.setItem('userRole', userRole); // <-- ADDED: Save the role hint
 
       // Set state using the roleHint, not decoded.role
       set({
-        user: { email: decoded.sub, role: roleHint }, // Use roleHint
+        user: { email: decoded.sub, role: userRole }, // Use roleHint
         token: token,
-        farmerAuth: roleHint === 'farmer', // Use roleHint
-        buyerAuth: roleHint === 'buyer',   // Use roleHint
+        farmerAuth: userRole === 'farmer', // Use roleHint
+        buyerAuth: userRole === 'buyer',   // Use roleHint
         loading: false,
       });
       // --------------------
 
-      return { role: roleHint }; // Return the role we were given
+      return { role: userRole }; // Return the role we were given
 
     } catch (err) {
       set({ loading: false });

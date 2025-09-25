@@ -35,6 +35,7 @@ const BuyerLoginPage = () => {
   // --- Local state for this component's form ---
   const [email, setEmail] = useState("sahil@gmail.com");
   const [password, setPassword] = useState("sahiljagtap");
+  const [userRole, setuserRole] = useState(null);
   const [error, setError] = useState(null);
 
   // --- 3. HANDLE LOGIN USING THE STORE ---
@@ -44,7 +45,7 @@ const BuyerLoginPage = () => {
 
     try {
       // Pass the role hint 'buyer' to the login action
-      const { role } = await login(email, password, 'buyer');
+      const { role } = await login(email, password, userRole);
 
       if (role === 'buyer') {
         console.log("Successful buyer login. Navigating to dashboard.");

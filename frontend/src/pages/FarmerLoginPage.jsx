@@ -35,6 +35,7 @@ const FarmerLoginPage = () => {
   // --- Local state (Unchanged) ---
   const [email, setEmail] = useState("suyog@gmail.com");
   const [password, setPassword] = useState("suyog123");
+const [userRole, setuserRole] = useState(null)
   const [error, setError] = useState(null);
 
   // --- 3. HANDLE LOGIN LOGIC (Unchanged) ---
@@ -43,7 +44,7 @@ const FarmerLoginPage = () => {
     setError(null);
 
     try {
-      const { role } = await login(email, password, 'farmer');
+      const { role } = await login(email, password, userRole);
       
       if (role === 'farmer') {
         console.log("Successful farmer login. Navigating to dashboard.");

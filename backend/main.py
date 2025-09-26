@@ -1,10 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from database.postgresConn import engine, Base
 from models import all_model
 
-from router import user_routes, auth_routes, croplist_routes, wallet_routes, contract_routes, milestone_routes, logistics_routes
+from router import user_routes, auth_routes, croplist_routes, wallet_routes, contract_routes, milestone_routes, logistics_routes, chat_routes
 
 all_model.Base.metadata.create_all(bind=engine)
 
@@ -37,3 +37,4 @@ app.include_router(wallet_routes.router)
 app.include_router(contract_routes.router)
 app.include_router(milestone_routes.router)
 app.include_router(logistics_routes.router)
+app.include_router(chat_routes.router)

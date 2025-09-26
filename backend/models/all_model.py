@@ -7,7 +7,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-
+from sqlalchemy import Enum as SQLAlchemyEnum
 # IMPORTANT: Import the single, shared Base object from your database file
 from database.postgresConn import Base
 
@@ -21,6 +21,7 @@ class ContractStatus(str, enum.Enum):
     accepted = "accepted"
     rejected = "rejected"
     ongoing = "ongoing"
+    negotiating = "negotiating"
     completed = "completed"
     cancelled = "cancelled"
 
@@ -73,6 +74,7 @@ class Contract(Base):
     status = Column(Enum(ContractStatus), default=ContractStatus.pending_farmer_approval, nullable=False)
     payment_terms = Column(String, default="final", nullable=False)
     summary = Column(Text, nullable=True)
+    last_offer_by = Column(String, nullable=False, default='buyer')
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     listing = relationship("CropList", back_populates="contracts")
@@ -82,6 +84,7 @@ class Contract(Base):
     transactions = relationship("Transaction", back_populates="contract", cascade="all, delete-orphan")
     ai_advisories = relationship("AIAdvice", back_populates="contract", cascade="all, delete-orphan")
     shipments = relationship("Shipment", back_populates="contract", cascade="all, delete-orphan")
+    negotiation_messages = relationship("NegotiationMessage", back_populates="contract", cascade="all, delete-orphan")
 
 class Milestone(Base):
     __tablename__ = "milestones"
@@ -142,3 +145,22 @@ class Shipment(Base):
     
     contract = relationship("Contract", back_populates="shipments")
     milestone = relationship("Milestone", back_populates="shipment")
+
+class NegotiationMessage(Base):
+    __tablename__ = 'negotiation_messages'
+    id = Column(Integer, primary_key=True, index=True)
+    contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False)
+    sender_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    
+    # This will store the template message, e.g., "I propose a new price."
+    message = Column(String, nullable=False)
+    
+    # The actual new values being negotiated
+    proposed_price = Column(Float, nullable=True)
+    proposed_quantity = Column(Integer, nullable=True)
+    
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relationships
+    sender = relationship("User")
+    contract = relationship("Contract", back_populates="negotiation_messages") # Add back_populates to Contract model

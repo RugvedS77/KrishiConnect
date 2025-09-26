@@ -179,6 +179,10 @@ class ContractDashboardResponse(ContractResponse):
     total_value: Decimal
     escrow_amount: Decimal
     amount_paid: Decimal
+
+class ContractOfferUpdate(BaseModel):
+    price_per_unit_agreed: float
+    quantity_proposed: int
     
 # --- AI Helper Schemas ---
 class AIAdvice(BaseModel):
@@ -192,6 +196,16 @@ class ProposalAnalysis(BaseModel):
     best_proposal_id: Optional[int] = None
     reason: str
 
+class NegotiationMessageSchema(BaseModel):
+    id: int
+    sender_id: int
+    message: str
+    proposed_price: Optional[float] = None
+    proposed_quantity: Optional[int] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
 # --- Auth Schemas ---
 class Token(BaseModel):
     access_token: str
@@ -200,6 +214,12 @@ class Token(BaseModel):
     
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+# This will be your new response model for the login route
+class TokenWithUser(BaseModel):
+    access_token: str
+    token_type: str
+    user: UserResponse # <-- Nest the user object here
     
 
 # --- Final Rebuild ---

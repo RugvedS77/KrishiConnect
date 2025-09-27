@@ -49,25 +49,32 @@ async def websocket_endpoint(
             data = await websocket.receive_text()
             message_data = json.loads(data)
             
-            with SessionLocal() as message_db:
+            # --- MODIFIED LOGIC ---
+            with SessionLocal() as db:
+                # 1. Create a message with the default 'text' type.
                 new_message = NegotiationMessageModel(
                     contract_id=contract_id,
                     sender_id=user_id,
+                    message_type='text', # <-- It's a regular text message
                     message=message_data.get("message"),
-                    created_at=datetime.utcnow()
                 )
-                message_db.add(new_message)
-                message_db.commit()
-                message_db.refresh(new_message)
+                db.add(new_message)
+                db.commit()
+                db.refresh(new_message)
                 
-                broadcast_message = {
+                # 2. Prepare the broadcast payload in the same structure.
+                broadcast_payload = {
                     "id": new_message.id,
                     "sender_id": new_message.sender_id,
+                    "message_type": new_message.message_type,
                     "message": new_message.message,
+                    "proposed_price": None, # No offer details for a text message
+                    "proposed_quantity": None,
                     "created_at": new_message.created_at.isoformat()
                 }
 
-            await manager.broadcast(json.dumps(broadcast_message), contract_id)
+            # 3. Broadcast the structured message.
+            await manager.broadcast(json.dumps(broadcast_payload), contract_id)
 
     except WebSocketDisconnect:
         manager.disconnect(websocket, contract_id)

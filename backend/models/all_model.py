@@ -152,8 +152,8 @@ class NegotiationMessage(Base):
     contract_id = Column(Integer, ForeignKey('contracts.id'), nullable=False)
     sender_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
-    # This will store the template message, e.g., "I propose a new price."
-    message = Column(String, nullable=False)
+    message_type = Column(String(20), nullable=False, default='text') # This will be 'text' for a normal message, and 'offer' for a system message.
+    message = Column(String, nullable=False) # This will store the template message, e.g., "I propose a new price."
     
     # The actual new values being negotiated
     proposed_price = Column(Float, nullable=True)

@@ -410,14 +410,34 @@ async def update_contract_offer(
     contract.last_offer_by = user.role.value # Assumes user.role is an Enum
     contract.status = ContractStatus.negotiating # Always set to 'negotiating' after an offer
     
+    # --- THIS IS THE NEW LOGIC ---
+    # 1. Create a structured system message in the database.
+    system_message = NegotiationMessageModel(
+        contract_id=contract.id,
+        sender_id=user.id,
+        message_type='offer', # <-- Set the type
+        proposed_price=request.price_per_unit_agreed,
+        proposed_quantity=request.quantity_proposed,
+        message=f"{user.full_name or user.email} has proposed a new offer." # A descriptive message
+    )
+    db.add(system_message)
     db.commit()
+    db.refresh(system_message)
 
-    # After saving, broadcast a notification message via the WebSocket
-    notification_payload = {
-        "type": "system_message",
-        "message": f"A new offer was sent by {user.role.value}: Price ₹{contract.price_per_unit_agreed}, Quantity {contract.quantity_proposed}"
+    # 2. Prepare a full JSON payload to broadcast.
+    broadcast_payload = {
+        "id": system_message.id,
+        "sender_id": system_message.sender_id,
+        "message_type": system_message.message_type,
+        "message": system_message.message,
+        "proposed_price": float(system_message.proposed_price),
+        "proposed_quantity": system_message.proposed_quantity,
+        "created_at": system_message.created_at.isoformat()
     }
-    await manager.broadcast(json.dumps(notification_payload), contract.id)
+
+    # 3. Broadcast the structured message.
+    await manager.broadcast(json.dumps(broadcast_payload), contract.id)
+    # --- END OF NEW LOGIC ---
 
     db.refresh(contract)
     return contract
@@ -472,12 +492,12 @@ def buyer_accepts_offer(
     # Validation
     if not contract or contract.buyer_id != user.id:
         raise HTTPException(status_code=403, detail="Not authorized.")
-    if contract.status != ContractStatus.negotiating or contract.last_offer_by != ProposerRole.farmer:
+    if contract.status != ContractStatus.negotiating or contract.last_offer_by != "farmer":
         raise HTTPException(status_code=400, detail="No pending offer from the farmer to accept.")
 
     # --- This is the same Escrow logic as the original 'accept' endpoint ---
     wallet = db.query(WalletModel).filter(WalletModel.user_id == user.id).first()
-    total_value = contract.total_value # Use the updated total value
+    total_value = contract.price_per_unit_agreed * Decimal(contract.quantity_proposed)
     if not wallet or wallet.balance < total_value:
         raise HTTPException(status_code=400, detail="Insufficient funds to secure the contract.")
 

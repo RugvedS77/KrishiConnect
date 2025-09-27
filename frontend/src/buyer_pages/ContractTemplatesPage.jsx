@@ -149,7 +149,16 @@ const ContractTemplatesPage = () => {
     }
   }, [crop]);
 
-  const handleFormChange = (templateId, updatedData) => setFormData(prev => ({ ...prev, [templateId]: updatedData }));
+  // const handleFormChange = (templateId, updatedData) => setFormData(prev => ({ ...prev, [templateId]: updatedData }));
+  // FIX 1: Update handleFormChange to properly merge data
+  const handleFormChange = (templateId, updatedData) => 
+  setFormData(prev => ({ 
+    ...prev, 
+    [templateId]: {
+      ...prev[templateId], // Preserve existing data for this template
+      ...updatedData       // Only update the changed fields
+    }
+  }));
 
   const templates = [
     { id: 'spot-buy', title: 'Secured Spot Buy', description: 'Simple one-time purchase of ready-to-harvest produce.', bestFor: 'Quick, low-risk transactions.', milestones: '1 Progress, 1 Deliverable' },
@@ -224,7 +233,15 @@ const ContractTemplatesPage = () => {
     const currentData = formData[selectedTemplate];
     if (!currentData) return null;
 
-    const currentSetData = (updatedData) => handleFormChange(selectedTemplate, updatedData);
+    const currentSetData = (updatedData) => {
+      setFormData(prev => ({
+        ...prev,
+        [selectedTemplate]: {
+          ...prev[selectedTemplate],
+          ...updatedData
+        }
+      }));
+    };
     const escrowProps = { requiredEscrow, walletBalance, termsAgreed, onTermsChange: (e) => setTermsAgreed(e.target.checked), onAddFundsClick: () => setIsFundsModalOpen(true) };
     const props = { crop, buyer: buyerDetails, formData: currentData, setFormData: currentSetData, setMode, onEscrowChange: setRequiredEscrow, escrowProps };
     const previewProps = { data: currentData, crop, buyer: buyerDetails, isSubmitting, submitError, submitSuccess, onSendProposal: handleSendProposal };
@@ -464,33 +481,135 @@ const A4PreviewWrapper = ({ children, title, description, signatureFile, onSendP
 };
 const GenericMilestonePreviewSection = ({ totalValue, milestones }) => (<><h3 className="font-bold mt-6 mb-2 text-base">Article 2: Payment and Escrow</h3><p>The Total Contract Value shall be held in the KrishiConnect Escrow Account and released according to the following milestones:</p><table className="w-full text-left border-collapse my-2 text-xs sm:text-sm"><thead className="bg-gray-100"><tr><th className="p-2 border">Milestone Description</th><th className="p-2 border">Type</th><th className="p-2 border">Payment</th></tr></thead><tbody>{(milestones || []).map((m, i) => (<tr key={i}><td className="p-2 border">{m.desc}</td><td className="p-2 border capitalize">{m.type}</td><td className="p-2 border">{m.val}% (₹{(totalValue * (parseFloat(m.val) || 0) / 100).toLocaleString('en-IN')})</td></tr>))}</tbody></table></>);
 
-const SecuredSpotBuyForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
-  const handleInputChange = (e) => { const { name, value } = e.target; setFormData(prev => ({ ...prev, [name]: value })); };
-  const handleSignatureSave = (file) => setFormData(prev => ({ ...prev, signature: file }));
-  const totalValue = useMemo(() => (parseFloat(formData.quantity) || 0) * (parseFloat(formData.price) || 0), [formData.quantity, formData.price]);
-  useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
-  const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
+// FIX 2: Update how you call handleFormChange in your forms
+const SecuredSpotBuyForm = ({
+  formData,
+  setFormData,
+  crop,
+  buyer,
+  setMode,
+  onEscrowChange,
+  escrowProps
+}) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    // Only pass the changed field, not the entire formData
+    setFormData({
+      ...formData, // Preserve existing data
+      [name]: value // Only update the changed field
+    });
+  };
+
+  const handleSignatureSave = (file) => {
+    // Only pass the signature, not the entire formData
+    setFormData({
+      ...formData, // Preserve existing data including milestones
+      signature: file // Only update signature
+    });
+  };
+
+  const totalValue = useMemo(
+    () =>
+      (parseFloat(formData.quantity) || 0) *
+      (parseFloat(formData.price) || 0),
+    [formData.quantity, formData.price]
+  );
+
+  useEffect(() => {
+    onEscrowChange(totalValue);
+  }, [totalValue, onEscrowChange]);
+
+  const totalPercentage = useMemo(
+    () =>
+      (formData.milestones || []).reduce(
+        (acc, m) => acc + (parseFloat(m.val) || 0),
+        0
+      ),
+    [formData.milestones]
+  );
+
   const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-  const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+
+  const isValid =
+    Math.round(totalPercentage) === 100 &&
+    formData.signature &&
+    hasSufficientFunds &&
+    escrowProps.termsAgreed;
+
   return (
     <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
       <PartiesSection crop={crop} buyer={buyer} />
+
       <section>
-        <h3 className="text-xl font-semibold border-b pb-2 mb-4">Contract Terms</h3>
+        <h3 className="text-xl font-semibold border-b pb-2 mb-4">
+          Contract Terms
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FormField label={`Quantity to Buy (${crop?.unit || 'units'})`} name="quantity" value={formData.quantity} onChange={handleInputChange} type="number" />
-          <FormField label="Quantity in Tons" name="quantityInTons" value={formData.quantityInTons} onChange={handleInputChange} type="number" placeholder="e.g., 1.5" />
-          <FormField label={`Price per ${crop?.unit || 'unit'} (₹)`} name="price" value={formData.price} onChange={handleInputChange} type="number" />
+          <FormField
+            label={`Quantity to Buy (${crop?.unit || "units"})`}
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleInputChange}
+            type="number"
+          />
+          <FormField
+            label="Quantity in Tons"
+            name="quantityInTons"
+            value={formData.quantityInTons}
+            onChange={handleInputChange}
+            type="number"
+            placeholder="e.g., 1.5"
+          />
+          <FormField
+            label={`Price per ${crop?.unit || "unit"} (₹)`}
+            name="price"
+            value={formData.price}
+            onChange={handleInputChange}
+            type="number"
+          />
         </div>
-        <div className="mt-6"><FormField label="Quality Specifications" name="qualitySpecs" value={formData.qualitySpecs} onChange={handleInputChange} placeholder="e.g., Grade A" /></div>
+        <div className="mt-6">
+          <FormField
+            label="Quality Specifications"
+            name="qualitySpecs"
+            value={formData.qualitySpecs}
+            onChange={handleInputChange}
+            placeholder="e.g., Grade A"
+          />
+        </div>
+        
+        <div className="mt-4 p-3 bg-gray-50 rounded-md">
+          <p className="text-sm">
+            <strong>Total Contract Value:</strong> ₹{totalValue.toLocaleString('en-IN', { 
+              minimumFractionDigits: 2, 
+              maximumFractionDigits: 2 
+            })}
+          </p>
+        </div>
       </section>
-      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
+
+      {/* Pass setFormData directly to preserve milestones */}
+      <DynamicMilestoneSection
+        formData={formData}
+        setFormData={setFormData}
+        isEditable={true}
+      />
+
       <SignatureEditSection onSave={handleSignatureSave} />
-      <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
-      <FormActions onPreview={() => setMode('preview')} isDisabled={!isValid} />
+
+      <EscrowAndApprovalSection
+        {...escrowProps}
+        requiredEscrow={totalValue}
+      />
+
+      <FormActions
+        onPreview={() => setMode("preview")}
+        isDisabled={!isValid}
+      />
     </form>
   );
 };
+
 const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
   const handleInputChange = (e) => { const { name, value } = e.target; setFormData(prev => ({ ...prev, [name]: value })); };
   const handleSignatureSave = (file) => setFormData(prev => ({ ...prev, signature: file }));
@@ -516,7 +635,7 @@ const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onE
         </div>
         <div className="mt-4 p-3 bg-gray-50 rounded-md text-sm"><p><strong>Calculated Total Yield:</strong> {calculatedYield.totalYield.toLocaleString()} {crop?.unit || 'units'} (~{calculatedYield.tons} Tons)</p></div>
       </section>
-      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
+      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={true} />
       <SignatureEditSection onSave={handleSignatureSave} />
       <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
       <FormActions onPreview={() => setMode('preview')} isDisabled={!isValid} />
@@ -550,7 +669,7 @@ const InputFinancingForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
         </div>
         <div className="mt-4 p-3 bg-gray-50 rounded-md text-sm"><p><strong>Estimated Buyback Quantity:</strong> {calculatedQuantity.quantity} {crop?.unit || 'units'} (~{calculatedQuantity.tons} Tons)</p></div>
       </section>
-      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
+      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={true} />
       <SignatureEditSection onSave={handleSignatureSave} />
       <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
       <FormActions onPreview={() => setMode('preview')} isDisabled={!isValid} />
@@ -594,7 +713,7 @@ const QualityTieredForm = ({ formData, setFormData, crop, buyer, setMode, onEscr
           <button type="button" onClick={addTier} className="w-full mt-2 text-sm font-semibold text-green-600 hover:bg-green-100 rounded-md p-2 flex items-center justify-center space-x-2"><PlusCircle size={16} /><span>Add Tier</span></button>
         </div>
       </section>
-      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
+      <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={true} />
       <SignatureEditSection onSave={handleSignatureSave} />
       <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
       <FormActions onPreview={() => setMode('preview')} isDisabled={!isValid} />
@@ -633,7 +752,7 @@ const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, on
           <FormField label="No. of Deliveries" name="deliveries" value={formData.deliveries} onChange={handleInputChange} type="number" min="1" />
         </div>
       </section>
-      <DynamicMilestoneSection formData={formData} setFormData={setParentFormData} isEditable={false} />
+      <DynamicMilestoneSection formData={formData} setFormData={setParentFormData} isEditable={true} />
       <SignatureEditSection onSave={handleSignatureSave} />
       <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
       <FormActions onPreview={() => setMode('preview')} isDisabled={!isValid} />

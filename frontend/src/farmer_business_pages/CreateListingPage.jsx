@@ -1,8 +1,8 @@
 
 
 import React, { useState } from "react";
-import FormInput from "../farmer_components/CreateListing/FormInput";
-import FormSelect from "../farmer_components/CreateListing/FormSelect";
+import FormInput from "../farmer_business_components/CreateListing/FormInput";
+import FormSelect from "../farmer_business_components/CreateListing/FormSelect";
 import { supabase } from "../supabaseClient"; // Make sure this path is correct
 
 const API_URL = "http://localhost:8000/api/croplists/";

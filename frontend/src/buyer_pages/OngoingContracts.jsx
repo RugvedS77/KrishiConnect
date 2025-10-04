@@ -4,7 +4,7 @@ import { useAuthStore } from '../authStore';
 import { 
     AlertCircle, FileText, MessageCircle, ThumbsDown, Inbox, Loader2 
 } from "lucide-react";
-import NegotiationChatModal from '../farmer_components/NegotiationChatModal';
+import NegotiationChatModal from '../farmer_business_components/NegotiationChatModal';
 
 const BuyerContractsPage = () => {
     const [activeTab, setActiveTab] = useState("negotiating");

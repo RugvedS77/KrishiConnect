@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Truck, Loader2 } from 'lucide-react';
-import FarmerLogisticsView from '../farmer_components/Logistics/FarmerView';
+import FarmerLogisticsView from '../farmer_business_components/Logistics/FarmerView';
 // In a real app, you would import your auth store to get the token
 import { useAuthStore } from '../authStore';
 

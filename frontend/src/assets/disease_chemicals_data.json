@@ -1,0 +1,104 @@
+{
+  "cotton": {
+    "Aphids": {
+      "Symptoms": "Angular leaf spots with red to brown margins, water-soaked lesions that become necrotic",
+      "Preventive_measures": "Use disease-free seeds, practice crop rotation, avoid overhead irrigation",
+      "Chemicals": ["Imidacloprid 17.8% SL", "Acetamiprid 20.0% SP", "Thiamethoxam 25.0% WG" ,"Flonicamid 50.0% WG"],
+      "links": ["https://kisanvedika.bighaat.com/management-of-aphids-in-cotton/",
+       "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html",
+        "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html", 
+        "https://www.example.com/aphids/flonicamid"],
+      "Organic":["Azadirachtin 00.03% EC Min. Neem Oil Based Spray 2000 g/ml of formulation diluted in 500 liters of water per hectare, with a waiting period of 5 days before harvest","Amruth Alestra Liquid  containing Verticillium lecanii with dosage of 2ml/Litre of water","release parasitoid like Aphelinus sp., to effectively control cotton aphids’ populations","Release natural predators such as lady bird beetles, green lacewing, hoverflies and spiders etc","using neem products,detergent / soap powder @ 1 gm/litre of spray fluid is to be added for getting uniform spray suspension","Spray of 5 % neem seed kernel extract prepared on farm or crude neem oil spray @ 1% "]
+    }, 
+    "Army worm": {
+      "Symptoms": "Caterpillars feeding on leaves, creating holes and skeletonizing foliage",
+      "Preventive_measures": "Regular monitoring, use of pheromone traps, biological control with natural predators",
+      "Chemicals": ["Emamectin Benzoate 5.0% SG", "Spinosad 45.0% SC", "Flubendiamide 20.0% WG" ,"Chlorantraniliprole 18.5% SC"],
+      "links": ["https://www.researchgate.net/publication/279171735_Fall_Armyworm_Lepidoptera_Noctuidae_Ecology_in_Southeastern_Cotton/fulltext/5642acd808ae997866c4cdd5/Fall-Armyworm-Lepidoptera-Noctuidae-Ecology-in-Southeastern-Cotton.pdf", 
+      "https://www.researchgate.net/publication/279171735_Fall_Armyworm_Lepidoptera_Noctuidae_Ecology_in_Southeastern_Cotton/fulltext/5642acd808ae997866c4cdd5/Fall-Armyworm-Lepidoptera-Noctuidae-Ecology-in-Southeastern-Cotton.pdf",
+      "https://www.researchgate.net/publication/279171735_Fall_Armyworm_Lepidoptera_Noctuidae_Ecology_in_Southeastern_Cotton/fulltext/5642acd808ae997866c4cdd5/Fall-Armyworm-Lepidoptera-Noctuidae-Ecology-in-Southeastern-Cotton.pdf" ,
+      "https://www.researchgate.net/publication/279171735_Fall_Armyworm_Lepidoptera_Noctuidae_Ecology_in_Southeastern_Cotton/fulltext/5642acd808ae997866c4cdd5/Fall-Armyworm-Lepidoptera-Noctuidae-Ecology-in-Southeastern-Cotton.pdf"],
+      "Organic":["Release egg parasitoids like Trichogramma pretiosum or Telenomus remus 50,000 per acre at weekly","Anand Dr. Bacto’s Brave ( Beauveria bassiana) (dosage: 2.5ml per liter of water.)","Katyayani Organic Larvicide (Bacillus thuringiensis )(dosage:10ml per liter of water. )","Econeem Plus Bio pesticide (Azadirachtin )(dosage:3ml per litre as oviposition deterrent on one week after sowing)","Deep ploughing and application of neemcake (dosage:  50–100 mL/ha)","Common predators include big-eyed bugs, minute pirate bugs, damsel bug, lacewing larvae, assassin bugs, spiders, lady beetles and Collops beetles."]
+    },
+    "Bacterial Blight": {
+      "Symptoms": "Water-soaked lesions on leaves, stems, and bolls, leading to wilting and defoliation",
+      "Preventive_measures": "Use resistant varieties, apply copper-based bactericides, ensure proper field sanitation",
+      "Chemicals": ["Carboxin 37.5%","Thiram 37.5%"],
+      "links":["https://ppqs.gov.in/sites/default/files/cotton.pdf",
+      "https://ppqs.gov.in/sites/default/files/cotton.pdf"],
+      "Organic":["Seaweed Extracts: These can boost plant immunity and help them resist bacterial infections","Mulching: Mulching can prevent the spread of soil-borne bacteria to the leaves","V-Cure Fungicide Plus Bactericide"]
+    },
+    "Cotton Boll Rot": {
+      "Symptoms": "Soft, mushy bolls with a foul odor, often with fungal growth",
+      "Preventive_measures": "Improve air circulation, avoid excessive nitrogen fertilization, timely harvesting",
+      "Chemicals": ["Carbendazim 50.0% WP", "Thiram 37.5% WS", "Carboxin 37.5% WS"],
+      "links": ["https://cicr.org.in/wp-content/uploads/boll-rot-eng.pdf",
+      "https://ppqs.gov.in/sites/default/files/cotton.pdf",
+      "https://ppqs.gov.in/sites/default/files/cotton.pdf"
+  ]
+    },
+    "Curl Virus": {
+      "Symptoms": "Leaf curling, yellowing, and stunted growth",
+      "Preventive_measures": "Use virus-free seeds, control vector populations, apply insecticides",
+      "Chemicals": ["Imidacloprid 70.0% WG", "Thiamethoxam 30.0% FS", "Dinotefuran 20.0% SG "],
+      "links": ["https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/",
+      "https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/",
+      "https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/"
+  ],
+      "Organic":["canola oil and bifenthrin (bifenthrin10% EC)","Azardiractin  (Brand: Greenpeace Neemol Bio Neem Oil Insecticide : Neem Oil extracts)  (dosage:1 – 2 ml/lit water )","Fatty Acid based Plant Extracts (Brand:  Nanobee Agrokill Insecticide : Nano Colloidal Micelles 100%) (dosage:3 mL/Litre )","Beauveria bassiana (Brand: Anand Dr Bacto’s Brave)  (dosage:2.5 ml/lit water)","VC-100  (dosage:5 gram/Litre water )","Vanproz V-Bind (dosage: 2 – 3 ml/lit water)","Multiplex Magnum Mn (Manganese 12% ) (dosage: 2.5 ml/lit water)","Foliar application of neem leaf extract and 1% neem oil ","Neem oil + Teepol   (dosge: 3 + 500 ml/ha)","Fish oil resin soap   (dosage: 14/15 kg/ha)"]
+    },
+    "Herbicide Growth Damage": {
+      "Symptoms": "Distorted growth, leaf chlorosis, and necrosis due to herbicide exposure",
+      "Preventive_measures": "Follow label instructions, avoid drift, use appropriate herbicide rates"
+    },
+    "Leaf Hopper Jassids": {
+      "Symptoms": "Yellowing and curling of leaves, stunted plant growth",
+      "Preventive_measures": "Use resistant varieties, apply insecticides, maintain field hygiene",
+      "Chemicals": ["Acephate 75.0% SP", "Imidacloprid 11.01% SC", "Buprofezin 25.0% SC"],
+      "links": ["https://drive.google.com/file/d/1LrdmOduP0NY0LO6HdPoXuXA05vODnLuF/view?usp=drive_link",
+      "https://katyayanikrishidirect.com/blogs/news/controlling-of-leaf-hopper-in-cotton-plant",
+      "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html"],
+      "Organic":["spinosad- fermented soil actinomycete bacteria {active ingredients: Spinosyn A and Spinosyn D} (dosage: 0.35ml/L on infected area )","Release predators viz., Chrysopa carnea (green lacewing)","Neem Seed Kernel Extract %5 {50 grams of ground neem seed kernels per liter of water} (dosage:25 kg/hectare)","aqueous neem seed extract (dosage: 10gram/Litre sprayed at 10 days interval)","Insecticidal soaps","Metarhizium anisopliae (Green Muscardine)","Beauveria bassiana (Green Mold/Beauveria)","Paecilomyces fumosoroseus (Violet Mold/Paecilomyces)","bacterium, Bacillus thuringiensis var. kurstaki (Garden Dust)","larvae of ladybird beetles and lacewings, spiders","Anagrus atomus (fairyfly or leafhopper egg parasitoid)","Azadirachtin 00.03% WSP (300 PPM) Neem Oil Based (dosage:Apply 2500-5000 g/ml of formulation diluted in 500-1000 liters of water per hectare, with a waiting period of 7 days before harvest.)"]
+    },
+    "Leaf Redding": {
+      "Symptoms": "Reddening of leaves, often due to nutrient imbalances or environmental stress",
+      "Preventive_measures": "Correct nutrient deficiencies, ensure proper irrigation, avoid water stress",
+      "Chemicals": ["Potassium nitrate[2-3 kg/ha]","Calcium nitrate[2-3 kg/ha]","Iron chelate[1-2 g/L]"],
+      "links": ["https://agrostar.in/article/management-of-reddening-in-cotton/5d0a2476ab9c8d86241613f9?language=en&state=maharashtra",
+      "2",
+      "3"]
+    },
+    "Leaf Variegation": {
+      "Symptoms": "Irregular leaf coloration, often genetic or due to viral infections",
+      "Preventive_measures": "Select healthy plants, control viral vectors, apply balanced fertilizers",
+      "Organic":["no direct environmental cause for this disorder, no biological treatment are available to treat it"]
+    },
+    "Powdery Mildew": {
+      "Symptoms": "White powdery fungal growth on leaves and stems",
+      "Preventive_measures": "Ensure good air circulation, apply fungicides, avoid overhead irrigation",
+      "Chemicals": ["Difenoconazole 11.4% SC", "Azoxystrobin 18.2% SC", "Carbendazim 50.0% WP"],
+      "links": ["https://agritech.tnau.ac.in/crop_protection/cotton_diseases/cotton_d4.html",
+      "https://agritech.tnau.ac.in/crop_protection/cotton_diseases/cotton_d4.html",
+      "http://eagri.org/eagri50/PATH272/lecture13/005.html"],
+      "Organic":["bacteria (Bacillus circulans and Serratia marcescens) have been used to control.","Sulfur and Fish Oil + Sesame Oil","Neem oil","Milk"]
+    },
+    "Target Spot": {
+      "Symptoms": "Circular spots with concentric rings on leaves, leading to defoliation",
+      "Preventive_measures": "Apply fungicides, remove infected debris, ensure proper spacing",
+      "Chemicals": ["Pyraclostrobin 5.0% WG", "Metiram 55.0% WG", "Propiconazole 25.0% EC"],
+      "links": ["cotton.org/beltwide/proceedings/2005-2022/data/conferences/2021/paper/20737.pdf",
+      "cotton.org/beltwide/proceedings/2005-2022/data/conferences/2021/paper/20737.pdf",
+      "https://news.utcrops.com/2017/07/target-spot-cotton-identify-management-options/"]
+    },
+    "Wilt": {
+      "Symptoms": "Sudden wilting of plants, often due to fungal or bacterial infections",
+      "Preventive_measures": "Use resistant varieties, improve soil drainage, apply fungicides",
+      "Chemicals": ["Carbendazim 50.0% WP", "Thiram 37.5% WS", "Azoxystrobin 18.2% SC"],
+      "links": ["https://agritech.tnau.ac.in/crop_protection/cotton_diseases/cotton_d1.html",
+      "https://ppqs.gov.in/sites/default/files/cotton.pdf",
+      "http://eagri.org/eagri50/PATH272/lecture13/005.html"],
+      "Organic" : ["Apply farm yard manure or other organic manures (dosage: 4 ton/acre)","Trichoderma asperellum : Biocontrol Agent: It suppresses the growth of plant pathogens such as Fusarium, (dosage: 1 kg/ acre, twice in the soil during sowing and 90 DAS )","T. asperellum : A fungus acts as a Biocontrol agent (dosage: 1 kg/ 100kg of manure for 15 days )","Increase in soil temperature (Soil solarization) decreases the incidence of wilt"]
+    }
+  }
+}
+

@@ -12,7 +12,7 @@ import {
   Sparkles, // <-- Added from AI feature
   MessagesSquare
 } from "lucide-react";
-import NegotiationChatModal from "../farmer_components/NegotiationChatModal";
+import NegotiationChatModal from "../farmer_business_components/NegotiationChatModal";
 
 // --- API Helper functions (From Original File) ---
 

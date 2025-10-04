@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../authStore'; // Import auth store
-import ProfileData from '../farmer_components/Profile/ProfileData'; // Keep mock data as a base
-import StarRating from '../farmer_components/Profile/StarRating';
-import ProfileField from '../farmer_components/Profile/ProfileField';
+import ProfileData from '../farmer_business_components/Profile/ProfileData'; // Keep mock data as a base
+import StarRating from '../farmer_business_components/Profile/StarRating';
+import ProfileField from '../farmer_business_components/Profile/ProfileField';
 import { Loader2, AlertCircle, Save } from 'lucide-react'; // Import icons
 
 export default function ProfilePage() {

@@ -23,6 +23,7 @@ import FarmOSDashboard from './farmer_daily_operation_pages/FarmOSDashboard.jsx'
 import FarmAdvisoryPage from './farmer_daily_operation_pages/FarmAdvisoryPage.jsx';
 import MachineryProductsPage from './farmer_daily_operation_pages/MachineryProductsPage.jsx';
 import CommunityHubPage from './farmer_daily_operation_pages/CommunityHubPage.jsx';
+import PostDetailPage from './farmer_daily_operation_pages/PostDetailPage.jsx';
 
 // ------------------- Buyer Imports -------------------
 import BuyerLayout from './buyer_components/Layout.jsx';
@@ -96,6 +97,7 @@ const router = createBrowserRouter([
             { path: 'advisory', element: <FarmAdvisoryPage /> },
             { path: 'resources', element: <MachineryProductsPage /> },
             { path: 'community-hub', element: <CommunityHubPage /> },
+            { path: 'community-hub/posts/:postId', element: <PostDetailPage /> },
             { path: 'profile', element: <ProfilePage /> },
             { path: 'support', element: <SupportPage /> },
       ]},

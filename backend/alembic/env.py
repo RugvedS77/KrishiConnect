@@ -9,32 +9,63 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 
-# This finds the .env file in your project's root (e.g., ./backend/.env) and loads it
-load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
+# # This finds the .env file in your project's root (e.g., ./backend/.env) and loads it
+# load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 
-from models.all_model import Base # <-- IMPORT YOUR Base OBJECT
+# from models.all_model import Base # <-- IMPORT YOUR Base OBJECT
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+# # this is the Alembic Config object, which provides
+# # access to the values within the .ini file in use.
+# config = context.config
+
+# # Interpret the config file for Python logging.
+# # This line sets up loggers basically.
+# if config.config_file_name is not None:
+#     fileConfig(config.config_file_name)
+
+# # add your model's MetaData object here
+# # for 'autogenerate' support
+# # from myapp import mymodel
+# # target_metadata = mymodel.Base.metadata
+# target_metadata = Base.metadata
+
+# # other values from the config, defined by the needs of env.py,
+# # can be acquired:
+# # my_important_option = config.get_main_option("my_important_option")
+# # ... etc.
+
+# --- SCRIPT CONFIGURATION ---
+
+# 1. Add the project root to the Python path.
+project_root = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, project_root)
+from models.all_model import Base # Import your models' Base
+
+# 2. Find and load the .env file.
+dotenv_path = os.path.join(project_root, '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
+# This is the Alembic Config object.
 config = context.config
 
+# 3. Manually set the sqlalchemy.url from the loaded environment variable.
+DB_URL = os.getenv('DATABASE_URL')
+if not DB_URL:
+    raise ValueError("DATABASE_URL environment variable not set or could not be loaded!")
+config.set_main_option('sqlalchemy.url', DB_URL)
+
 # Interpret the config file for Python logging.
-# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
+# Set the target metadata for 'autogenerate' support
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# --- END OF CONFIGURATION ---
+
 
 
 def run_migrations_offline() -> None:

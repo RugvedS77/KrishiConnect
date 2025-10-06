@@ -220,6 +220,39 @@ class TokenWithUser(BaseModel):
     access_token: str
     token_type: str
     user: UserResponse # <-- Nest the user object here
+
+# Community and other services 
+
+class AuthorResponse(BaseModel):
+    id: int
+    full_name: str
+    # avatar_url: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+class ReplyCreate(BaseModel):
+    content: str
+
+class ForumPostSummaryResponse(BaseModel):
+    id: int
+    title: str
+    author_id: int
+    category: Optional[str] = None
+    image_url: Optional[str] = None
+    created_at: datetime
+    author: AuthorResponse
+    reply_count: int
+    model_config = ConfigDict(from_attributes=True)
+
+class ReplyResponse(BaseModel):
+    id: int
+    content: str
+    created_at: datetime
+    author: AuthorResponse # Reuse the AuthorResponse schema we defined before
+    model_config = ConfigDict(from_attributes=True)
+
+class PostDetailResponse(ForumPostSummaryResponse):
+    replies: List[ReplyResponse] = []
+    model_config = ConfigDict(from_attributes=True)
     
 
 # --- Final Rebuild ---

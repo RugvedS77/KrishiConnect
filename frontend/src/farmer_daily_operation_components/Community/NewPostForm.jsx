@@ -1,101 +1,93 @@
-// src/components/NewPostForm.jsx
-import React, { useState } from 'react';
-import { forumApi } from '../../api/forumApi';
+// src/components/NewPostForm.jsx (Corrected)
 
-export function NewPostForm({ currentUser, categories, onPostCreated, onCancel }) {
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAuthStore } from '../../authStore';
+import { forumApi } from '../../api/forumApi';
+import { Loader2, AlertCircle, MessageSquare } from 'lucide-react';
+
+
+export default function NewPostForm({ categories, onPostCreated, onCancel }) {
+  const token = useAuthStore((state) => state.token);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [category, setCategory] = useState(categories[0]);
+  const [category, setCategory] = useState(categories[0] || '');
   const [image, setImage] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    if (!title || !content || !category) return setError('All fields are required.');
+    setLoading(true);
     setError(null);
 
-    // 1. Create FormData
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('category', category);
-    formData.append('user_id', currentUser.id);
-    if (image) {
-      formData.append('image', image);
-    }
-
-    // 2. Call the API
     try {
-      await forumApi.createPost(formData);
-      onPostCreated(); // Tell the parent page to refresh
-    } catch (e) {
-      setError(e.message);
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('category', category);
+      if (image) formData.append('image', image);
+
+      await forumApi.createPost(token, formData);
+      onPostCreated(); // Notify parent
+      setTitle('');
+      setContent('');
+      setCategory(categories[0] || '');
+      setImage(null);
+    } catch (err) {
+      setError(err.message);
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white shadow-md rounded-lg border">
-      <h3 className="text-xl font-semibold mb-3">Create a New Post</h3>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      
-      <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700">Title</label>
+    <form onSubmit={handleSubmit} className="p-4 border rounded-md bg-white shadow-sm space-y-4">
+      {error && <p className="text-red-500">{error}</p>}
+      <div>
+        <label className="block font-medium mb-1">Title</label>
         <input 
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-          required
+          className="w-full px-3 py-2 border rounded-md"
         />
       </div>
-
-      <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700">Category</label>
-        <select
-          value={category}
+      <div>
+        <label className="block font-medium mb-1">Content</label>
+        <textarea 
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="w-full px-3 py-2 border rounded-md"
+          rows={4}
+        />
+      </div>
+      <div>
+        <label className="block font-medium mb-1">Category</label>
+        <select 
+          value={category} 
           onChange={(e) => setCategory(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+          className="w-full px-3 py-2 border rounded-md"
         >
           {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
         </select>
       </div>
-
-      <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700">Content</label>
-        <textarea 
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-          rows="4"
-          required
-        />
+      <div>
+        <label className="block font-medium mb-1">Image (optional)</label>
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
       </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Upload Image (Optional)</label>
-        <input 
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
-          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
-      </div>
-
       <div className="flex gap-2">
         <button 
           type="submit" 
-          disabled={isSubmitting}
-          className="bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+          disabled={loading} 
+          className="bg-blue-600 text-white px-4 py-2 rounded-md"
         >
-          {isSubmitting ? 'Posting...' : 'Submit Post'}
+          {loading ? 'Posting...' : 'Create Post'}
         </button>
         <button 
           type="button" 
-          onClick={onCancel}
-          className="bg-gray-200 text-gray-700 py-2 px-4 rounded-md"
+          onClick={onCancel} 
+          className="bg-gray-300 px-4 py-2 rounded-md"
         >
           Cancel
         </button>

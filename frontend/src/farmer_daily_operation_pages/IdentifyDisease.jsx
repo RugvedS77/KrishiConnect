@@ -72,7 +72,7 @@ const IdentifyDisease = () => {
       const resizedFile = await resizeImage(file);
       const formData = new FormData();
       formData.append('file', resizedFile);
-      const response = await fetch('http://localhost:5000/predict', {
+      const response = await fetch('http://localhost:8000/api/services/cotton-predict', {
         method: 'POST',
         body: formData,
       });

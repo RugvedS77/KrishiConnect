@@ -41,6 +41,9 @@ class User(Base):
     contracts_as_buyer = relationship("Contract", foreign_keys="[Contract.buyer_id]", back_populates="buyer")
     contracts_as_farmer = relationship("Contract", foreign_keys="[Contract.farmer_id]", back_populates="farmer")
 
+    forum_posts = relationship("ForumPost", back_populates="author", cascade="all, delete-orphan")
+    forum_replies = relationship("ForumReply", back_populates="author", cascade="all, delete-orphan")
+
 class CropList(Base):
     __tablename__ = "crop_lists"
     id = Column(Integer, primary_key=True, index=True)
@@ -164,3 +167,36 @@ class NegotiationMessage(Base):
     # Relationships
     sender = relationship("User")
     contract = relationship("Contract", back_populates="negotiation_messages") # Add back_populates to Contract model
+
+# Community and other Services
+
+class ForumPost(Base):
+    __tablename__ = "forum_posts"
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=True)
+    content = Column(String, nullable=False)
+    category = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)
+    created_at =  Column(DateTime(timezone=True), server_default=func.now())
+
+    # Foreign key to User
+    author_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+
+    # Relationships
+    author = relationship("User", back_populates="forum_posts")
+    replies = relationship("ForumReply", back_populates="post", cascade="all, delete-orphan")
+
+class ForumReply(Base):
+    __tablename__ = "forum_replies"
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(String, nullable=False)
+    created_at =  Column(DateTime(timezone=True), server_default=func.now())
+
+    # Foreign keys
+    post_id = Column(Integer, ForeignKey("forum_posts.id"), nullable=False)
+    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    # Relationships
+    post = relationship("ForumPost", back_populates="replies")
+    author = relationship("User", back_populates="forum_replies")
+

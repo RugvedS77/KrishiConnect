@@ -15,3 +15,7 @@ python-multipart
 google-generativeai
 Pillow
 requests
+httpx
+huggingface_hub
+tensorflow-cpu
+numpy

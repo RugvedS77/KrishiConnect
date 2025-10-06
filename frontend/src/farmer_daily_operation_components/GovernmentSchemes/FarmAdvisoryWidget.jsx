@@ -1,8 +1,7 @@
 // src/components/FarmAdvisoryWidget.jsx
 import React, { useState, useEffect } from 'react';
-
-// The API endpoint
-const ADVISORY_API_URL = 'http://127.0.0.1:8000/api/advisory';
+// weather feature
+const ADVISORY_API_URL = 'http://localhost:8000/api/services/weather';
 
 // --- NEW: Helper to return a dynamic weather icon ---
 function getWeatherIcon(description) {

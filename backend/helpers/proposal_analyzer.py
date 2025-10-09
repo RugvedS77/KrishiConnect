@@ -10,7 +10,7 @@ from models.all_model import CropList as CropListModel, Contract as ContractMode
 # Configure the API client
 try:
     genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash-lite')
 except Exception as e:
     print(f"Error configuring Google AI: {e}")
     model = None

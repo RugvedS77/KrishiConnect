@@ -86,7 +86,7 @@ async def fetch_google_weather_and_advisories(lat: float = 18.52, lon: float = 7
     """
     API_KEY = os.getenv("GOOGLE_WEATHER_API_KEY")
     if not API_KEY:
-        return {"error": "GOOGLE_API_KEY not found in .env file."}
+        return {"error": "GOOGLE_WEATHER_API_KEY not found in .env file."}
 
     API_URL = "https://weather.googleapis.com/v1/forecast/hours:lookup"
     

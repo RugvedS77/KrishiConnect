@@ -11,7 +11,7 @@ export default function CropRecommendationPage() {
     setLoading(true);
     setResult(null); // Clear previous results
     try {
-      const res = await fetch("http://localhost:8000/api/recommend/crops", {
+      const res = await fetch("http://localhost:8000/api/services/recommend-crops", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -20,8 +20,9 @@ export default function CropRecommendationPage() {
         // Handle HTTP errors like 404 or 500
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      const j = await res.json();
-      setResult(j);
+      const data = await res.json();
+      console.log("recommeded crops : ", data)
+      setResult(data);
     } catch (err) {
       console.error(err);
       // Set a more informative error state

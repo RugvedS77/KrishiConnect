@@ -1,6 +1,6 @@
 # schemas/all_schema.py
 
-from pydantic import BaseModel, ConfigDict, EmailStr, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, model_validator, Field
 from datetime import date, datetime
 from decimal import Decimal
 from typing import List, Optional
@@ -253,6 +253,32 @@ class ReplyResponse(BaseModel):
 class PostDetailResponse(ForumPostSummaryResponse):
     replies: List[ReplyResponse] = []
     model_config = ConfigDict(from_attributes=True)
+
+#crop recommendation
+
+class RecommendationRequest(BaseModel):
+    location: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    nitrogen: Optional[float] = None
+    phosphorus: Optional[float] = None
+    potassium: Optional[float] = None
+    pH: Optional[float] = Field(None, alias="pH")
+    temperature: Optional[float] = None
+    humidity: Optional[float] = None
+    rainfall: Optional[float] = None
+    water_available_liters: Optional[float] = None
+    area_hectares: Optional[float] = None
+    notes: Optional[str] = None
+
+class CropRecommendation(BaseModel):
+    name: str
+    suitability_score: float
+    reason: Optional[str] = None
+
+class RecommendationResponse(BaseModel):
+    recommendations: List[CropRecommendation]
+    source: str
     
 
 # --- Final Rebuild ---

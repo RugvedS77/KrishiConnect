@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Wheat",
+    "ideal": {
+      "nitrogen": [50, 150],
+      "phosphorus": [20, 60],
+      "potassium": [30, 120],
+      "pH": [6.0, 7.5],
+      "min_temp": 10,
+      "max_temp": 25,
+      "rainfall": [300, 900],
+      "water_required_per_hectare": 5000
+    },
+    "notes": "Cool-season cereal; prefers moderate rainfall."
+  },
+  {
+    "name": "Rice",
+    "ideal": {
+      "nitrogen": [80, 200],
+      "phosphorus": [30, 80],
+      "potassium": [50, 150],
+      "pH": [5.5, 7.0],
+      "min_temp": 20,
+      "max_temp": 35,
+      "rainfall": [1000, 2000],
+      "water_required_per_hectare": 12000
+    },
+    "notes": "Requires high water availability and warm temps."
+  },
+  {
+    "name": "Maize",
+    "ideal": {
+      "nitrogen": [60, 180],
+      "phosphorus": [25, 70],
+      "potassium": [40, 140],
+      "pH": [5.5, 7.5],
+      "min_temp": 15,
+      "max_temp": 32,
+      "rainfall": [500, 1200],
+      "water_required_per_hectare": 7000
+    },
+    "notes": "Warm-season cereal, responds well to fertilization."
+  },
+  {
+    "name": "Soybean",
+    "ideal": {
+      "nitrogen": [10, 80],
+      "phosphorus": [20, 60],
+      "potassium": [20, 100],
+      "pH": [5.5, 7.0],
+      "min_temp": 15,
+      "max_temp": 30,
+      "rainfall": [450, 1000],
+      "water_required_per_hectare": 6000
+    },
+    "notes": "Legume — fixes nitrogen, good for rotations."
+  },
+  {
+    "name": "Cotton",
+    "ideal": {
+      "nitrogen": [40, 140],
+      "phosphorus": [20, 60],
+      "potassium": [40, 120],
+      "pH": [5.8, 8.0],
+      "min_temp": 18,
+      "max_temp": 36,
+      "rainfall": [500, 1200],
+      "water_required_per_hectare": 8000
+    },
+    "notes": "Grows in warm climates; sensitive to waterlogging."
+  }
+]

@@ -23,7 +23,7 @@ export const forumApi = {
   getPostById: async (token, postId) => {
     if (!token) throw new Error("No token provided");
 
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
+    const response = await fetch(`${API_BASE_URL}/api/forum/posts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -35,7 +35,7 @@ export const forumApi = {
   createPost: async (token, formData) => {
     if (!token) throw new Error("No token provided");
 
-    const response = await fetch(`${API_BASE_URL}/posts`, {
+    const response = await fetch(`${API_BASE_URL}/api/forum/posts`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: formData
@@ -49,7 +49,7 @@ export const forumApi = {
   createReply: async (token, postId, content) => {
     if (!token) throw new Error("No token provided");
 
-    const response = await fetch(`${API_BASE_URL}/posts/${postId}/replies`, {
+    const response = await fetch(`${API_BASE_URL}/api/forum/posts/${postId}/replies`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

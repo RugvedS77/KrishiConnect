@@ -15,7 +15,7 @@ import {
     AlertCircle
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Mock Data (Only for Chart and Activity Feed now) ---
 const chartData = [

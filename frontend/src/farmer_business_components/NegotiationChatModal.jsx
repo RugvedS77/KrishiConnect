@@ -197,7 +197,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../authStore';
 import { X, Send, Loader2, Handshake } from 'lucide-react';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 const fetchNegotiationHistory = async (contractId, token) => {
     const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/negotiation-history`, {

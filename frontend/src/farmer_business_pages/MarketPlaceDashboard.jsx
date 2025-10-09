@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
 import { useInterfaceStore } from '../interfaceStore'; // Added interface store
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Helper: Reusable Dashboard Card ---
 const DashboardCard = ({ title, value, icon, isLoading }) => (

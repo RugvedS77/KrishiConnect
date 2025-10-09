@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import SchemeCard from '../farmer_daily_operation_components/GovernmentSchemes/SchemeCard.jsx';
 import SchemeDetail from '../farmer_daily_operation_components/GovernmentSchemes/SchemeDetail.jsx';
 import EligibilityQuiz from '../farmer_daily_operation_components/GovernmentSchemes/EligibilityQuiz.jsx';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 // The API URL is now part of this component
 const API_URL = `http://127.0.0.1:8000/api/schemes`;
 

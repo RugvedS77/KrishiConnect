@@ -3,7 +3,7 @@ import FileUpload from '../farmer_daily_operation_components/DiseasePage/FileUpl
 import AgriShops from '../farmer_daily_operation_components/DiseasePage/AgriShops';
 import RecommendProducts from '../farmer_daily_operation_components/DiseasePage/RecommendProducts'
 import diseaseData from '../assets/disease_chemicals_data.json';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 const IdentifyDisease = () => {
   const [file, setFile] = useState(null);

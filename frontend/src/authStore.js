@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "./api/apiConfig";
 
 export const useAuthStore = create((set, get) => ({
   user: null,

@@ -4,7 +4,7 @@ import { Truck, Loader2 } from 'lucide-react';
 import BuyerView from '../buyer_components/Logistics/BuyerView';
 // In a real app, you would import your auth store
 import { useAuthStore } from '../authStore';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function BuyLogisticsPage() {
     const [contracts, setContracts] = useState([]);

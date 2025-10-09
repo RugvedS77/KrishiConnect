@@ -1,6 +1,6 @@
 // src/components/FarmAdvisoryWidget.jsx
 import React, { useState, useEffect } from 'react';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../../api/apiConfig";
 // weather feature
 const ADVISORY_API_URL = `${API_BASE_URL}/api/services/weather`;
 

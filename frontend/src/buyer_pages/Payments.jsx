@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { PlusCircle, X, Loader2 as Loader } from 'lucide-react';
 import { useAuthStore } from '../authStore';
 import { Link } from 'react-router-dom'; // Import Link
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Add Funds Modal Component (Updated to handle live API) ---
 const AddFundsModal = ({ onClose, onAddFunds }) => {

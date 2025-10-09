@@ -16,7 +16,7 @@ import {
     Receipt
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- MODAL COMPONENTS ---
 

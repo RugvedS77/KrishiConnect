@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2, X, CheckCircle, Calendar, MapPin, ArrowRight, RefreshCw } from 'lucide-react';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../../api/apiConfig";
 
 // --- Reusable UI Components ---
 

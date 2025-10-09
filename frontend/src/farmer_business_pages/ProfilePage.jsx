@@ -4,7 +4,7 @@ import ProfileData from '../farmer_business_components/Profile/ProfileData'; // 
 import StarRating from '../farmer_business_components/Profile/StarRating';
 import ProfileField from '../farmer_business_components/Profile/ProfileField';
 import { Loader2, AlertCircle, Save } from 'lucide-react'; // Import icons
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null); // Start as null

@@ -10,7 +10,7 @@ import {
     AlertCircle  // Added
 } from 'lucide-react';
 import { useAuthStore } from '../authStore'; // Added
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Helper Components (Unchanged) ---
 

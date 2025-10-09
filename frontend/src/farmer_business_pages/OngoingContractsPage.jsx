@@ -3,7 +3,7 @@ import ContractList from '../farmer_business_components/OngoingContracts/Contrac
 import EmptyState from '../farmer_business_components/OngoingContracts/EmptyState.jsx';
 import { useAuthStore } from '../authStore';
 import { Loader2, XCircle } from 'lucide-react'; 
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 // Removed Modal-specific icons like X, Camera
 
 // --- Modal Component Has Been REMOVED ---

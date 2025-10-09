@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Download, Star, User, Loader2, AlertCircle, X, Edit2, Save } from 'lucide-react';
 import { useAuthStore } from '../authStore'; // Import auth store
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Edit Profile Modal ---
 // A new component to handle editing the profile

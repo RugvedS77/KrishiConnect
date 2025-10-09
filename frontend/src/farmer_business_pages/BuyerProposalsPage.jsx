@@ -13,7 +13,7 @@ import {
   MessagesSquare
 } from "lucide-react";
 import NegotiationChatModal from "../farmer_business_components/NegotiationChatModal";
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- API Helper functions (From Original File) ---
 

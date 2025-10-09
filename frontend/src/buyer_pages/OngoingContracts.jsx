@@ -5,7 +5,7 @@ import {
     AlertCircle, FileText, MessageCircle, ThumbsDown, Inbox, Loader2 
 } from "lucide-react";
 import NegotiationChatModal from '../farmer_business_components/NegotiationChatModal';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 const BuyerContractsPage = () => {
     const [activeTab, setActiveTab] = useState("negotiating");

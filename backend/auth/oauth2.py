@@ -7,7 +7,7 @@ from auth import token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 def get_current_user(data: str = Depends(oauth2_scheme)):
-    print("Raw token received:", data) 
+    # print("Raw token received:", data) 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

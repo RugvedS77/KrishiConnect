@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Briefcase, Sun, Thermometer, Droplets, NotepadText, Loader2, CloudRain } from 'lucide-react';
 
 import {useAuthStore} from '../authStore.js'
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- API Helper function for fetching weather ---
 const fetchWeatherData = async (token) => {

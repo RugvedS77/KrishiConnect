@@ -2,7 +2,7 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 import { LayoutDashboard, Search, FileText, Banknote, User, Loader2, Truck} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../authStore'; // Adjust path as needed
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // CustomLink function (Unchanged)
 function CustomLink({ to, icon, children, end = false }) {

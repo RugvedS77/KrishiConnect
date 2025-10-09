@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../authStore'; // <-- 1. Import Auth Store
 import { Loader2, Inbox, Sparkles, Calendar, MapPin, Package } from 'lucide-react'; // <-- 2. Import Icons
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Main Component ---
 export default function FarmerListingsPage() {

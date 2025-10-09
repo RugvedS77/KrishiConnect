@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Truck, Package, MapPin, ArrowRight, Loader2, X, CheckCircle, Calendar, IndianRupee } from 'lucide-react';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from './api/apiConfig';
 
 // --- MOCK DATA & API SIMULATION ---
 // In your real app, this data would come from your API calls.

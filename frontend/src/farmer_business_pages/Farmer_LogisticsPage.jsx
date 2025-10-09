@@ -3,7 +3,7 @@ import { Truck, Loader2 } from 'lucide-react';
 import FarmerLogisticsView from '../farmer_business_components/Logistics/FarmerView';
 // In a real app, you would import your auth store to get the token
 import { useAuthStore } from '../authStore';
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function FarmLogisticsPage() {
     const [contracts, setContracts] = useState([]);

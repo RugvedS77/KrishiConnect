@@ -14,7 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { useAuthStore } from "../authStore";
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- 2. NEW HELPER COMPONENT for the modal ---
 // This reusable component creates the nice icon + text row

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import RecommendationForm from "../farmer_daily_operation_components/CropRecommendation/RecommendationForm"
 import RecommendationResult from "../farmer_daily_operation_components/CropRecommendation/RecommendationResult";
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function CropRecommendationPage() {
   const [result, setResult] = useState(null);

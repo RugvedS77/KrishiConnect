@@ -9,7 +9,7 @@ import TemplateSelection from "../buyer_components/Contract/TemplateSelection";
 import TemplateForm from "../buyer_components/Contract/TemplateForm";
 import ContractPreview from "../buyer_components/Contract/ContractPreview";
 import { AddFundsModal, TemplateViewerModal } from "../buyer_components/Contract/Modals";
-import { API_BASE_URL } from './apiConfig';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // Helpers & API
 const postMilestone = async (contractId, milestoneData, token) => {

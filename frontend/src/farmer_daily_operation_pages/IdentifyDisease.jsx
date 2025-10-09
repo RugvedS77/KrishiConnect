@@ -3,6 +3,7 @@ import FileUpload from '../farmer_daily_operation_components/DiseasePage/FileUpl
 import AgriShops from '../farmer_daily_operation_components/DiseasePage/AgriShops';
 import RecommendProducts from '../farmer_daily_operation_components/DiseasePage/RecommendProducts'
 import diseaseData from '../assets/disease_chemicals_data.json';
+import { API_BASE_URL } from './apiConfig';
 
 const IdentifyDisease = () => {
   const [file, setFile] = useState(null);
@@ -72,7 +73,7 @@ const IdentifyDisease = () => {
       const resizedFile = await resizeImage(file);
       const formData = new FormData();
       formData.append('file', resizedFile);
-      const response = await fetch('http://localhost:8000/api/services/cotton-predict', {
+      const response = await fetch(`${API_BASE_URL}/api/services/cotton-predict`, {
         method: 'POST',
         body: formData,
       });

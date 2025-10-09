@@ -13,11 +13,12 @@ import {
   MessagesSquare
 } from "lucide-react";
 import NegotiationChatModal from "../farmer_business_components/NegotiationChatModal";
+import { API_BASE_URL } from './apiConfig';
 
 // --- API Helper functions (From Original File) ---
 
 const fetchProposalsForListing = async (listingId, token) => {
-  const response = await fetch(`http://localhost:8000/api/contracts/listing/${listingId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/contracts/listing/${listingId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   if (!response.ok) {
@@ -27,7 +28,7 @@ const fetchProposalsForListing = async (listingId, token) => {
 };
 
 const acceptProposalApi = async (contractId, token) => {
-  const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/accept`, {
+  const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/accept`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -39,7 +40,7 @@ const acceptProposalApi = async (contractId, token) => {
 };
 
 const rejectProposalApi = async (contractId, token) => {
-  const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/reject`, {
+  const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/reject`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -52,7 +53,7 @@ const rejectProposalApi = async (contractId, token) => {
 
 // --- NEW API Helper for updating an offer during negotiation ---
 const updateOfferApi = async (contractId, offerData, token) => {
-  const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/update-offer`, {
+  const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/update-offer`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -318,7 +319,7 @@ export default function BuyerProposalsPage() {
     setAnalysisError(null);
     try {
       // Calls the new backend route
-      const response = await fetch(`http://localhost:8000/api/croplists/${listingId}/analyze-proposals`, {
+      const response = await fetch(`${API_BASE_URL}/api/croplists/${listingId}/analyze-proposals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {

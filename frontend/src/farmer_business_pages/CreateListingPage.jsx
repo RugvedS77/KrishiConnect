@@ -5,8 +5,6 @@ import FormInput from "../farmer_business_components/CreateListing/FormInput";
 import FormSelect from "../farmer_business_components/CreateListing/FormSelect";
 import { supabase } from "../supabaseClient"; // Make sure this path is correct
 
-const API_URL = "http://localhost:8000/api/croplists/";
-
 export default function CreateListingPage() {
   const [formData, setFormData] = useState({
     cropType: "",

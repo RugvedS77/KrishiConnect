@@ -4,6 +4,7 @@ import ProfileData from '../farmer_business_components/Profile/ProfileData'; // 
 import StarRating from '../farmer_business_components/Profile/StarRating';
 import ProfileField from '../farmer_business_components/Profile/ProfileField';
 import { Loader2, AlertCircle, Save } from 'lucide-react'; // Import icons
+import { API_BASE_URL } from './apiConfig';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null); // Start as null
@@ -28,10 +29,10 @@ export default function ProfilePage() {
     try {
       // We need to fetch from two different endpoints to build this page
       const [userRes, completedRes] = await Promise.all([
-        fetch("http://localhost:8000/api/users/me", {
+        fetch(`${API_BASE_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://localhost:8000/api/contracts/completed", {
+        fetch(`${API_BASE_URL}/api/contracts/completed`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -102,7 +103,7 @@ export default function ProfilePage() {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/users/me", {
+      const response = await fetch(`${API_BASE_URL}/api/users/me`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',

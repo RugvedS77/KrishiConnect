@@ -4,6 +4,7 @@ import { Truck, Loader2 } from 'lucide-react';
 import BuyerView from '../buyer_components/Logistics/BuyerView';
 // In a real app, you would import your auth store
 import { useAuthStore } from '../authStore';
+import { API_BASE_URL } from './apiConfig';
 
 export default function BuyLogisticsPage() {
     const [contracts, setContracts] = useState([]);
@@ -16,7 +17,7 @@ export default function BuyLogisticsPage() {
         setError('');
         try {
             // This endpoint fetches all ongoing contracts for the logged-in user (buyer or farmer)
-            const response = await fetch('http://localhost:8000/api/contracts/ongoing', { 
+            const response = await fetch(`${API_BASE_URL}/api/contracts/ongoing`, { 
                 headers: { Authorization: `Bearer ${token}` } 
             });
             if (!response.ok) throw new Error("Failed to fetch ongoing contracts.");

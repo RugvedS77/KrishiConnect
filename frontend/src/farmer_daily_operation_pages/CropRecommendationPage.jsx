@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import RecommendationForm from "../farmer_daily_operation_components/CropRecommendation/RecommendationForm"
 import RecommendationResult from "../farmer_daily_operation_components/CropRecommendation/RecommendationResult";
+import { API_BASE_URL } from './apiConfig';
 
 export default function CropRecommendationPage() {
   const [result, setResult] = useState(null);
@@ -11,7 +12,7 @@ export default function CropRecommendationPage() {
     setLoading(true);
     setResult(null); // Clear previous results
     try {
-      const res = await fetch("http://localhost:8000/api/services/recommend-crops", {
+      const res = await fetch(`${API_BASE_URL}/api/services/recommend-crops`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

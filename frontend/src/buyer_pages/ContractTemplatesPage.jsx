@@ -9,11 +9,12 @@ import TemplateSelection from "../buyer_components/Contract/TemplateSelection";
 import TemplateForm from "../buyer_components/Contract/TemplateForm";
 import ContractPreview from "../buyer_components/Contract/ContractPreview";
 import { AddFundsModal, TemplateViewerModal } from "../buyer_components/Contract/Modals";
+import { API_BASE_URL } from './apiConfig';
 
 // Helpers & API
 const postMilestone = async (contractId, milestoneData, token) => {
   const response = await fetch(
-    `http://localhost:8000/api/milestones/contract/${contractId}`,
+    `${API_BASE_URL}/api/milestones/contract/${contractId}`,
     {
       method: "POST",
       headers: {
@@ -111,7 +112,7 @@ const ContractTemplatePage = () => {
     const fetchWalletBalance = useCallback(async () => {
         if (!token) return;
         try {
-            const response = await fetch("http://localhost:8000/api/wallet/me", {
+            const response = await fetch(`${API_BASE_URL}/api/wallet/me`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             if (!response.ok) throw new Error("Could not fetch wallet balance.");
@@ -125,7 +126,7 @@ const ContractTemplatePage = () => {
     const handleAddFunds = async (amount) => {
         if (!token) throw new Error("Authentication expired.");
         const response = await fetch(
-            "http://localhost:8000/api/wallet/me/add-funds",
+            `${API_BASE_URL}/api/wallet/me/add-funds`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -148,7 +149,7 @@ const ContractTemplatePage = () => {
             }
             setPageLoading(true);
             try {
-                const response = await fetch(`http://localhost:8000/api/croplists/${cropId}`, {
+                const response = await fetch(`${API_BASE_URL}/api/croplists/${cropId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 if (!response.ok) throw new Error("Crop listing not found.");
@@ -219,7 +220,7 @@ const ContractTemplatePage = () => {
                 totalValue = parseFloat(currentData.totalValue);
                 contractPayload = { listing_id: crop.id, quantity_proposed: 1, price_per_unit_agreed: totalValue, payment_terms: `Custom Project: ${currentData.projectDescription}`, };
             }
-            const contractResponse = await fetch("http://localhost:8000/api/contracts/", {
+            const contractResponse = await fetch(`${API_BASE_URL}/api/contracts/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
                 body: JSON.stringify(contractPayload),

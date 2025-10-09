@@ -15,6 +15,7 @@ import {
     AlertCircle
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
+import { API_BASE_URL } from './apiConfig';
 
 // --- Mock Data (Only for Chart and Activity Feed now) ---
 const chartData = [
@@ -149,7 +150,7 @@ const BuyerDashboard = () => {
         // Only run if we have a token but no user object in the store
         if (token && !user) { 
             try {
-                const response = await fetch("http://localhost:8000/api/users/me", {
+                const response = await fetch(`${API_BASE_URL}/api/users/me`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (response.ok) {
@@ -181,9 +182,9 @@ const BuyerDashboard = () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         // Define all API calls to run in parallel
-        const walletPromise = fetch("http://localhost:8000/api/wallet/me", { headers });
-        const ongoingPromise = fetch("http://localhost:8000/api/contracts/ongoing", { headers });
-        const pendingPromise = fetch("http://localhost:8000/api/contracts/proposals/sent-pending", { headers });
+        const walletPromise = fetch(`${API_BASE_URL}/api/wallet/me`, { headers });
+        const ongoingPromise = fetch(`${API_BASE_URL}/api/contracts/ongoing`, { headers });
+        const pendingPromise = fetch(`${API_BASE_URL}/api/contracts/proposals/sent-pending`, { headers });
 
         const [walletRes, ongoingRes, pendingRes] = await Promise.all([
             walletPromise,

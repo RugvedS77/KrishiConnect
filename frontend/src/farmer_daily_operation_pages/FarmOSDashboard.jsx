@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Briefcase, Sun, Thermometer, Droplets, NotepadText, Loader2, CloudRain } from 'lucide-react';
 
 import {useAuthStore} from '../authStore.js'
-
+import { API_BASE_URL } from './apiConfig';
 
 // --- API Helper function for fetching weather ---
 const fetchWeatherData = async (token) => {
-    const response = await fetch("http://localhost:8000/api/services/weather", {
+    const response = await fetch(`${API_BASE_URL}/api/services/weather`, {
         headers: { Authorization: `Bearer ${token}` }
     });
     if (!response.ok) {

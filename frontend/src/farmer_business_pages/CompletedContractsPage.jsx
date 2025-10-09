@@ -10,6 +10,7 @@ import {
     AlertCircle  // Added
 } from 'lucide-react';
 import { useAuthStore } from '../authStore'; // Added
+import { API_BASE_URL } from './apiConfig';
 
 // --- Helper Components (Unchanged) ---
 
@@ -62,7 +63,7 @@ export default function CompletedContractsPage() {
     try {
       // ASSUMPTION: You must create this endpoint in your backend.
       // It should query contracts where status == ContractStatus.completed
-      const response = await fetch("http://localhost:8000/api/contracts/completed", {
+      const response = await fetch(`${API_BASE_URL}/api/contracts/completed`, {
          headers: { 'Authorization': `Bearer ${token}` }
       });
 

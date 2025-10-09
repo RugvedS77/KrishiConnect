@@ -13,7 +13,8 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost:5173",  # Your Vite frontend URL
+    "http://localhost:5173",
+    "https://krishiconnect.vercel.app"  # Your Vite frontend URL
 ]
 
 # Add CORS middleware

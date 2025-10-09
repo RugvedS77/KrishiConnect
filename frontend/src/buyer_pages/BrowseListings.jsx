@@ -14,6 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { useAuthStore } from "../authStore";
+import { API_BASE_URL } from './apiConfig';
 
 // --- 2. NEW HELPER COMPONENT for the modal ---
 // This reusable component creates the nice icon + text row
@@ -237,7 +238,7 @@ const BrowseListings = () => {
       }
 
       try {
-        const url = new URL("http://localhost:8000/api/croplists/");
+        const url = new URL(`${API_BASE_URL}/api/croplists/`);
         if (cropType) {
           url.searchParams.append("crop_type", cropType);
         }

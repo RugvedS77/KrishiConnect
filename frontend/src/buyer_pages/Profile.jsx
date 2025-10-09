@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Download, Star, User, Loader2, AlertCircle, X, Edit2, Save } from 'lucide-react';
 import { useAuthStore } from '../authStore'; // Import auth store
+import { API_BASE_URL } from './apiConfig';
 
 // --- Edit Profile Modal ---
 // A new component to handle editing the profile
@@ -102,10 +103,10 @@ const Profile = () => {
     try {
       // Run both API calls in parallel
       const [profileRes, contractsRes] = await Promise.all([
-        fetch("http://localhost:8000/api/users/me", {
+        fetch(`${API_BASE_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        fetch("http://localhost:8000/api/contracts/completed", {
+        fetch(`${API_BASE_URL}/api/contracts/completed`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ]);
@@ -134,7 +135,7 @@ const Profile = () => {
   // --- API: Save Profile Changes ---
   const handleSaveProfile = async (updateData) => {
     // This function will be passed to the modal. It must throw an error on failure.
-    const response = await fetch("http://localhost:8000/api/users/me", {
+    const response = await fetch(`${API_BASE_URL}/api/users/me`, {
       method: "PUT",
       headers: {
         'Content-Type': 'application/json',

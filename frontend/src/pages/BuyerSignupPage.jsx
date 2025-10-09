@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Leaf } from "lucide-react";
+import { API_BASE_URL } from './apiConfig';
 
 // --- Reusable SVG Icons for Social Login ---
 const GoogleIcon = () => (
@@ -51,7 +52,7 @@ const BuyerSignupPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/api/users/", {
+      const response = await fetch(`${API_BASE_URL}/api/users/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

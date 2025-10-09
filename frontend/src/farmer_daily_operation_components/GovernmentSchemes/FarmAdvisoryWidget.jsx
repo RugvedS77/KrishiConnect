@@ -1,7 +1,8 @@
 // src/components/FarmAdvisoryWidget.jsx
 import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from './apiConfig';
 // weather feature
-const ADVISORY_API_URL = 'http://localhost:8000/api/services/weather';
+const ADVISORY_API_URL = `${API_BASE_URL}/api/services/weather`;
 
 // --- NEW: Helper to return a dynamic weather icon ---
 function getWeatherIcon(description) {

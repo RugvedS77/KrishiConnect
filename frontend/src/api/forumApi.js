@@ -11,7 +11,7 @@ export const forumApi = {
     if (category && category !== 'All') params.append('category', category);
     if (query) params.append('q', query);
 
-    const response = await fetch(`${API_BASE_URL}/posts?${params.toString()}`, {
+    const response = await fetch(`${API_BASE_URL}/api/forum/posts?${params.toString()}`, {
       headers: { Authorization: `Bearer ${token}` } // <-- Always use JWT
     });
 

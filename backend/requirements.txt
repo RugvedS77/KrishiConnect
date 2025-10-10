@@ -3,7 +3,6 @@ uvicorn[standard]
 sqlalchemy
 psycopg2-binary
 python-dotenv
-sqlalchemy
 pydantic
 pydantic[email]
 alembic
@@ -20,4 +19,3 @@ huggingface_hub
 tensorflow-cpu
 numpy
 supabase
-python-multipart

@@ -5,6 +5,7 @@ import { useAuthStore } from '../../authStore';
 import { forumApi } from '../../api/forumApi';
 import { Loader2, AlertCircle, MessageSquare } from 'lucide-react';
 
+
 export default function NewPostForm({ categories, onPostCreated, onCancel }) {
   const token = useAuthStore((state) => state.token);
   const [title, setTitle] = useState('');

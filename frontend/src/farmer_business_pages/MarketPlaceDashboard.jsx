@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
 import { useInterfaceStore } from '../interfaceStore'; // Added interface store
-import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Helper: Reusable Dashboard Card ---
 const DashboardCard = ({ title, value, icon, isLoading }) => (
@@ -81,7 +80,7 @@ const ComplianceHelperModal = ({ contracts, token, onClose }) => {
         setAiAdvice('');
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/contracts/${selectedContractId}/compliance-check`, {
+            const response = await fetch(`http://localhost:8000/api/contracts/${selectedContractId}/compliance-check`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -219,9 +218,9 @@ export default function MarketPlaceDashboard() {
 
     try {
       const headers = { Authorization: `Bearer ${token}` };
-      const walletPromise = fetch(`${API_BASE_URL}/api/wallet/me`, { headers });
-      const ongoingPromise = fetch(`${API_BASE_URL}/api/contracts/ongoing`, { headers });
-      const pendingPromise = fetch(`${API_BASE_URL}/api/contracts/proposals/pending`, { headers });
+      const walletPromise = fetch("http://localhost:8000/api/wallet/me", { headers });
+      const ongoingPromise = fetch("http://localhost:8000/api/contracts/ongoing", { headers });
+      const pendingPromise = fetch("http://localhost:8000/api/contracts/proposals/pending", { headers });
 
       const [walletRes, ongoingRes, pendingRes] = await Promise.all([
         walletPromise, ongoingPromise, pendingPromise

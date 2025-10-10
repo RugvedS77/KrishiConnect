@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
-import { API_BASE_URL } from "./api/apiConfig";
 
 export const useAuthStore = create((set, get) => ({
   user: null,
@@ -47,7 +46,7 @@ export const useAuthStore = create((set, get) => ({
     formData.append('password', password);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const response = await fetch("http://localhost:8000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData,

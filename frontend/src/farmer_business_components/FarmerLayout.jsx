@@ -3,7 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'; // 2. Import useLocation
 import { useInterfaceStore } from '../interfaceStore.js';
 
 // Import the two different sidebars
-import MarketPlaceSidebar from '../farmer_business_components/MarketPlaceSidebar.jsx';
+import MarketplaceSidebar from '../farmer_business_components/MarketplaceSidebar.jsx';
 import FarmOSSidebar from '../farmer_daily_operation_components/FarmOSSidebar.jsx';
 
 export default function FarmerLayout() {
@@ -27,7 +27,7 @@ export default function FarmerLayout() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* This logic now works correctly because the mode is always in sync */}
-      {mode === 'marketplace' ? <MarketPlaceSidebar /> : <FarmOSSidebar />}
+      {mode === 'marketplace' ? <MarketplaceSidebar /> : <FarmOSSidebar />}
       
       <main className="flex-1 overflow-y-auto p-6">
         <Outlet />

@@ -1,14 +1,12 @@
-// src/pages/SchemeExplorerPage.jsx
 import React, { useState, useEffect } from 'react';
 // Note the updated '../' paths
 import SchemeCard from '../farmer_daily_operation_components/GovernmentSchemes/SchemeCard.jsx';
 import SchemeDetail from '../farmer_daily_operation_components/GovernmentSchemes/SchemeDetail.jsx';
 import EligibilityQuiz from '../farmer_daily_operation_components/GovernmentSchemes/EligibilityQuiz.jsx';
-import { API_BASE_URL } from "../api/apiConfig";
-// The API URL is now part of this component
-const API_URL = `http://127.0.0.1:8000/api/schemes`;
 
-// We just renamed App() to SchemeExplorerPage()
+// --- NEW: Import the scheme data directly from the local JSON file ---
+import allSchemeData from '../assets/gov_schemes.json';
+
 function SchemeExplorerPage() {
   // All state now lives inside this component
   const [allSchemes, setAllSchemes] = useState([]);
@@ -23,38 +21,32 @@ function SchemeExplorerPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // --- NEW: State for our dynamic filter lists ---
+  // State for our dynamic filter lists
   const [categories, setCategories] = useState(['All']);
   const [governments, setGovernments] = useState(['All']);
 
-  // Data fetching logic lives here
+  // --- UPDATED: Data loading logic now uses the imported JSON file ---
   useEffect(() => {
-    const fetchSchemes = async () => {
+    // Simulate a brief loading period for a smoother user experience
+    setTimeout(() => {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
+        setAllSchemes(allSchemeData); 
+        setFilteredSchemes(allSchemeData); 
         
-        setAllSchemes(data); 
-        setFilteredSchemes(data); 
-        
-        // --- UPDATED: Set the filter lists into STATE ---
-        setCategories(['All', ...new Set(data.map(s => s.category))]);
-        setGovernments(['All', ...new Set(data.map(s => s.government))]);
+        // Set the filter lists dynamically from the loaded data
+        setCategories(['All', ...new Set(allSchemeData.map(s => s.category))]);
+        setGovernments(['All', ...new Set(allSchemeData.map(s => s.government))]);
 
       } catch (e) {
-        setError(e.message);
+        console.error("Error processing local scheme data:", e);
+        setError("Failed to load or parse the local scheme data file.");
       } finally {
         setIsLoading(false);
       }
-    };
-
-    fetchSchemes();
+    }, 500); // 500ms simulated delay
   }, []); // The empty array [] means "run this only once on mount"
 
-  // Filter logic lives here
+  // Filter logic remains the same
   useEffect(() => {
     let result = allSchemes; 
 
@@ -67,7 +59,7 @@ function SchemeExplorerPage() {
     setFilteredSchemes(result);
   }, [filters, allSchemes]);
 
-  // --- All handlers now live here ---
+  // --- All handlers remain the same ---
   
   const handleFilterChange = (filterType, value) => {
     setQuizResults(null); 
@@ -120,7 +112,7 @@ function SchemeExplorerPage() {
   
   const schemesToDisplay = quizResults ? quizResults : filteredSchemes;
 
-  // --- All Render Logic now lives here ---
+  // --- All Render Logic remains mostly the same ---
   
   if (isLoading) {
     return <div className="text-center p-10 text-2xl font-bold text-gray-500">Loading Schemes...</div>
@@ -131,7 +123,7 @@ function SchemeExplorerPage() {
       <div className="text-center p-10">
         <h2 className="text-2xl font-bold text-red-600">Error: Could not load data</h2>
         <p className="text-gray-700 mb-4">"{error}"</p>
-        <p className="text-gray-500">Please make sure your backend server is running on `http://127.0.0.1:8000`.</p>
+        <p className="text-gray-500">Please ensure the `gov_schemes.json` file exists in the `src/assets` folder.</p>
       </div>
     )
   }
@@ -144,8 +136,8 @@ function SchemeExplorerPage() {
           className="bg-transparent text-blue-600 font-semibold py-2 px-1 mb-5 flex items-center gap-1 transition-all hover:text-blue-800"
         >
            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+           </svg>
           Back to All Schemes
         </button>
         <SchemeDetail scheme={selectedScheme} />
@@ -160,7 +152,7 @@ function SchemeExplorerPage() {
         <p className="text-lg text-gray-600">Find the right government scheme for your needs.</p>
       </header>
 
-      {/* --- Quiz Banner --- */}
+      {/* Quiz Banner */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8 text-center">
         <h2 className="text-2xl font-bold text-blue-800 mb-2">Not sure where to start?</h2>
         <p className="text-gray-700 mb-4">Answer 5 simple questions to find the perfect schemes for you.</p>
@@ -187,11 +179,10 @@ function SchemeExplorerPage() {
       {!quizResults && (
         <>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">...Or, Browse All Schemes</h2>
-          {/* --- Filter by Need --- */}
+          {/* Filter by Need */}
           <div className="mb-6">
             <h3 className="text-base font-semibold text-gray-600 mb-3">Filter by Need:</h3>
             <div className="flex flex-wrap gap-2">
-              {/* --- UPDATED: Use 'categories' state variable --- */}
               {categories.map(category => (
                 <button
                   key={category}
@@ -208,11 +199,10 @@ function SchemeExplorerPage() {
             </div>
           </div>
 
-          {/* --- Filter by Government --- */}
+          {/* Filter by Government */}
           <div className="mb-8">
             <h3 className="text-base font-semibold text-gray-600 mb-3">Filter by Government:</h3>
             <div className="flex flex-wrap gap-2">
-              {/* --- UPDATED: Use 'governments' state variable --- */}
               {governments.map(gov => (
                 <button
                   key={gov}
@@ -231,7 +221,7 @@ function SchemeExplorerPage() {
         </>
       )}
 
-      {/* --- Scheme Card Grid --- */}
+      {/* Scheme Card Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {schemesToDisplay.length > 0 ? (
           schemesToDisplay.map(scheme => (
@@ -243,7 +233,6 @@ function SchemeExplorerPage() {
           ))
         ) : (
           <div className="col-span-3 text-center py-10">
-            {/* --- FIXED: Changed </D> to </p> --- */}
             <p className="text-gray-500 italic text-lg mb-4">
               {quizResults ? "No schemes match your quiz answers." : "No schemes match your selected filters."}
             </p>
@@ -257,7 +246,7 @@ function SchemeExplorerPage() {
         )}
       </div>
 
-      {/* --- The Modal Component --- */}
+      {/* The Modal Component */}
       {isQuizOpen && (
         <EligibilityQuiz 
           onClose={() => setIsQuizOpen(false)}

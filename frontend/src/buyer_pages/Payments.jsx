@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { PlusCircle, X, Loader2 as Loader } from 'lucide-react';
 import { useAuthStore } from '../authStore';
 import { Link } from 'react-router-dom'; // Import Link
-import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Add Funds Modal Component (Updated to handle live API) ---
 const AddFundsModal = ({ onClose, onAddFunds }) => {
@@ -168,8 +167,8 @@ const Payments = () => {
       
       // --- FIX 1: Corrected API path for transactions ---
       const [walletRes, transRes] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/wallet/me`, { headers }),
-        fetch(`${API_BASE_URL}/api/wallet/me/transactions`, { headers }) // <-- ADDED /me/
+        fetch("http://localhost:8000/api/wallet/me", { headers }),
+        fetch("http://localhost:8000/api/wallet/me/transactions", { headers }) // <-- ADDED /me/
       ]);
 
       if (!walletRes.ok || !transRes.ok) {
@@ -199,7 +198,7 @@ const Payments = () => {
     }
 
     // --- FIX 2: Corrected API path for adding funds ---
-    const response = await fetch(`${API_BASE_URL}/api/wallet/me/add-funds`, { // <-- ADDED /me/ and -funds
+    const response = await fetch("http://localhost:8000/api/wallet/me/add-funds", { // <-- ADDED /me/ and -funds
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

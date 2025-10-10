@@ -7,32 +7,11 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [visibleCount, setVisibleCount] = useState(3);
+    const [visibleCount] = useState(2); // 👈 Only show 2 products
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // useEffect(() => {
-    //     const loadProducts = async () => {
-    //         try {
-    //             const response = await fetch('src/assets/output.json');
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! status: ${response.status}`);
-    //             }
-    //             const data = await response.json();
-    //             setProducts(data);
-    //         } catch (error) {
-    //             setError(`Failed to load products: ${error.message}`);
-    //             console.error('Fetch error:', error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     loadProducts();
-    // }, []);
-
     useEffect(() => {
-        // 2. Remove the entire loadProducts useEffect
-        // The data is now available immediately
         setProducts(productsData); 
         setLoading(false); 
     }, []);
@@ -130,11 +109,9 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
         setFilteredProducts(recommendations);
     };
 
-    const showMoreProducts = () => {
+    const showNextProducts = () => {
         const newIndex = currentIndex + visibleCount;
-        if (newIndex < filteredProducts.length) {
-            setCurrentIndex(newIndex);
-        }
+        if (newIndex < filteredProducts.length) setCurrentIndex(newIndex);
     };
 
     const showPreviousProducts = () => {
@@ -146,7 +123,7 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
 
     if (loading) return (
         <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-500"></div>
         </div>
     );
 
@@ -158,7 +135,7 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
 
     return (
         <div className="container mx-auto px-4 py-8 relative">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            <h2 className="text-2xl font-bold text-sky-700 mb-6">
                 Recommended Products for {disease}
             </h2>
 
@@ -170,16 +147,17 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
                     {currentIndex > 0 && (
                         <button
                             onClick={showPreviousProducts}
-                            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+                            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border border-slate-200 p-2 rounded-full shadow-md hover:bg-sky-50"
                         >
-                            <FaChevronLeft className="text-green-600" />
+                            <FaChevronLeft className="text-sky-600" />
                         </button>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-hidden">
+                    {/* Product Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 overflow-hidden">
                         {displayedProducts.map((product) => (
-                            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                                <div className="h-48 bg-gray-100 flex items-center justify-center">
+                            <div key={product.id} className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl border border-slate-200 transition-all duration-300">
+                                <div className="h-48 bg-gradient-to-br from-sky-50 to-blue-100 flex items-center justify-center">
                                     {product.thumbnail_image_url ? (
                                         <img
                                             src={product.thumbnail_image_url}
@@ -187,19 +165,19 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
                                             className="w-full h-full object-contain"
                                         />
                                     ) : (
-                                        <div className="text-gray-400 flex flex-col items-center">
+                                        <div className="text-sky-400 flex flex-col items-center">
                                             <FaFlask className="text-5xl mb-2" />
                                             <span>No Image Available</span>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="p-4">
-                                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.name}</h3>
-                                    <p className="text-gray-600 text-sm mb-3">{product.company}</p>
+                                <div className="p-5">
+                                    <h3 className="text-xl font-semibold text-sky-800 mb-2">{product.name}</h3>
+                                    <p className="text-slate-700 text-sm mb-3">{product.company}</p>
 
                                     <div className="mb-3">
-                                        <p className="font-medium text-sm text-gray-700">Matched Chemicals:</p>
+                                        <p className="font-medium text-sm text-slate-700">Matched Chemicals:</p>
                                         <div className="flex flex-wrap gap-1 mt-1">
                                             {product.matched_chemicals.map((chemObj, i) => (
                                                 <span key={i} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded flex items-center gap-1">
@@ -215,7 +193,7 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-1 text-sm text-gray-600">
+                                    <div className="space-y-1 text-sm text-slate-700">
                                         <p><span className="font-medium">Compound:</span> {product.compound}</p>
                                         <p><span className="font-medium">Dosage:</span> {product.description?.dosage || 'N/A'}</p>
                                     </div>
@@ -227,24 +205,12 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
                     {/* Right Arrow */}
                     {currentIndex + visibleCount < filteredProducts.length && (
                         <button
-                            onClick={showMoreProducts}
-                            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+                            onClick={showNextProducts}
+                            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white border border-slate-200 p-2 rounded-full shadow-md hover:bg-sky-50"
                         >
-                            <FaChevronRight className="text-green-600" />
+                            <FaChevronRight className="text-sky-600" />
                         </button>
                     )}
-                </div>
-            )}
-
-            {/* See More Button */}
-            {currentIndex + visibleCount < filteredProducts.length && (
-                <div className="flex justify-center mt-6">
-                    <button
-                        onClick={showMoreProducts}
-                        className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-full transition-colors duration-300"
-                    >
-                        See More Products
-                    </button>
                 </div>
             )}
         </div>

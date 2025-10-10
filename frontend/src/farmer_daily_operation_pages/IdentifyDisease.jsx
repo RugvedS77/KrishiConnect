@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   ArrowUpTrayIcon,
   CheckCircleIcon,
@@ -6,45 +6,54 @@ import {
   DocumentMagnifyingGlassIcon,
   XCircleIcon,
   ShieldCheckIcon,
-  ArrowPathIcon
-} from '@heroicons/react/24/outline';
+  ArrowPathIcon,
+} from "@heroicons/react/24/outline";
+import SolutionTabs from "../farmer_daily_operation_components/DiseasePage/SolutionTabs";
+import diseaseData from "../assets/disease_chemicals_data.json";
 
-import SolutionTabs from '../farmer_daily_operation_components/DiseasePage/SolutionTabs';
-import diseaseData from '../assets/disease_chemicals_data.json';
-import { API_BASE_URL } from "../api/apiConfig";
-
-// Configuration object for all supported crops
 const CROP_CONFIG = {
   cotton: {
-    name: 'Cotton',
-    emoji: '🌱',
-    apiEndpoint: `${API_BASE_URL}/api/services/cotton-predict`,
+    name: "Cotton",
+    emoji: "🌱",
+    apiEndpoint: "http://localhost:8000/api/services/cotton-predict",
     commonDiseases: [
-      "Bacterial Blight", "Powdery Mildew", "Fusarium Wilt", "Target Spot", 
-      "Verticillium Wilt", "Curl Virus", "Cotton Boll Rot"
+      "Bacterial Blight",
+      "Powdery Mildew",
+      "Fusarium Wilt",
+      "Target Spot",
+      "Verticillium Wilt",
+      "Curl Virus",
+      "Cotton Boll Rot",
     ],
   },
   tomato: {
-    name: 'Tomato',
-    emoji: '🍅',
-    apiEndpoint: `${API_BASE_URL}/api/services/tomato-predict`,
+    name: "Tomato",
+    emoji: "🍅",
+    apiEndpoint: "http://localhost:8000/api/services/tomato-predict",
     commonDiseases: [
-      "Bacterial spot", "Early blight", "Late blight", "Leaf Mold",
-      "Septoria leaf spot", "Spider mites", "Target Spot", "Yellow Leaf Curl Virus", "Mosaic virus"
+      "Bacterial spot",
+      "Early blight",
+      "Late blight",
+      "Leaf Mold",
+      "Septoria leaf spot",
+      "Spider mites",
+      "Target Spot",
+      "Yellow Leaf Curl Virus",
+      "Mosaic virus",
     ],
-  }
+  },
 };
 
-// Dynamic scrolling ticker component
+// Smooth Ticker
 const DiseaseTicker = ({ diseases }) => {
-  const extendedDiseases = [...diseases, ...diseases];
+  const extended = [...diseases, ...diseases];
   return (
-    <div className="ticker-wrap">
-      <div className="ticker-move">
-        {extendedDiseases.map((disease, index) => (
-          <div key={index} className="ticker-item">
-            <span className="mr-2">🦠</span>
-            {disease}
+    <div className="overflow-hidden relative w-full py-2 border-y border-blue-500/20 bg-blue-50 rounded-full">
+      <div className="flex animate-marquee space-x-8">
+        {extended.map((disease, i) => (
+          <div key={i} className="text-blue-700 font-medium flex items-center space-x-2">
+            <span>🦠</span>
+            <span>{disease}</span>
           </div>
         ))}
       </div>
@@ -52,46 +61,60 @@ const DiseaseTicker = ({ diseases }) => {
   );
 };
 
-// ProcessStepper component
+// Stepper
 const ProcessStepper = ({ stage }) => {
-    const steps = [
-        { id: 'upload', title: 'Upload Image', emoji: '📸' },
-        { id: 'analyze', title: 'AI Analysis', emoji: '🧠' },
-        { id: 'result', title: 'Get Solution', emoji: '💡' }
-    ];
-    const stageIndex = steps.findIndex(step => step.id === stage);
-    return (
-        <div className="w-full max-w-2xl mx-auto mb-8">
-            <div className="flex items-center justify-between">
-                {steps.map((step, index) => {
-                    const isActive = index === stageIndex;
-                    const isCompleted = index < stageIndex;
-                    return (
-                        <React.Fragment key={step.id}>
-                            <div className="flex flex-col items-center text-center">
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl transition-all duration-300 ${isActive ? 'bg-green-500 shadow-lg shadow-green-200' : isCompleted ? 'bg-green-500' : 'bg-slate-200'}`}>{isCompleted ? '✔️' : step.emoji}</div>
-                                <p className={`mt-3 font-bold ${isActive || isCompleted ? 'text-green-600' : 'text-slate-500'}`}>{step.title}</p>
-                            </div>
-                            {index < steps.length - 1 && (<div className={`flex-1 h-1 mx-4 rounded ${isCompleted ? 'bg-green-500' : 'bg-slate-200'}`}></div>)}
-                        </React.Fragment>
-                    );
-                })}
-            </div>
-        </div>
-    );
+  const steps = [
+    { id: "upload", title: "Upload Image", emoji: "📸" },
+    { id: "analyze", title: "AI Analysis", emoji: "🤖" },
+    { id: "result", title: "Get Solution", emoji: "💡" },
+  ];
+  const stageIndex = steps.findIndex((step) => step.id === stage);
+
+  return (
+    <div className="max-w-2xl mx-auto mb-8">
+      <div className="flex items-center justify-between">
+        {steps.map((step, i) => {
+          const active = i === stageIndex;
+          const done = i < stageIndex;
+          return (
+            <React.Fragment key={step.id}>
+              <div className="flex flex-col items-center text-center">
+                <div
+                  className={`w-16 h-16 flex items-center justify-center rounded-full text-3xl transition-all duration-300 
+                    ${active ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                    : done ? "bg-blue-500 text-white"
+                    : "bg-slate-200 text-slate-600"}`}
+                >
+                  {done ? "✔️" : step.emoji}
+                </div>
+                <p
+                  className={`mt-2 text-sm font-semibold 
+                    ${active || done ? "text-blue-600" : "text-slate-500"}`}
+                >
+                  {step.title}
+                </p>
+              </div>
+              {i < steps.length - 1 && (
+                <div className={`flex-1 h-[2px] mx-3 rounded ${done ? "bg-blue-600" : "bg-slate-300"}`}></div>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
-// InfoCard component (kept here for Symptoms & Prevention cards)
+// InfoCard Component
 const InfoCard = ({ icon, title, color, children }) => (
-    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm">
-        <div className={`flex items-center gap-3 px-6 py-4 border-b border-slate-200/80`}>
-        {React.cloneElement(icon, { className: `w-7 h-7 ${color}` })}
-        <h3 className={`text-lg font-bold ${color}`}>{title}</h3>
-        </div>
-        <div className="p-6 text-slate-700 leading-relaxed text-base">{children}</div>
+  <div className="bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl">
+    <div className="flex items-center gap-3 px-5 py-3 border-b border-slate-200">
+      {React.cloneElement(icon, { className: `w-6 h-6 ${color}` })}
+      <h3 className={`text-lg font-semibold ${color}`}>{title}</h3>
     </div>
+    <div className="p-5 text-slate-700">{children}</div>
+  </div>
 );
-
 
 const IdentifyDisease = () => {
   const [selectedCrop, setSelectedCrop] = useState(null);
@@ -99,148 +122,240 @@ const IdentifyDisease = () => {
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState(null);
-  const [error, setError] = useState('');
-  const [dragActive, setDragActive] = useState(false);
+  const [error, setError] = useState("");
+  const [confidenceProgress, setConfidenceProgress] = useState(0);
 
   useEffect(() => {
-    if (!file) { setPreviewUrl(null); return; }
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
+    if (!file) return setPreviewUrl(null);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
   }, [file]);
 
-  const handleDrag = (e) => { e.preventDefault(); e.stopPropagation(); if (e.type === "dragenter" || e.type === "dragover") { setDragActive(true); } else if (e.type === "dragleave") { setDragActive(false); } };
-  const handleDrop = (e) => { e.preventDefault(); e.stopPropagation(); setDragActive(false); if (e.dataTransfer.files && e.dataTransfer.files[0]) { handleFileChange(e.dataTransfer.files[0]); } };
-  const handleFileChange = (selectedFile) => { if (selectedFile && selectedFile.type.startsWith('image/')) { setFile(selectedFile); setError(''); setResult(null); } else { setError('Please select a valid image file.'); } };
-  
-  const handleReset = () => {
-    setFile(null);
-    setResult(null);
-    setError('');
-    setPreviewUrl(null);
-    setSelectedCrop(null);
+  const handleFileChange = (f) => {
+    if (f && f.type.startsWith("image/")) {
+      setFile(f);
+      setError("");
+      setResult(null);
+    } else setError("Please select a valid image file.");
   };
 
   const handleUpload = async () => {
     if (!file || !selectedCrop) {
-      setError('Please select a crop and upload an image.');
+      setError("Please select a crop and upload an image.");
       return;
     }
     setIsUploading(true);
-    setError('');
-
-    const resizeImage = (file) => new Promise((resolve, reject) => { const img = new window.Image(); const reader = new FileReader(); reader.onload = (e) => { img.onload = () => { const canvas = document.createElement('canvas'); canvas.width = 224; canvas.height = 224; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, 224, 224); canvas.toBlob((blob) => { if (blob) { resolve(new File([blob], file.name, { type: blob.type })); } else { reject(new Error('Image resizing failed.')); } }, file.type || 'image/jpeg'); }; img.onerror = reject; img.src = e.target.result; }; reader.onerror = reject; reader.readAsDataURL(file); });
+    setError("");
+    setConfidenceProgress(0);
 
     try {
-      const resizedFile = await resizeImage(file);
       const formData = new FormData();
-      formData.append('file', resizedFile);
-      
-      const endpoint = CROP_CONFIG[selectedCrop].apiEndpoint;
-      const response = await fetch(endpoint, { method: 'POST', body: formData });
-      
-      if (!response.ok) { throw new Error('Prediction failed. Our team has been notified.'); }
-      
-      const data = await response.json();
-      
-      const diseaseInfo = diseaseData[selectedCrop]?.[data.disease] || { Symptoms: 'No specific symptoms information available', Preventive_measures: 'Consult your local agri expert for prevention options.', Chemicals: [], links: [], Organic: [] };
-      
-      setResult({ 
-        crop: selectedCrop, 
-        disease: data.disease, 
-        confidence: (data.confidence * 100), 
-        symptoms: diseaseInfo.Symptoms, 
-        prevention: diseaseInfo.Preventive_measures, 
-        chemicals: diseaseInfo.Chemicals, 
-        organic: diseaseInfo.Organic || [], 
-        links: diseaseInfo.links || [] 
+      formData.append("file", file);
+      const res = await fetch(CROP_CONFIG[selectedCrop].apiEndpoint, { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Prediction failed.");
+
+      const data = await res.json();
+      const info = diseaseData[selectedCrop]?.[data.disease] || {};
+
+      setResult({
+        crop: selectedCrop,
+        disease: data.disease,
+        confidence: data.confidence * 100,
+        symptoms: info.Symptoms || "No info available.",
+        prevention: info.Preventive_measures || "No info available.",
+        chemicals: info.Chemicals?.slice(0, 2) || [],
+        organic: info.Organic?.slice(0, 2) || [],
+        links: info.links?.slice(0, 2) || [],
       });
+
+      // Animate confidence progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 2;
+        if (progress >= data.confidence * 100) {
+          progress = data.confidence * 100;
+          clearInterval(interval);
+        }
+        setConfidenceProgress(progress);
+      }, 20);
     } catch (err) {
-      setError(err.message || 'Failed to get prediction. Please try again.');
+      setError(err.message);
       setResult(null);
     } finally {
       setIsUploading(false);
     }
   };
 
-  let currentStage = 'upload';
-  if (isUploading) { currentStage = 'analyze'; } else if (result) { currentStage = 'result'; }
+  const handleReset = () => {
+    setSelectedCrop(null);
+    setFile(null);
+    setResult(null);
+    setError("");
+  };
 
-  const renderCropSelection = () => (
-    <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-2xl font-bold text-slate-700 mb-2">Select Your Crop</h2>
-        <p className="text-slate-500 mb-6">Choose the type of plant you want to analyze.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {Object.entries(CROP_CONFIG).map(([key, { name, emoji }]) => (
-                <button
-                    key={key}
-                    onClick={() => setSelectedCrop(key)}
-                    className="flex flex-col items-center justify-center p-8 bg-white rounded-3xl border-2 border-slate-200 hover:border-green-500 hover:bg-green-50/80 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-                >
-                    <span className="text-6xl mb-4">{emoji}</span>
-                    <span className="text-2xl font-bold text-slate-800">{name}</span>
-                </button>
-            ))}
-        </div>
-    </div>
-  );
+  let stage = "upload";
+  if (isUploading) stage = "analyze";
+  else if (result) stage = "result";
 
   return (
-    <div className="min-h-screen bg-green-50/30 font-sans text-slate-800">
-      <div className="container mx-auto px-4 py-4 max-w-7xl">
-        <header className="text-center mb-4">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent pb-2">🌱🔬 AI Plant Disease Diagnosis</h1>
-          <p className="text-lg text-slate-600 max-w-3xl mx-auto">Get instant, actionable solutions in just three simple steps.</p>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-sky-100 text-slate-800">
+      <div className="container mx-auto px-5 py-10 max-w-7xl">
+        <header className="text-center mb-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-sky-700 bg-clip-text text-transparent">
+            🌱 AI Crop Disease Detector
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Upload your crop leaf image and get instant diagnosis with recommendations.
+          </p>
         </header>
 
-        {selectedCrop && <ProcessStepper stage={currentStage} />}
+        {selectedCrop && <ProcessStepper stage={stage} />}
 
-        {!selectedCrop ? renderCropSelection() : currentStage !== 'result' ? (
-          <div className="max-w-2xl mx-auto">
-            <div className="text-center mb-2">
-                <DiseaseTicker diseases={CROP_CONFIG[selectedCrop].commonDiseases} />
-            </div>
-
-            <div onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop} className={`relative p-6 border-2 border-dashed rounded-3xl transition-all duration-300 ${dragActive ? 'border-green-500 bg-green-50/80' : 'border-slate-300 bg-white'}`}>
-              <input type="file" id="file-upload" className="absolute w-0 h-0 opacity-0" onChange={(e) => handleFileChange(e.target.files[0])} accept="image/*"/>
-              <label htmlFor="file-upload" className="flex flex-col items-center justify-center cursor-pointer text-center">
-                <ArrowUpTrayIcon className="w-12 h-12 text-slate-400 mb-3"/>
-                <h2 className="text-xl font-semibold text-slate-700">Drag & Drop Your Image Here</h2>
-                <p className="text-slate-500 mt-1">or <span className="text-green-600 font-semibold">click to browse</span></p>
-              </label>
-            </div>
-            
-            {file && !isUploading && (<div className="mt-4 p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between shadow-sm"><div className="flex items-center gap-3"><img src={previewUrl} alt="preview" className="w-10 h-10 rounded-lg object-cover" /><span className="font-medium text-slate-700 truncate">{file.name}</span></div><button onClick={() => setFile(null)} className="p-2 text-slate-500 hover:text-red-600 hover:bg-red-100 rounded-full transition-colors"><XCircleIcon className="w-6 h-6"/></button></div>)}
-            {error && (<div className="mt-4 p-4 bg-red-100 border border-red-200 rounded-xl flex items-center gap-3 text-red-800"><ExclamationTriangleIcon className="w-6 h-6"/><p className="font-medium">{error}</p></div>)}
-
-            <div className="text-center mt-6">
-                <button onClick={handleUpload} disabled={!file || isUploading} className="w-full sm:w-auto flex items-center justify-center gap-3 px-12 py-4 rounded-full font-bold text-lg text-white bg-gradient-to-r from-lime-500 via-green-500 to-emerald-600 transition-all duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-2xl hover:shadow-green-300/80">
-                  {isUploading ? (<><div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"/><span>Analyzing...</span></>) : (<><DocumentMagnifyingGlassIcon className="w-7 h-7"/><span>Analyze {CROP_CONFIG[selectedCrop].name}</span></>)}
-                </button>
-            </div>
+        {!selectedCrop ? (
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mt-8">
+            {Object.entries(CROP_CONFIG).map(([key, { name, emoji }]) => (
+              <button
+                key={key}
+                onClick={() => setSelectedCrop(key)}
+                className="bg-white border border-slate-200 rounded-2xl p-8 flex flex-col items-center 
+                hover:bg-blue-50 hover:border-blue-400 transition-all shadow-sm hover:shadow-lg"
+              >
+                <span className="text-6xl mb-4">{emoji}</span>
+                <span className="text-xl font-bold text-slate-800">{name}</span>
+              </button>
+            ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-            <div className="lg:col-span-2 lg:sticky lg:top-8 space-y-6">
-              <div className="bg-white p-6 rounded-3xl shadow-lg border border-slate-200/80"><h2 className="text-xl font-bold text-slate-800 mb-4">Your Uploaded {CROP_CONFIG[result.crop].name} Leaf</h2><img src={previewUrl} alt="Uploaded crop" className="w-full h-auto rounded-2xl object-cover" /></div>
-              <button onClick={handleReset} className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-full font-bold text-lg text-white bg-gradient-to-r from-slate-700 to-slate-800 transition-all hover:shadow-lg"><ArrowPathIcon className="w-6 h-6"/>Analyze Another</button>
+          <>
+            <div className="max-w-2xl mx-auto mb-6">
+              <DiseaseTicker diseases={CROP_CONFIG[selectedCrop].commonDiseases} />
             </div>
-            
-            <div className="lg:col-span-3 space-y-6">
-                <div className="bg-gradient-to-br from-green-50 via-white to-white p-6 rounded-3xl shadow-lg border-2 border-green-200">
-                    <div className="flex items-start justify-between"><div><p className="font-semibold text-green-800">Diagnosis Result</p><p className="text-4xl font-bold text-slate-800 mt-1">{result.disease}</p></div><span className="flex items-center gap-2 font-bold text-green-700 bg-green-100 px-3 py-1 rounded-full"><CheckCircleIcon className="w-6 h-6" />Success</span></div>
-                    <div className="mt-6"><p className="text-sm font-medium text-slate-600 mb-2">Confidence Level: <span className="font-bold text-green-700">{result.confidence.toFixed(2)}%</span></p><div className="w-full bg-slate-200 rounded-full h-3"><div className="bg-gradient-to-r from-lime-400 to-green-600 h-3 rounded-full" style={{ width: `${result.confidence}%` }}/></div></div>
+
+            {!result ? (
+              <div className="max-w-2xl mx-auto text-center">
+                <label className="block border-2 border-dashed border-blue-400 rounded-3xl p-8 bg-white hover:bg-blue-50 transition cursor-pointer">
+                  <ArrowUpTrayIcon className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+                  <p className="text-lg font-semibold text-slate-700">
+                    Drag & Drop or Click to Upload
+                  </p>
+                  <input
+                    type="file"
+                    onChange={(e) => handleFileChange(e.target.files[0])}
+                    className="hidden"
+                  />
+                </label>
+                {file && !isUploading && (
+                  <div className="mt-4 bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={previewUrl}
+                        alt="preview"
+                        className="w-12 h-12 rounded-lg object-cover"
+                      />
+                      <span className="font-medium text-slate-700">{file.name}</span>
+                    </div>
+                    <button
+                      onClick={() => setFile(null)}
+                      className="p-2 text-slate-500 hover:text-red-600 transition"
+                    >
+                      <XCircleIcon className="w-6 h-6" />
+                    </button>
+                  </div>
+                )}
+                {error && (
+                  <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-xl border border-red-300 flex items-center gap-2">
+                    <ExclamationTriangleIcon className="w-5 h-5" /> {error}
+                  </div>
+                )}
+                <button
+                  onClick={handleUpload}
+                  disabled={!file || isUploading}
+                  className="mt-6 w-full sm:w-auto px-10 py-4 rounded-full font-bold text-lg text-white 
+                  bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:shadow-lg hover:scale-105 transition disabled:opacity-50"
+                >
+                  {isUploading ? "Analyzing..." : `Analyze ${CROP_CONFIG[selectedCrop].name}`}
+                </button>
+              </div>
+            ) : (
+              <div className="max-w-5xl mx-auto mt-8 grid lg:grid-cols-5 gap-8 items-start">
+                <div className="lg:col-span-2 space-y-5">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-md">
+                    <h2 className="text-lg font-bold mb-3 text-slate-700">
+                      Uploaded {CROP_CONFIG[result.crop].name} Leaf
+                    </h2>
+                    <img src={previewUrl} alt="uploaded" className="w-full rounded-xl" />
+                  </div>
+                  <button
+                    onClick={handleReset}
+                    className="w-full px-6 py-4 rounded-full text-white font-bold bg-gradient-to-r from-slate-700 to-slate-800 hover:scale-105 transition"
+                  >
+                    <ArrowPathIcon className="w-6 h-6 inline-block mr-2" /> Analyze Another
+                  </button>
+
+                  {/* Disease Info Below */}
+                  <div className="mt-6 bg-white rounded-2xl p-5 shadow border border-slate-200">
+                    <h3 className="font-semibold text-slate-800 mb-2">
+                      🧬 Disease Information:
+                    </h3>
+                    <p className="text-slate-600">
+                      {result.disease} is commonly found in{" "}
+                      {CROP_CONFIG[result.crop].name} crops and can be prevented
+                      using proper field hygiene and crop rotation.
+                    </p>
+                  </div>
                 </div>
 
-                <InfoCard title="Symptoms" color="text-sky-600" icon={<DocumentMagnifyingGlassIcon />}><p>{result.symptoms}</p></InfoCard>
-                <InfoCard title="Prevention Measures" color="text-green-600" icon={<ShieldCheckIcon />}><p>{result.prevention}</p></InfoCard>
-                
-                <SolutionTabs 
-                  result={result}
-                  userLocation={{ latitude: 18.5204, longitude: 73.8567 }}
-                />
-            </div>
-          </div>
+                <div className="lg:col-span-3 space-y-6">
+                  <div className="bg-gradient-to-br from-blue-50 via-white to-white p-6 rounded-3xl shadow-md border-2 border-blue-200">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-blue-700 font-semibold">Diagnosis Result</p>
+                        <p className="text-3xl font-bold text-slate-800">{result.disease}</p>
+                      </div>
+                      <span className="flex items-center gap-2 font-semibold text-blue-700 bg-blue-100 px-3 py-1 rounded-full">
+                        <CheckCircleIcon className="w-5 h-5" /> Success
+                      </span>
+                    </div>
+
+                    {/* Confidence Progress */}
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-slate-600 mb-1">
+                        Confidence:{" "}
+                        <span className="font-bold text-blue-700">
+                          {confidenceProgress.toFixed(0)}%
+                        </span>
+                      </p>
+                      <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-3 bg-gradient-to-r from-blue-500 to-sky-400 rounded-full transition-all duration-200"
+                          style={{ width: `${confidenceProgress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <InfoCard title="Symptoms" color="text-sky-600" icon={<DocumentMagnifyingGlassIcon />}>
+                    {result.symptoms}
+                  </InfoCard>
+
+                  <InfoCard title="Prevention" color="text-green-600" icon={<ShieldCheckIcon />}>
+                    {result.prevention}
+                  </InfoCard>
+
+                  {/* Only 2 Products + 2 Shops */}
+                  <SolutionTabs
+                    result={{
+                      ...result,
+                      chemicals: result.chemicals.slice(0, 2),
+                      links: result.links.slice(0, 2),
+                    }}
+                    showMore={false}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

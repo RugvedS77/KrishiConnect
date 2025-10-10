@@ -16,7 +16,6 @@ import {
     Receipt
 } from 'lucide-react';
 import { useAuthStore } from '../authStore';
-import { API_BASE_URL } from "../api/apiConfig";
 
 // --- MODAL COMPONENTS ---
 
@@ -341,8 +340,8 @@ const FinancePage = () => {
         try {
             const headers = { Authorization: `Bearer ${token}` };
             const [walletRes, transRes] = await Promise.all([
-                fetch(`${API_BASE_URL}/api/wallet/me`, { headers }),
-                fetch(`${API_BASE_URL}/api/wallet/me/transactions`, { headers })
+                fetch("http://localhost:8000/api/wallet/me", { headers }),
+                fetch("http://localhost:8000/api/wallet/me/transactions", { headers })
             ]);
             if (!walletRes.ok || !transRes.ok) throw new Error("Failed to load payment data. Please try again later.");
             const walletData = await walletRes.json();

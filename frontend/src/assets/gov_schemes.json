@@ -1,0 +1,195 @@
+[
+  {
+    "id": "pm-kisan",
+    "title": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+    "category": "Direct Income",
+    "government": "Central",
+    "cardSummary": "₹6,000 per year as direct income support.",
+    "cardFor": "All landholding farmer families.",
+    "detail_summary_benefit": "₹6,000 / year",
+    "detail_summary_type": "Direct Income (Cash Transfer)",
+    "applyUrl": "https://pmkisan.gov.in/",
+    "tab_what_is_it": "<p>A Central Sector scheme to supplement the financial needs of landholding farmer families, helping them procure various inputs for agriculture and allied activities as well as domestic needs.</p><p><b>Key Benefits:</b></p><ul><li><b>Financial Support:</b> ₹6,000 per year, transferred directly to the farmer's Aadhaar-linked bank account.</li><li><b>Installment Plan:</b> The amount is paid in three equal installments of ₹2,000 every four months, providing a regular financial safety net.</li><li><b>No Restrictions:</b> Farmers have full flexibility to use the funds as per their requirements without any constraints.</li></ul>",
+    "tab_eligibility": "<p>All landholding farmer families who own cultivable land, irrespective of the size of their landholdings.</p><p><b>Exclusions:</b></p><ul><li>Institutional landholders.</li><li>Farmer families where one or more members hold or held constitutional posts.</li><li>Serving or retired officers and employees of Central/State Government, Ministries, PSEs, and Autonomous institutions.</li><li>High-income individuals such as doctors, engineers, lawyers, and those who paid income tax in the last assessment year.</li></ul>",
+    "tab_documents": [
+      "Aadhaar Card (mandatory)",
+      "Landholding papers (7/12 and 8-A or equivalent)",
+      "Bank Account Passbook",
+      "Citizenship Certificate"
+    ],
+    "tab_how_to_apply": "<p>The application process is entirely online through the official portal.</p><ol><li>Visit the official PM-KISAN Portal at <b>pmkisan.gov.in</b>.</li><li>On the homepage, scroll down to the <b>'Farmer Corner'</b> section.</li><li>Click on the <b>'New Farmer Registration'</b> option.</li><li>Enter your Aadhaar number, mobile number, select your state, and fill in the required details on the form. You can also visit your nearest Common Service Centre (CSC) for registration assistance.</li></ol>",
+    "rules": {
+      "states": ["All"],
+      "must_own_land": true,
+      "can_be_tenant": false,
+      "categories": ["All"],
+      "needs": ["income_support"]
+    }
+  },
+  {
+    "id": "pmfby",
+    "title": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "category": "Crop Insurance",
+    "government": "Central",
+    "cardSummary": "Comprehensive insurance coverage for crop loss or damage.",
+    "cardFor": "All farmers, including tenants and sharecroppers.",
+    "detail_summary_benefit": "Insures against crop failure",
+    "detail_summary_type": "Crop Insurance",
+    "applyUrl": "https://pmfby.gov.in/",
+    "tab_what_is_it": "<p>The flagship crop insurance scheme to provide financial support to farmers against crop loss or damage arising from unforeseen events and natural calamities.</p><p><b>Key Benefits & Covered Risks:</b></p><ul><li><b>Low Farmer Premium:</b> Uniform premium capped at 2% for all Kharif crops, 1.5% for all Rabi crops, and 5% for commercial/horticultural crops. The rest of the premium is paid by the Government.</li><li><b>Comprehensive Coverage:</b> Insures against yield losses due to non-preventable risks, such as drought, dry spells, floods, pests, and diseases.</li><li><b>Localized Calamities:</b> Covers losses from hailstorms, landslides, and inundation affecting isolated farms.</li><li><b>Post-Harvest Losses:</b> Coverage is available up to a maximum period of two weeks from harvesting for crops kept in 'cut & spread' condition to dry.</li><li><b>Use of Technology:</b> Drones and satellites are used for faster and more accurate crop loss assessment and claim settlement.</li></ul>",
+    "tab_eligibility": "<p>All farmers, including sharecroppers and tenant farmers, who are growing notified crops in notified areas are eligible.</p><p><b>Enrollment Types:</b></p><ul><li><b>Loanee Farmers:</b> Those taking a crop loan (KCC) for notified crops were previously compulsorily covered, but enrollment is now voluntary since 2020.</li><li><b>Non-Loanee Farmers:</b> Can apply voluntarily through the appropriate channels.</li></ul>",
+    "tab_documents": [
+      "Aadhaar Card",
+      "Land Records (7/12, 8-A, or a valid Tenancy Agreement)",
+      "Bank Passbook",
+      "Sowing Declaration Form"
+    ],
+    "tab_how_to_apply": "<p><b>Non-Loanee Farmers</b> can apply through various channels:</p><ol><li>Go to the official National Crop Insurance Portal (NCIP) at <b>pmfby.gov.in</b> and click on the <b>'Farmer Application'</b> link on the homepage.</li><li>Visit your nearest bank branch and ask for the PMFBY enrollment form.</li><li>Find a local Common Service Centre (CSC) or a certified insurance agent who can enroll you.</li></ol><p><b>Loanee Farmers</b> can enroll through the same bank from which they avail their crop loan.</p>",
+    "rules": {
+      "states": ["All"],
+      "must_own_land": true,
+      "can_be_tenant": true,
+      "categories": ["All"],
+      "needs": ["crop_insurance"]
+    }
+  },
+  {
+    "id": "kcc",
+    "title": "Kisan Credit Card (KCC)",
+    "category": "Bank Loan",
+    "government": "Central",
+    "cardSummary": "A flexible, low-interest credit line for all farming needs.",
+    "cardFor": "All farmers, tenants, and SHGs.",
+    "detail_summary_benefit": "Revolving credit at ~4% interest",
+    "detail_summary_type": "Credit / Loan",
+    "applyUrl": "https://www.jansamarth.in/kisan-credit-card-scheme",
+    "tab_what_is_it": "<p>A credit facility that gives farmers timely and flexible access to funds. It is not a one-time loan but a revolving credit limit, valid for 5 years with simple annual renewal.</p><p><b>Key Benefits:</b></p><ul><li><b>Comprehensive Credit:</b> Covers costs of cultivation, post-harvest expenses, marketing, household consumption, and maintenance of farm assets. It also extends to allied activities like dairy, fisheries, and poultry.</li><li><b>Extremely Low Interest:</b> The standard interest rate is 7%. With the 3% prompt repayment incentive from the government, the <b>effective interest rate is only 4%</b> per annum.</li><li><b>Flexibility:</b> Withdraw funds as needed from the credit limit; repay after harvest. Interest is charged only on the amount withdrawn.</li><li><b>Insurance Coverage:</b> Provides personal accident insurance coverage of up to ₹50,000 for death or permanent disability.</li></ul>",
+    "tab_eligibility": "<ul><li>Individual farmers who are owner-cultivators.</li><li>Tenant farmers, oral lessees, and sharecroppers.</li><li>Self Help Groups (SHGs) or Joint Liability Groups (JLGs) of farmers.</li><li>Farmers involved in allied activities like animal husbandry and fisheries.</li></ul>",
+    "tab_documents": [
+      "Completed application form (from the bank)",
+      "Proof of Identity (Aadhaar Card, Voter ID, etc.)",
+      "Proof of Address (Utility bill, Aadhaar, etc.)",
+      "Proof of Landholding (7/12, 8-A, or Tenancy Agreement)",
+      "A passport-size photograph"
+    ],
+    "tab_how_to_apply": "<ol><li><b>Offline:</b> Visit the nearest branch of any Commercial Bank, Regional Rural Bank (RRB), or Cooperative Bank and fill out the KCC form.</li><li><b>Online (Bank Website):</b> Most major banks (like SBI, PNB, etc.) have an 'Apply for KCC' or 'Agri Loans' section on their official websites.</li><li><b>Online (Govt. Portal):</b> Visit the <b>JanSamarth Portal</b> (jansamarth.in), go to the 'Agricultural Loan' category, and select the Kisan Credit Card scheme to start your application with multiple lenders.</li></ol>",
+    "rules": {
+      "states": ["All"],
+      "must_own_land": true,
+      "can_be_tenant": true,
+      "categories": ["All", "SHG", "JLG"],
+      "needs": ["loan"]
+    }
+  },
+  {
+    "id": "smam",
+    "title": "Agricultural Mechanization (SMAM)",
+    "category": "Buy Equipment",
+    "government": "Central",
+    "cardSummary": "40-50% subsidy on tractors and other farm machinery.",
+    "cardFor": "All farmers, FPOs, and CHCs.",
+    "detail_summary_benefit": "40-50% subsidy",
+    "detail_summary_type": "Equipment Subsidy",
+    "applyUrl": "https://agrimachinery.nic.in/",
+    "tab_what_is_it": "<p>A Sub-Mission on Agricultural Mechanization (SMAM) to make modern farm equipment more accessible by providing subsidies for purchasing machinery.</p><p><b>Key Benefits:</b></p><ul><li><b>Capital Subsidy:</b> Provides a subsidy ranging from 40% to 50% on the cost of eligible machinery, reducing the financial burden on farmers.</li><li><b>Wide Range of Equipment:</b> Covers tractors, power tillers, rotavators, combine harvesters, threshers, and specialized machinery for horticulture and post-harvest management.</li><li><b>Promotes Custom Hiring Centers (CHCs):</b> Offers higher subsidies (up to 80% in some cases) for establishing CHCs, allowing small farmers to rent equipment affordably.</li></ul>",
+    "tab_eligibility": "<ul><li>Individual farmers.</li><li>Farmer Producer Organizations (FPOs).</li><li>Self Help Groups (SHGs).</li><li>Cooperative Societies.</li><li>Entrepreneurs setting up Custom Hiring Centers (CHCs).</li></ul>",
+    "tab_documents": [
+      "Aadhaar Card",
+      "7/12 and 8-A (Land Records)",
+      "Bank Passbook",
+      "Caste Certificate (if applicable for higher subsidy rates)",
+      "Quotation for the machinery from an authorized dealer"
+    ],
+    "tab_how_to_apply": "<p>Applications are managed at the state level through a unified national portal.</p><ol><li>Visit the official SMAM portal at <b>agrimachinery.nic.in</b>.</li><li>On the homepage, click on the <b>'Registration'</b> menu and select <b>'Farmer'</b> from the dropdown.</li><li>Complete the registration using your Aadhaar number. After registration, you will be directed to your state's specific Direct Benefit Transfer (DBT) portal to submit the application for the machinery you want to purchase.</li></ol>",
+    "rules": {
+      "states": ["All"],
+      "must_own_land": true,
+      "can_be_tenant": false,
+      "categories": ["All", "FPO", "SHG"],
+      "needs": ["equipment"]
+    }
+  },
+  {
+    "id": "aif",
+    "title": "Agriculture Infrastructure Fund (AIF)",
+    "category": "Build/Upgrade",
+    "government": "Central",
+    "cardSummary": "Low-interest loans for building post-harvest infrastructure.",
+    "cardFor": "Farmers, FPOs, and Agri-entrepreneurs.",
+    "detail_summary_benefit": "3% Interest Subvention on Loans",
+    "detail_summary_type": "Infrastructure Loan",
+    "applyUrl": "https://agriinfra.dac.gov.in/",
+    "tab_what_is_it": "<p>A financing facility for creating post-harvest management infrastructure and community farming assets. This is a loan scheme with significant financial benefits, not a direct subsidy grant.</p><p><b>Key Benefits:</b></p><ul><li><b>Interest Subvention:</b> A <b>3% interest subvention (discount)</b> on loans up to ₹2 crore.</li><li><b>Credit Guarantee:</b> Credit guarantee coverage for eligible borrowers from the CGTMSE scheme for loans up to ₹2 crore.</li><li><b>Wide Range of Projects:</b> Covers warehouses, silos, pack-houses, cold storage, processing units, supply chain infrastructure, and more.</li><li><b>Long Repayment Period:</b> Moratorium for repayment can be up to 2 years, with a total repayment period of up to 7 years.</li></ul>",
+    "tab_eligibility": "<ul><li>Farmers</li><li>Farmer Producer Organizations (FPOs)</li><li>Self Help Groups (SHGs)</li><li>Agri-entrepreneurs and Startups</li><li>Primary Agricultural Credit Societies (PACS)</li></ul>",
+    "tab_documents": [
+      "Detailed Project Report (DPR)",
+      "Business Registration Documents (for FPOs/companies)",
+      "Land Records for the project site",
+      "Bank KYC documents (Aadhaar, PAN, etc.)",
+      "Application form from the selected lending institution"
+    ],
+    "tab_how_to_apply": "<ol><li>Prepare a Detailed Project Report (DPR) for your intended project (e.g., 'Cold Storage Unit of 100 MT capacity').</li><li>Visit the official <b>AIF National Portal</b> at <b>agriinfra.dac.gov.in</b> and click on the <b>'Beneficiary Registration'</b> link.</li><li>Fill out the registration form. The portal allows you to select your preferred lending institution (bank).</li><li>The bank will then process the loan application as per its standard procedures, with the AIF benefits applied upon sanction.</li></ol>",
+    "rules": {
+      "states": ["All"],
+      "must_own_land": true,
+      "can_be_tenant": false,
+      "categories": ["All", "FPO", "SHG", "Startup"],
+      "needs": ["infrastructure"]
+    }
+  },
+  {
+    "id": "ambedkar-scheme",
+    "title": "Dr. Babasaheb Ambedkar Krushi Swavalamban Yojana",
+    "category": "Irrigation/Wells",
+    "government": "State",
+    "cardSummary": "High subsidy on wells, pumps, and irrigation for SC/ST.",
+    "cardFor": "SC / Navabuddha farmers in Maharashtra.",
+    "detail_summary_benefit": "Up to 95% Subsidy",
+    "detail_summary_type": "Irrigation Subsidy",
+    "applyUrl": "https://mahadbt.maharashtra.gov.in/",
+    "tab_what_is_it": "<p>A Maharashtra state scheme to empower Scheduled Caste (SC) / Navabuddha farmers by providing high subsidies to create permanent irrigation facilities and make them self-reliant.</p><p><b>Key Benefits (Subsidy Amounts):</b></p><ul><li><b>New Wells:</b> ₹2.5 Lakhs</li><li><b>Old Well Repairs:</b> ₹50,000</li><li><b>Borewell:</b> ₹20,000</li><li><b>Pumpset / Electric Motor:</b> ₹25,000</li><li><b>Drip or Sprinkler Irrigation:</b> 90% subsidy on unit cost.</li><li><b>Farm Pond Lining:</b> ₹1 Lakh</li></ul>",
+    "tab_eligibility": "<ul><li>Must be a farmer in Maharashtra.</li><li>Must belong to the Scheduled Caste (SC) or Navabuddha category.</li><li>Annual family income should not exceed ₹1.5 Lakhs.</li><li>Must hold a minimum of 0.40 Hectares of land.</li><li>Must have valid land records (7/12 and 8-A) and a Caste Certificate.</li></ul>",
+    "tab_documents": [
+      "Aadhaar Card",
+      "7/12 and 8-A (Land Records)",
+      "Bank Passbook",
+      "Caste Certificate (जातीचा दाखला)",
+      "Income Certificate (उत्पन्नाचा दाखला)"
+    ],
+    "tab_how_to_apply": "<p>Applications are processed online via the official Maharashtra state DBT portal.</p><ol><li>Visit the <b>MahaDBT portal</b> at <b>mahadbt.maharashtra.gov.in</b>.</li><li>First, click on <b>'New Applicant Registration'</b>. After registering, log in with your credentials.</li><li>Inside the portal, fill out your personal profile completely. Then, on the main dashboard, click <b>'Apply for Scheme'</b>.</li><li>Select the <b>'Agriculture'</b> department, and you will find the 'Dr. Babasaheb Ambedkar Krushi Swavalamban Yojana' listed. Select the components you need (e.g., New Well, Drip Irrigation) and submit.</li></ol>",
+    "rules": {
+      "states": ["Maharashtra"],
+      "must_own_land": true,
+      "can_be_tenant": false,
+      "categories": ["SC", "Navabuddha"],
+      "needs": ["irrigation"]
+    }
+  },
+  {
+    "id": "falbag-scheme",
+    "title": "Bhausaheb Fundkar Falbag Lagvad Yojana",
+    "category": "New Orchard",
+    "government": "State",
+    "cardSummary": "100% subsidy for planting new fruit orchards.",
+    "cardFor": "All farmers in Maharashtra.",
+    "detail_summary_benefit": "100% subsidy (in 3 installments)",
+    "detail_summary_type": "Horticulture Subsidy",
+    "applyUrl": "https://mahadbt.maharashtra.gov.in/",
+    "tab_what_is_it": "<p>A Maharashtra state scheme to promote horticulture by providing a 100% subsidy for planting new orchards of 16 different fruit crops.</p><p><b>Key Benefits:</b></p><ul><li><b>100% Subsidy:</b> Covers costs for pit digging, planting material, fertilizers, and crop protection for the first three years.</li><li><b>Payment Structure:</b> The subsidy is paid in three installments: 50% in the first year, 30% in the second, and 20% in the third, based on plant survival.</li><li><b>Eligible Crops:</b> Includes Mango, Cashew, Pomegranate, Guava, Orange, Sweet Lime, Fig, Coconut, and more.</li></ul>",
+    "tab_eligibility": "<ul><li>Any farmer in Maharashtra with 7/12 and 8-A land records in their name.</li><li>Must have an Aadhaar-linked bank account.</li><li>Minimum land for application is 0.10 Hectare and maximum is 6 Hectares.</li><li>Must have a source of irrigation.</li></ul>",
+    "tab_documents": [
+      "Aadhaar Card",
+      "7/12 and 8-A (Land Records)",
+      "Bank Passbook",
+      "A self-declaration (स्वयंघोषणापत्र) confirming you have irrigation facilities."
+    ],
+    "tab_how_to_apply": "<p>All applications are processed online via the official Maharashtra state DBT portal.</p><ol><li>Visit the <b>MahaDBT portal</b> at <b>mahadbt.maharashtra.gov.in</b>.</li><li>First, click on <b>'New Applicant Registration'</b>. After registering, log in.</li><li>Inside the portal, fill out your profile completely. Then, on the main dashboard, click <b>'Apply for Scheme'</b>.</li><li>Select the <b>'Agriculture'</b> department, and you will find the 'Bhausaheb Fundkar Falbag Lagvad Yojana' listed. Select the fruit crops you wish to plant and submit your application.</li></ol>",
+    "rules": {
+      "states": ["Maharashtra"],
+      "must_own_land": true,
+      "can_be_tenant": false,
+      "categories": ["All"],
+      "needs": ["horticulture"]
+    }
+  }
+]

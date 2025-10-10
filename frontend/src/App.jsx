@@ -7,7 +7,7 @@ import './App.css';
 import FarmerLayout from './farmer_business_components/FarmerLayout.jsx';
 
 // ------------------- Farmer Business (Marketplace) Pages -------------------
-import MarketplaceDashboard from './farmer_business_pages/MarketPlaceDashboard.jsx'; 
+import MarketplaceDashboard from './farmer_business_pages/MarketplaceDashboard.jsx'; 
 import FarmerErrorPage from './farmer_business_pages/ErrorPage.jsx';
 import CreateListingPage from './farmer_business_pages/CreateListingPage.jsx';
 import BuyerProposalsPage from './farmer_business_pages/BuyerProposalsPage.jsx';

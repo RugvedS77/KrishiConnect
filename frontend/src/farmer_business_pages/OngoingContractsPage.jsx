@@ -3,7 +3,6 @@ import ContractList from '../farmer_business_components/OngoingContracts/Contrac
 import EmptyState from '../farmer_business_components/OngoingContracts/EmptyState.jsx';
 import { useAuthStore } from '../authStore';
 import { Loader2, XCircle } from 'lucide-react'; 
-import { API_BASE_URL } from "../api/apiConfig";
 // Removed Modal-specific icons like X, Camera
 
 // --- Modal Component Has Been REMOVED ---
@@ -26,7 +25,7 @@ export default function OngoingContractsPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/contracts/ongoing`, {
+      const response = await fetch("http://localhost:8000/api/contracts/ongoing", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
@@ -104,7 +103,7 @@ export default function OngoingContractsPage() {
       };
 
       // 4. Call the backend PATCH route
-      const response = await fetch(`${API_BASE_URL}/api/milestones/${milestoneToUpdate.id}/complete`, {
+      const response = await fetch(`http://localhost:8000/api/milestones/${milestoneToUpdate.id}/complete`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

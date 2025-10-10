@@ -5,7 +5,6 @@ import {
     AlertCircle, FileText, MessageCircle, ThumbsDown, Inbox, Loader2 
 } from "lucide-react";
 import NegotiationChatModal from '../farmer_business_components/NegotiationChatModal';
-import { API_BASE_URL } from "../api/apiConfig";
 
 const BuyerContractsPage = () => {
     const [activeTab, setActiveTab] = useState("negotiating");
@@ -18,7 +17,7 @@ const BuyerContractsPage = () => {
 
     // Add these to your API helper section
     const acceptOfferApi = async (contractId, token) => {
-        const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/accept-offer`, {
+        const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/accept-offer`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -27,7 +26,7 @@ const BuyerContractsPage = () => {
     };
 
     const rejectOfferApi = async (contractId, token) => {
-        const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/reject-offer`, {
+        const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/reject-offer`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}` }
         });
@@ -45,7 +44,7 @@ const BuyerContractsPage = () => {
         const statusesToFetch = ['negotiating', 'ongoing', 'rejected'];
         try {
             const results = await Promise.all(statusesToFetch.map(async (status) => {
-                const url = `${API_BASE_URL}/api/contracts/my-contracts?status=${status}`;
+                const url = `http://localhost:8000/api/contracts/my-contracts?status=${status}`;
                 const headers = { 'Authorization': `Bearer ${token}` };
                 const response = await fetch(url, { headers });
                 if (!response.ok) throw new Error(`Failed to fetch ${status} contracts. Status: ${response.status}`);
@@ -435,7 +434,7 @@ export default BuyerContractsPage;
 //         const statusesToFetch = ['negotiating', 'ongoing', 'rejected'];
 //         try {
 //             const results = await Promise.all(statusesToFetch.map(async (status) => {
-//                 const url = `${API_BASE_URL}/api/contracts/my-contracts?status=${status}`;
+//                 const url = `http://localhost:8000/api/contracts/my-contracts?status=${status}`;
 //                 const headers = { 'Authorization': `Bearer ${token}` };
 //                 const response = await fetch(url, { headers });
 //                 if (!response.ok) throw new Error(`Failed to fetch ${status} contracts. Status: ${response.status}`);

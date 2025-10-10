@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaChevronRight, FaChevronLeft, FaFlask } from 'react-icons/fa';
 import diseaseData from '../../assets/disease_chemicals_data.json';
+import productsData from '../../assets/output.json'; 
 
 const RecommendProducts = ({ chemicals = [], disease = "" }) => {
     const [products, setProducts] = useState([]);
@@ -10,23 +11,30 @@ const RecommendProducts = ({ chemicals = [], disease = "" }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // useEffect(() => {
+    //     const loadProducts = async () => {
+    //         try {
+    //             const response = await fetch('src/assets/output.json');
+    //             if (!response.ok) {
+    //                 throw new Error(`HTTP error! status: ${response.status}`);
+    //             }
+    //             const data = await response.json();
+    //             setProducts(data);
+    //         } catch (error) {
+    //             setError(`Failed to load products: ${error.message}`);
+    //             console.error('Fetch error:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+    //     loadProducts();
+    // }, []);
+
     useEffect(() => {
-        const loadProducts = async () => {
-            try {
-                const response = await fetch('src/assets/output.json');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setProducts(data);
-            } catch (error) {
-                setError(`Failed to load products: ${error.message}`);
-                console.error('Fetch error:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadProducts();
+        // 2. Remove the entire loadProducts useEffect
+        // The data is now available immediately
+        setProducts(productsData); 
+        setLoading(false); 
     }, []);
 
     useEffect(() => {

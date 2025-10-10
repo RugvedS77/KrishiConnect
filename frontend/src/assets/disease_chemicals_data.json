@@ -1,15 +1,5 @@
 {
   "cotton": {
-    "Aphids": {
-      "Symptoms": "Angular leaf spots with red to brown margins, water-soaked lesions that become necrotic",
-      "Preventive_measures": "Use disease-free seeds, practice crop rotation, avoid overhead irrigation",
-      "Chemicals": ["Imidacloprid 17.8% SL", "Acetamiprid 20.0% SP", "Thiamethoxam 25.0% WG" ,"Flonicamid 50.0% WG"],
-      "links": ["https://kisanvedika.bighaat.com/management-of-aphids-in-cotton/",
-       "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html",
-        "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html", 
-        "https://www.example.com/aphids/flonicamid"],
-      "Organic":["Azadirachtin 00.03% EC Min. Neem Oil Based Spray 2000 g/ml of formulation diluted in 500 liters of water per hectare, with a waiting period of 5 days before harvest","Amruth Alestra Liquid  containing Verticillium lecanii with dosage of 2ml/Litre of water","release parasitoid like Aphelinus sp., to effectively control cotton aphids’ populations","Release natural predators such as lady bird beetles, green lacewing, hoverflies and spiders etc","using neem products,detergent / soap powder @ 1 gm/litre of spray fluid is to be added for getting uniform spray suspension","Spray of 5 % neem seed kernel extract prepared on farm or crude neem oil spray @ 1% "]
-    }, 
     "Army worm": {
       "Symptoms": "Caterpillars feeding on leaves, creating holes and skeletonizing foliage",
       "Preventive_measures": "Regular monitoring, use of pheromone traps, biological control with natural predators",
@@ -20,6 +10,7 @@
       "https://www.researchgate.net/publication/279171735_Fall_Armyworm_Lepidoptera_Noctuidae_Ecology_in_Southeastern_Cotton/fulltext/5642acd808ae997866c4cdd5/Fall-Armyworm-Lepidoptera-Noctuidae-Ecology-in-Southeastern-Cotton.pdf"],
       "Organic":["Release egg parasitoids like Trichogramma pretiosum or Telenomus remus 50,000 per acre at weekly","Anand Dr. Bacto’s Brave ( Beauveria bassiana) (dosage: 2.5ml per liter of water.)","Katyayani Organic Larvicide (Bacillus thuringiensis )(dosage:10ml per liter of water. )","Econeem Plus Bio pesticide (Azadirachtin )(dosage:3ml per litre as oviposition deterrent on one week after sowing)","Deep ploughing and application of neemcake (dosage:  50–100 mL/ha)","Common predators include big-eyed bugs, minute pirate bugs, damsel bug, lacewing larvae, assassin bugs, spiders, lady beetles and Collops beetles."]
     },
+
     "Bacterial Blight": {
       "Symptoms": "Water-soaked lesions on leaves, stems, and bolls, leading to wilting and defoliation",
       "Preventive_measures": "Use resistant varieties, apply copper-based bactericides, ensure proper field sanitation",
@@ -28,6 +19,7 @@
       "https://ppqs.gov.in/sites/default/files/cotton.pdf"],
       "Organic":["Seaweed Extracts: These can boost plant immunity and help them resist bacterial infections","Mulching: Mulching can prevent the spread of soil-borne bacteria to the leaves","V-Cure Fungicide Plus Bactericide"]
     },
+
     "Cotton Boll Rot": {
       "Symptoms": "Soft, mushy bolls with a foul odor, often with fungal growth",
       "Preventive_measures": "Improve air circulation, avoid excessive nitrogen fertilization, timely harvesting",
@@ -35,8 +27,9 @@
       "links": ["https://cicr.org.in/wp-content/uploads/boll-rot-eng.pdf",
       "https://ppqs.gov.in/sites/default/files/cotton.pdf",
       "https://ppqs.gov.in/sites/default/files/cotton.pdf"
-  ]
+      ]
     },
+
     "Curl Virus": {
       "Symptoms": "Leaf curling, yellowing, and stunted growth",
       "Preventive_measures": "Use virus-free seeds, control vector populations, apply insecticides",
@@ -44,13 +37,15 @@
       "links": ["https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/",
       "https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/",
       "https://kisanvedika.bighaat.com/tackling-leaf-curl-virus-strategies-for-successful-management/"
-  ],
+   ],
       "Organic":["canola oil and bifenthrin (bifenthrin10% EC)","Azardiractin  (Brand: Greenpeace Neemol Bio Neem Oil Insecticide : Neem Oil extracts)  (dosage:1 – 2 ml/lit water )","Fatty Acid based Plant Extracts (Brand:  Nanobee Agrokill Insecticide : Nano Colloidal Micelles 100%) (dosage:3 mL/Litre )","Beauveria bassiana (Brand: Anand Dr Bacto’s Brave)  (dosage:2.5 ml/lit water)","VC-100  (dosage:5 gram/Litre water )","Vanproz V-Bind (dosage: 2 – 3 ml/lit water)","Multiplex Magnum Mn (Manganese 12% ) (dosage: 2.5 ml/lit water)","Foliar application of neem leaf extract and 1% neem oil ","Neem oil + Teepol   (dosge: 3 + 500 ml/ha)","Fish oil resin soap   (dosage: 14/15 kg/ha)"]
     },
+
     "Herbicide Growth Damage": {
       "Symptoms": "Distorted growth, leaf chlorosis, and necrosis due to herbicide exposure",
       "Preventive_measures": "Follow label instructions, avoid drift, use appropriate herbicide rates"
     },
+
     "Leaf Hopper Jassids": {
       "Symptoms": "Yellowing and curling of leaves, stunted plant growth",
       "Preventive_measures": "Use resistant varieties, apply insecticides, maintain field hygiene",
@@ -60,6 +55,7 @@
       "https://agritech.tnau.ac.in/crop_protection/crop_prot_crop_insectpest%20_cotton.html"],
       "Organic":["spinosad- fermented soil actinomycete bacteria {active ingredients: Spinosyn A and Spinosyn D} (dosage: 0.35ml/L on infected area )","Release predators viz., Chrysopa carnea (green lacewing)","Neem Seed Kernel Extract %5 {50 grams of ground neem seed kernels per liter of water} (dosage:25 kg/hectare)","aqueous neem seed extract (dosage: 10gram/Litre sprayed at 10 days interval)","Insecticidal soaps","Metarhizium anisopliae (Green Muscardine)","Beauveria bassiana (Green Mold/Beauveria)","Paecilomyces fumosoroseus (Violet Mold/Paecilomyces)","bacterium, Bacillus thuringiensis var. kurstaki (Garden Dust)","larvae of ladybird beetles and lacewings, spiders","Anagrus atomus (fairyfly or leafhopper egg parasitoid)","Azadirachtin 00.03% WSP (300 PPM) Neem Oil Based (dosage:Apply 2500-5000 g/ml of formulation diluted in 500-1000 liters of water per hectare, with a waiting period of 7 days before harvest.)"]
     },
+    
     "Leaf Redding": {
       "Symptoms": "Reddening of leaves, often due to nutrient imbalances or environmental stress",
       "Preventive_measures": "Correct nutrient deficiencies, ensure proper irrigation, avoid water stress",
@@ -68,11 +64,13 @@
       "2",
       "3"]
     },
+
     "Leaf Variegation": {
       "Symptoms": "Irregular leaf coloration, often genetic or due to viral infections",
       "Preventive_measures": "Select healthy plants, control viral vectors, apply balanced fertilizers",
       "Organic":["no direct environmental cause for this disorder, no biological treatment are available to treat it"]
     },
+
     "Powdery Mildew": {
       "Symptoms": "White powdery fungal growth on leaves and stems",
       "Preventive_measures": "Ensure good air circulation, apply fungicides, avoid overhead irrigation",
@@ -82,6 +80,7 @@
       "http://eagri.org/eagri50/PATH272/lecture13/005.html"],
       "Organic":["bacteria (Bacillus circulans and Serratia marcescens) have been used to control.","Sulfur and Fish Oil + Sesame Oil","Neem oil","Milk"]
     },
+
     "Target Spot": {
       "Symptoms": "Circular spots with concentric rings on leaves, leading to defoliation",
       "Preventive_measures": "Apply fungicides, remove infected debris, ensure proper spacing",
@@ -90,6 +89,7 @@
       "cotton.org/beltwide/proceedings/2005-2022/data/conferences/2021/paper/20737.pdf",
       "https://news.utcrops.com/2017/07/target-spot-cotton-identify-management-options/"]
     },
+
     "Wilt": {
       "Symptoms": "Sudden wilting of plants, often due to fungal or bacterial infections",
       "Preventive_measures": "Use resistant varieties, improve soil drainage, apply fungicides",
@@ -99,6 +99,121 @@
       "http://eagri.org/eagri50/PATH272/lecture13/005.html"],
       "Organic" : ["Apply farm yard manure or other organic manures (dosage: 4 ton/acre)","Trichoderma asperellum : Biocontrol Agent: It suppresses the growth of plant pathogens such as Fusarium, (dosage: 1 kg/ acre, twice in the soil during sowing and 90 DAS )","T. asperellum : A fungus acts as a Biocontrol agent (dosage: 1 kg/ 100kg of manure for 15 days )","Increase in soil temperature (Soil solarization) decreases the incidence of wilt"]
     }
-  }
+  },
+
+  
+  "tomato": { 
+    "Tomato Early blight": {
+      "Symptoms": "Brown to black circular spots with concentric rings, yellow halos, defoliation, dark sunken spots on stems/fruits",
+      "Preventive_measures": "Use resistant varieties, crop rotation, proper spacing, remove plant debris, avoid overhead irrigation",
+      "Chemicals": ["Chlorothalonil 33.1% SC", "Azoxystrobin 11.0% SC","Mancozeb 75% WP", "Dimethomorph 50% WP"],
+      "Organic": ["Copper-based fungicides (e.g., Bordeaux mixture, copper hydroxide)", "Neem oil", "Bacillus subtilis (Serenade)"],
+      "links": [
+          "https://extension.wvu.edu/lawn-gardening-pests/plant-disease/fruit-vegetable-diseases/early-blight-of-tomatoes#:~:text=What%20should%20be%20done%20if,weather%20remains%20damp%20and%20rainy.",
+          "https://kisanvedika.bighaat.com/early-blight-in-tomato-how-to-spot-and-stop-it-in-its-tracks/",
+          "https://kisanvedika.bighaat.com/early-blight-in-tomato-how-to-spot-and-stop-it-in-its-tracks/",
+          "https://plantix.net/en/library/plant-diseases/100321/early-blight/"
+      ]
+    },
+
+    "Tomato Late blight": {
+      "Symptoms": "Water-soaked lesions on leaves, stems, and fruits, leading to rapid decay",
+      "Preventive_measures": "Use resistant varieties, crop rotation, proper spacing, remove plant debris, avoid overhead irrigation",
+      "Chemicals": ["Azoxystrobin 18.2% SC", "Tebuconazole 50.0% WG", "Trifloxystrobin 25.0% WG", "Copper oxychloride 50% WP", ""],
+      "Organic": ["Bacillus subtilis (Serenade)", "Neem oil", "Copper-based fungicides"],
+      "links": [
+          "https://plantix.net/en/library/plant-diseases/100046/tomato-late-blight/",
+          "https://agriplexindia.com/blogs/featured/late-blight-in-tomato-a-comprehensive-guide-for-symptoms-treatment-and-prevention?srsltid=AfmBOoo8_9RuowFsL0R-kio_R72ixIKtokBi2KoGwW-nNqr3jOZ1xCHz",
+          "https://agriplexindia.com/blogs/featured/late-blight-in-tomato-a-comprehensive-guide-for-symptoms-treatment-and-prevention?srsltid=AfmBOoo8_9RuowFsL0R-kio_R72ixIKtokBi2KoGwW-nNqr3jOZ1xCHz",
+          "https://agriplexindia.com/blogs/featured/late-blight-in-tomato-a-comprehensive-guide-for-symptoms-treatment-and-prevention?srsltid=AfmBOoo8_9RuowFsL0R-kio_R72ixIKtokBi2KoGwW-nNqr3jOZ1xCHz"
+      ]
+    },
+
+    "Tomato Bacterial spot": {
+      "Symptoms": "Small, water-soaked grey circular spots with dark-brown margins appear on the undersides of older leaves.",
+      "Preventive_measures": "Sanitize stakes, cages, and tools between seasons. Maintain clean, weed-free fields. Use disease-free seeds/transplants.",
+      "Chemicals": ["Streptomycin Sulfate 90.0% SP", "Tetracycline hydrochloride 10.0% SP", "Oxytetracycline hydrochloride 20.0% WP"],
+      "Organic": ["Bacillus subtilis (Serenade)", "Neem oil", "Copper-based fungicides"],
+      "links": [
+          "https://www.trees.com/gardening-and-landscaping/bacterial-spot",
+          "https://www.trees.com/gardening-and-landscaping/bacterial-spot",
+          "https://www.trees.com/gardening-and-landscaping/bacterial-spot"
+      ]
+    },
+    
+    "Tomato Mosaic virus": {
+      "Symptoms": "Early infection may cause plants to look yellow and generally stunted. Dark and light green leaves mottling.",
+      "Preventive_measures": "Use resistant varieties. Use non-infected clean seeds. Remove volunteer tomato plants and weeds. Wash hands and tools regularly.",
+      "Chemicals": ["Immerse tomato seeds into 1% Sodium hypochlorite (=bleach=NaOCL) for 10 minutes"],
+      "Organic": ["trisodium phosphate (Na3PO4) (dosage: Soak seeds in a 10% solution for at least 15 minutes.)"],
+      "links": [
+          "https://www.google.com/url?q=https://plantwiseplusknowledgebank.org/doi/10.1079/PWKB.20137803405&sa=D&source=editors&ust=1752997851251703&usg=AOvVaw2SZgiJgLdOCxVa6d_5LPF5"
+      ]
+    },
+
+    "Tomato Septoria leaf spot": {
+      "Symptoms": "Small, water-soaked grey circular spots with dark-brown margins appear on the undersides of older leaves.",
+      "Preventive_measures": "Sanitize stakes, cages, and tools between seasons. Maintain clean, weed-free fields. Use disease-free seeds/transplants.",
+      "Chemicals": ["Captan 70.0% WP", "Hexaconazole 5.0% WP", "Mancozeb 75.0% WP"],
+      "Organic": ["Copper based fungicides such as Bordeaux mixture, copper hydroxide, copper sulphate or copper oxychloride sulphate."],
+      "links": [
+          "https://plantix.net/en/library/plant-diseases/100152/septoria-leaf-spot/",
+          "https://plantix.net/en/library/plant-diseases/100152/septoria-leaf-spot/",
+          "https://plantix.net/en/library/plant-diseases/100152/septoria-leaf-spot/"
+      ]
+    },
+
+    "Tomato Spider mites": {
+      "Symptoms": "Yellowing leaves, fine webbing on the underside of leaves, dark spots on either side of the leaf (from feeding damage).",
+      "Preventive_measures": "Regular monitoring/scouting, water consistently, keep plants off the ground and spaced out for air circulation.",
+      "Chemicals": [ "Spinosad 45.0% SC", "Insecticidal Soap", "Sulfur", "Botanical oils"],
+      "Organic": ["Neem oil", "Insecticidal soap", "Horticultural oils"],
+      "links": [
+          "https://agrilifeorganic.org/2024/05/20/spider-mites-on-tomato/",
+          "https://agrilifeorganic.org/2024/05/20/spider-mites-on-tomato/",
+          "https://agrilifeorganic.org/2024/05/20/spider-mites-on-tomato/",
+          "https://agrilifeorganic.org/2024/05/20/spider-mites-on-tomato/"
+      ]
+    },
+
+    "Tomato Target Spot": {
+      "Symptoms": "Pinpoint-sized, water-soaked spots on the upper leaf surface progressing to circular spots with gray to pale brown centers and dark concentric rings.",
+      "Preventive_measures": "Rotate fungicides, use integrated pest management, remove old plant debris, and avoid working in wet fields.",
+      "Chemicals": ["Azoxystrobin 11.0% SC", "Chlorothalonil 33.1% SC", "Mancozeb 50.0% WP", "Tebuconazole 18.3% SC"],
+      "Organic": ["Bacillus subtilis (strain QST 713)"],
+      "links": [
+          "https://www.heraldopenaccess.us/openaccess/potential-chemical-control-for-target-spot-disease-of-tomato-caused-by-corynespora-cassiicola",
+          "https://www.agriculturejournals.cz/pdfs/pps/2002/03/01.pdf",
+          "https://www.agriculturejournals.cz/pdfs/pps/2002/03/01.pdf",
+          "https://www.heraldopenaccess.us/openaccess/potential-chemical-control-for-target-spot-disease-of-tomato-caused-by-corynespora-cassiicola"
+      ]
+    },
+
+    "Tomato Yellow Leaf Curl Virus": {
+      "Symptoms": "Leaves become small, yellow between veins, and curl upwards. New growth is stunted, and plants look bushy.",
+      "Preventive_measures": "Use certified virus-free seeds and seedlings, monitor whitefly population, introduce resistant varieties, and remove infected plants.",
+      "Chemicals": ["Neonicotinoids"],
+      "Organic": ["Use TYLCV-resistant tomato varieties, eliminate infected plants, use insect-proof nets, maintain whitefly-free nurseries."],
+      "links": [
+          "https://extension.umn.edu/disease-management/tomato-viruses"
+      ]
+    },
+
+    "Tomato Leaf Mold": {
+      "Symptoms": "Pale greenish-yellow spots on upper sides of leaves. Olive-green to brown velvety mold on lower leaf surface below spots.",
+      "Preventive_measures": "Use certified disease-free seed, remove crop debris, and sanitize greenhouses.",
+      "Chemicals": ["Captan 70.0% WP", "Hexaconazole 5.0% WP", "Mancozeb 75.0% WP", "Azoxystrobin 11.0% SC", "Difenoconazole 11.4% SC"],
+      "Organic": ["Remove diseased plants and surrounding plants, dispose of infected material, sterilize equipment."],
+      "links": [
+          "https://www.gardeningknowhow.com/edible/vegetables/tomato/managing-tomato-leaf-mold.htm",
+          "https://www.gardeningknowhow.com/edible/vegetables/tomato/managing-tomato-leaf-mold.htm",
+          "https://www.gardeningknowhow.com/edible/vegetables/tomato/managing-tomato-leaf-mold.htm",
+          "https://extension.umn.edu/disease-management/tomato-leaf-mold",
+          "https://extension.umn.edu/disease-management/tomato-leaf-mold"
+      ]
+    }
 }
+}
+
+
 

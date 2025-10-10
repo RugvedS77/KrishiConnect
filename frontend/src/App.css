@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+/* src/index.css */
+
+.ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.ticker-move {
+  display: flex;
+  width: fit-content;
+  animation: scroll 40s linear infinite;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 9999px;
+  background-color: white;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  white-space: nowrap;
+  font-weight: 500;
+  color: #475569; /* slate-600 */
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaStore, FaMapMarkerAlt, FaPhone, FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import shopsData from '../../assets/Nearby_retailers.json';
 
 const AgriShops = ({ userLocation }) => {
   const [shops, setShops] = useState([]);
@@ -9,34 +10,40 @@ const AgriShops = ({ userLocation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchShops = async () => {
-      try {
-        // Option 1: If JSON is in public folder
-        const response = await fetch('src/assets/Nearby_retailers.json');
+  // useEffect(() => {
+  //   const fetchShops = async () => {
+  //     try {
+  //       // Option 1: If JSON is in public folder
+  //       const response = await fetch('src/assets/Nearby_retailers.json');
         
-        // Option 2: If using Vite and JSON is in src/assets
-        // import shopsData from '../assets/Nearby_retailers.json';
-        // setShops(shopsData);
-        // setLoading(false);
-        // return;
+  //       // Option 2: If using Vite and JSON is in src/assets
+  //       // import shopsData from '../assets/Nearby_retailers.json';
+  //       // setShops(shopsData);
+  //       // setLoading(false);
+  //       // return;
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
 
-        const data = await response.json();
-        setShops(data);
-      } catch (err) {
-        setError(`Failed to load shops: ${err.message}`);
-        console.error('Fetch error:', err);
-      } finally {
+  //       const data = await response.json();
+  //       setShops(data);
+  //     } catch (err) {
+  //       setError(`Failed to load shops: ${err.message}`);
+  //       console.error('Fetch error:', err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchShops();
+  // }, []);
+
+  useEffect(() => {
+        // 2. Remove the entire fetchShops useEffect
+        setShops(shopsData);
         setLoading(false);
-      }
-    };
-
-    fetchShops();
-  }, []);
+    }, []);
 
   useEffect(() => {
     if (shops.length > 0) {

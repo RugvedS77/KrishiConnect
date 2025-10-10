@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, UploadFile, File, status
+from fastapi import APIRouter, Depends, UploadFile, File, status, HTTPException
 from fastapi.responses import JSONResponse
 from schemas.all_schema import TokenData, RecommendationRequest, RecommendationResponse
 from auth import oauth2
 from services.weatherAPI import fetch_google_weather_and_advisories
 from services.cotton_model import cotton_disease_model
+from services.tomato_model import tomato_disease_model
 from services.crop_recommender import recommend, fetch_weather_by_coords
 import logging
 
@@ -26,6 +27,18 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
     
+logger = logging.getLogger("recommendation")
+logging.basicConfig(level=logging.INFO)
+
+@router.post("/tomato-predict")
+async def predict(file: UploadFile = File(...)):
+    try:
+        image_bytes = await file.read()
+        result = tomato_disease_model.predict_disease(image_bytes)
+        return JSONResponse(content=result)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 logger = logging.getLogger("recommendation")
 logging.basicConfig(level=logging.INFO)
 

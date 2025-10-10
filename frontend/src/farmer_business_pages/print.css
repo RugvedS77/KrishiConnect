@@ -1,0 +1,45 @@
+/* This file contains styles that are ONLY applied when printing the page */
+
+@media print {
+  /* Hide elements that should not be printed */
+  .no-print, 
+  nav, 
+  header, 
+  footer,
+  aside /* Common tags for sidebars/headers */ {
+    display: none !important;
+  }
+
+  /* Ensure the main content area takes up the full page */
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+  }
+
+  /* Reset layout for the main printable area */
+  .p-6, .p-8 {
+    padding: 1in !important; /* Add some margin for printing */
+  }
+
+  /* Style the contract cards for better print layout */
+  /* NOTE: You may need to adjust the class name '.contract-card' to match the actual
+     class on your individual contract items in ContractList.jsx */
+  .contract-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid; /* Prevents a card from being split across two pages */
+  }
+
+  /* Hide the update form and submit button within each contract */
+  .contract-card form {
+    display: none !important;
+  }
+
+  h1 {
+    font-size: 24pt !important;
+    text-align: center;
+    margin-bottom: 40px !important;
+  }
+}

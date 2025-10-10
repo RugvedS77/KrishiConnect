@@ -1,0 +1,45 @@
+# This is a GitHub Action to automatically deploy the backend folder to a Hugging Face Space
+
+name: Deploy Backend to Hugging Face Hub
+
+# This action runs on pushes to the main branch but only if files in the backend/ folder change.
+on:
+  push:
+    branches:
+      - main  # Or your primary branch name, e.g., master
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out your repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Push ONLY the 'backend' folder to your Hugging Face Space
+      - name: Push to HF Space
+        env:
+          # The HF token we stored in GitHub Secrets
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # Clone the HF Space repository into a temporary directory
+          # The GITHUB_ACTOR is your GitHub username, used here for authentication with the token
+          git clone "https://oauth2:$HF_TOKEN@huggingface.co/spaces/Rugs25/KrishiConnect" hf-space
+
+          # Copy the contents of your backend folder into the cloned HF Space directory
+          # The -T ensures the contents of 'backend' go into 'hf-space', not a subdirectory
+          cp -rT backend/ hf-space/
+
+          # Navigate into the cloned HF Space directory
+          cd hf-space
+
+          # Configure git with your details
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          # Add, commit, and push the changes to the Space's main branch
+          git add .
+          git commit -m "Automated backend update from GitHub Actions" || echo "No changes to commit"
+          git push

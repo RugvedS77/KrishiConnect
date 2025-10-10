@@ -3,6 +3,7 @@ from tensorflow.keras.models import load_model
 from huggingface_hub import hf_hub_download
 from PIL import Image
 import io
+import tempfile
 
 class CottonDiseaseModel:
     _instance = None
@@ -20,8 +21,15 @@ class CottonDiseaseModel:
 
     def _load_model(self):
         if self._model is None:
-            model_path = hf_hub_download(repo_id=self.repo_id, filename=self.filename, cache_dir="./hf_cache")
-            self._model = load_model(model_path)
+            with tempfile.TemporaryDirectory() as tmpdir:
+            # Download the model file into the temporary directory
+                model_path = hf_hub_download(
+                    repo_id=self.repo_id,
+                    filename=self.filename,
+                    cache_dir=tmpdir
+                )
+                # Load the model from that temporary path
+                self._model = load_model(model_path)
 
     def predict_disease(self, image_bytes):
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")

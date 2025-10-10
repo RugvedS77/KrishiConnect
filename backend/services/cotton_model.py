@@ -20,7 +20,7 @@ class CottonDiseaseModel:
 
     def _load_model(self):
         if self._model is None:
-            model_path = hf_hub_download(repo_id=self.repo_id, filename=self.filename)
+            model_path = hf_hub_download(repo_id=self.repo_id, filename=self.filename, cache_dir="./hf_cache")
             self._model = load_model(model_path)
 
     def predict_disease(self, image_bytes):

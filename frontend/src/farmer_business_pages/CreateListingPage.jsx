@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import FormInput from "../farmer_business_components/CreateListing/FormInput";
 import FormSelect from "../farmer_business_components/CreateListing/FormSelect";
 import { supabase } from "../supabaseClient"; // Make sure this path is correct
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function CreateListingPage() {
   const [formData, setFormData] = useState({
@@ -86,7 +87,7 @@ export default function CreateListingPage() {
       };
 
       // Step 3: Send data to your FastAPI backend
-      const response = await fetch(API_URL, {
+      const response = await fetch(`${API_BASE_URL}/api/croplists`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

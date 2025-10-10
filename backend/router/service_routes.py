@@ -19,7 +19,7 @@ async def get_weather(current_user: TokenData = Depends(oauth2.get_current_user)
     return response
 
 @router.post("/cotton-predict")
-async def predict(file: UploadFile = File(...)):
+async def predict_cotton(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
         result = cotton_disease_model.predict_disease(image_bytes)
@@ -31,7 +31,7 @@ logger = logging.getLogger("recommendation")
 logging.basicConfig(level=logging.INFO)
 
 @router.post("/tomato-predict")
-async def predict(file: UploadFile = File(...)):
+async def predict_tomato(file: UploadFile = File(...)):
     try:
         image_bytes = await file.read()
         result = tomato_disease_model.predict_disease(image_bytes)

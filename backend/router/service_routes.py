@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO)
 @router.post("/tomato-predict")
 async def predict_tomato(file: UploadFile = File(...)):
     try:
-        image_bytes = await file.read()
+        image_bytes = await file.read()        
         result = tomato_disease_model.predict_disease(image_bytes)
         return JSONResponse(content=result)
     except Exception as e:

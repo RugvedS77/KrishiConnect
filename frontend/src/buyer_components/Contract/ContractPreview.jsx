@@ -1,17 +1,11 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Send, Loader2, AlertCircle, CheckSquare } from 'lucide-react';
 
 // --- SHARED & REUSABLE PREVIEW COMPONENTS ---
 
-const A4PreviewWrapper = ({ children, title, description, signatureFile, onSendProposal, isSubmitting, submitError, submitSuccess }) => {
-    const [signatureUrl, setSignatureUrl] = useState(null);
-    useEffect(() => {
-        if (signatureFile instanceof File) {
-            const url = URL.createObjectURL(signatureFile);
-            setSignatureUrl(url);
-            return () => URL.revokeObjectURL(url);
-        }
-    }, [signatureFile]);
+// --- REPLACED to use signatureUrl prop ---
+const A4PreviewWrapper = ({ children, title, description, signatureUrl, onSendProposal, isSubmitting, submitError, submitSuccess }) => {
+    // NOTE: The useEffect for creating an object URL has been removed.
 
     const KrishiConnectLetterhead = () => (
         <div className="mb-10 pb-5 border-b-2 border-gray-300 text-center">
@@ -35,6 +29,7 @@ const A4PreviewWrapper = ({ children, title, description, signatureFile, onSendP
                     <div>
                         <h4 className="font-semibold text-center mb-2">Buyer's Signature</h4>
                         <div className="h-48 flex items-center justify-center border-2 border-dashed rounded-md p-4">
+                            {/* --- CHANGED to render from signatureUrl --- */}
                             {signatureUrl ? <img src={signatureUrl} alt="Buyer Signature" className="max-h-full object-contain" /> : <p className="text-gray-400 text-sm">No Signature Attached</p>}
                         </div>
                     </div>
@@ -85,7 +80,6 @@ const GenericMilestonePreviewSection = ({ totalValue, milestones }) => (
     </>
 );
 
-// --- NEW GENERIC COMPONENT FOR CORE TERMS ---
 const ContractDetails = ({ crop, buyer, terms }) => (
     <>
         <p>This Agreement is between <strong>{crop.farmer}</strong> ("Farmer") and <strong>{buyer.name}</strong> ("Buyer").</p>
@@ -101,7 +95,7 @@ const ContractDetails = ({ crop, buyer, terms }) => (
 );
 
 
-// --- REFACTORED INDIVIDUAL PREVIEW COMPONENTS ---
+// --- REFACTORED INDIVIDUAL PREVIEW COMPONENTS (ALL UPDATED) ---
 
 const SecuredSpotBuyPreview = ({ data, crop, buyer, ...props }) => {
     const totalValue = useMemo(() => (parseFloat(data.quantity) || 0) * (parseFloat(data.price) || 0), [data.quantity, data.price]);
@@ -115,7 +109,7 @@ const SecuredSpotBuyPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Secured Crop Supply Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Secured Crop Supply Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <GenericMilestonePreviewSection totalValue={totalValue} milestones={data.milestones} />
         </A4PreviewWrapper>
@@ -133,7 +127,7 @@ const ForwardAgreementPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Forward Price Assurance Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Forward Price Assurance Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <GenericMilestonePreviewSection totalValue={totalValue} milestones={data.milestones} />
         </A4PreviewWrapper>
@@ -152,7 +146,7 @@ const InputFinancingPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Input Financing & Buyback Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Input Financing & Buyback Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <GenericMilestonePreviewSection totalValue={totalValue} milestones={data.milestones} />
         </A4PreviewWrapper>
@@ -170,7 +164,7 @@ const QualityTieredPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Quality-Tiered Pricing Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Quality-Tiered Pricing Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <h3 className="font-bold mt-6 mb-2 text-base">Article 2: Quality Tiers</h3>
             <table className="w-full text-left border-collapse my-2 text-xs sm:text-sm">
@@ -196,7 +190,7 @@ const StaggeredDeliveryPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Staggered Delivery Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Staggered Delivery Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <GenericMilestonePreviewSection totalValue={totalValue} milestones={data.milestones} />
         </A4PreviewWrapper>
@@ -212,7 +206,7 @@ const CustomProjectPreview = ({ data, crop, buyer, ...props }) => {
     ];
 
     return (
-        <A4PreviewWrapper signatureFile={data.signature} title="Custom Project Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
+        <A4PreviewWrapper signatureUrl={data.signature_url} title="Custom Project Agreement" description={`Effective Date: ${new Date().toLocaleDateString()}`} {...props}>
             <ContractDetails crop={crop} buyer={buyer} terms={coreTerms} />
             <GenericMilestonePreviewSection totalValue={totalValue} milestones={data.milestones} />
         </A4PreviewWrapper>
@@ -242,4 +236,3 @@ const ContractPreview = ({ selectedTemplate, ...props }) => {
 };
 
 export default ContractPreview;
-

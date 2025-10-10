@@ -159,10 +159,14 @@ class MilestoneUpdateByFarmer(BaseModel):
 class ContractBase(BaseModel):
     quantity_proposed: float
     price_per_unit_agreed: Decimal
+    buyer_signature_url: Optional[str] = None
 
 class ContractCreate(ContractBase):
     listing_id: int
     payment_terms: Optional[str] = 'final'
+
+class ContractAcceptRequest(BaseModel):
+    farmer_signature_url: str
 
 class ContractResponse(ContractBase):
     id: int
@@ -172,6 +176,8 @@ class ContractResponse(ContractBase):
     listing: CropListResponse
     buyer: User
     farmer: User
+    buyer_signature_url: Optional[str] = None
+    farmer_signature_url: Optional[str] = None
     milestones: List[Milestone] = []
     model_config = ConfigDict(from_attributes=True)
 

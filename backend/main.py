@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.postgresConn import engine, Base
 from models import all_model
 
-from router import user_routes, auth_routes, croplist_routes, wallet_routes, contract_routes, milestone_routes, logistics_routes, chat_routes, service_routes, community_routes
+from router import user_routes, auth_routes, croplist_routes, wallet_routes, contract_routes, signature_routes, milestone_routes, logistics_routes, chat_routes, service_routes, community_routes
 
 all_model.Base.metadata.create_all(bind=engine)
 
@@ -36,6 +36,7 @@ app.include_router(user_routes.router)
 app.include_router(croplist_routes.router)
 app.include_router(wallet_routes.router)
 app.include_router(contract_routes.router)
+app.include_router(signature_routes.router)
 app.include_router(milestone_routes.router)
 app.include_router(logistics_routes.router)
 app.include_router(chat_routes.router)

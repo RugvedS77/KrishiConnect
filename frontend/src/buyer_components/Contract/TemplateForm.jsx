@@ -1,6 +1,10 @@
-import React, { useMemo, useEffect } from 'react';
-import { Eye, PlusCircle, XCircle, Wallet, CheckSquare, Package, ImageIcon } from 'lucide-react';
-import SignatureUploader from "../../buyer_components/SignatureUploader"; // Assuming this path is correct
+import React, { useMemo, useEffect, useState } from 'react';
+import { Eye, PlusCircle, XCircle, Wallet, CheckSquare, Package, ImageIcon, Loader2, AlertCircle } from 'lucide-react';
+import SignatureUploader from "../../buyer_components/SignatureUploader";
+
+// --- ADDED IMPORTS ---
+import { API_BASE_URL } from '../../api/apiConfig';
+import { useAuthStore } from '../../authStore';
 
 const convertToTons = (quantity, unit) => {
     if (!quantity || !unit) return 0;
@@ -33,17 +37,28 @@ const PartiesSection = ({ crop, buyer }) => (
     </section>
 );
 
-const SignatureEditSection = ({ onSave }) => (
+// --- REPLACED SignatureEditSection to pass down more props ---
+const SignatureEditSection = ({ onSave, signatureUrl, isUploading, uploadError }) => (
     <section>
         <h3 className="text-xl font-semibold border-b pb-2 mb-4">Your Digital Signature</h3>
         <p className="text-sm text-gray-600 mb-4">Upload an image of your signature. This will be considered a binding digital signature upon acceptance by the farmer.</p>
-        <div onClick={(e) => e.stopPropagation()}><SignatureUploader onSave={onSave} /></div>
+        <div onClick={(e) => e.stopPropagation()}>
+            <SignatureUploader
+                onSave={onSave}
+                currentSignatureUrl={signatureUrl}
+                isUploading={isUploading}
+                uploadError={uploadError}
+            />
+            {isUploading && <div className="mt-2 flex items-center text-sm text-gray-600"><Loader2 className="animate-spin mr-2" size={16} /> Uploading...</div>}
+            {uploadError && <div className="mt-2 flex items-center text-sm text-red-600"><AlertCircle className="mr-2" size={16} /> Error: {uploadError}</div>}
+        </div>
     </section>
 );
 
+
 const FormActions = ({ onPreview, isDisabled }) => (
     <div className="mt-8 pt-6 border-t">
-        <button type="button" onClick={onPreview} disabled={isDisabled} title={isDisabled ? "Complete all required fields" : "Proceed to Preview"} className="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2 text-base disabled:bg-gray-400 disabled:cursor-not-allowed">
+        <button type="button" onClick={onPreview} disabled={isDisabled} title={isDisabled ? "Complete all required fields and upload signature" : "Proceed to Preview"} className="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-700 flex items-center justify-center space-x-2 text-base disabled:bg-gray-400 disabled:cursor-not-allowed">
             <Eye size={20} /><span>Preview Contract</span>
         </button>
     </div>
@@ -127,16 +142,58 @@ const EscrowAndApprovalSection = ({ requiredEscrow, walletBalance, onAddFundsCli
     );
 };
 
-// --- INDIVIDUAL FORM COMPONENTS ---
+// --- GENERIC UPLOAD HANDLER (can be moved to a custom hook later) ---
+const useSignatureUpload = (setFormData) => {
+    const token = useAuthStore((state) => state.token);
+    const [signatureUploading, setSignatureUploading] = useState(false);
+    const [signatureUploadError, setSignatureUploadError] = useState(null);
+
+    const handleSignatureSave = async (file) => {
+        if (!file) return;
+        setSignatureUploading(true);
+        setSignatureUploadError(null);
+
+        const apiFormData = new FormData();
+        apiFormData.append("file", file);
+
+        try {
+            // --- THIS IS THE LINE THAT WAS FIXED ---
+            const response = await fetch(`${API_BASE_URL}/api/signatures/upload?role=buyer`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: apiFormData,
+            });
+
+            // --- THIS PART IS ALSO IMPROVED FOR BETTER ERROR MESSAGES ---
+            if (!response.ok) {
+                const err = await response.json(); // Read the JSON body of the error
+                throw new Error(err.detail || "Signature upload failed. The server returned an error.");
+            }
+            const data = await response.json();
+            console.log("Signature Upload Success:", data);
+            setFormData({ signature_url: data.url });
+        } catch (error) {
+            console.error("Signature Upload Error:", error);
+            setSignatureUploadError(error.message);
+        } finally {
+            setSignatureUploading(false);
+        }
+    };
+
+    return { signatureUploading, signatureUploadError, handleSignatureSave };
+};
+
+
+// --- INDIVIDUAL FORM COMPONENTS (ALL UPDATED) ---
 
 const SecuredSpotBuyForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     const totalValue = useMemo(() => (parseFloat(formData.quantity) || 0) * (parseFloat(formData.price) || 0), [formData.quantity, formData.price]);
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
 
     return (
         <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
@@ -152,7 +209,7 @@ const SecuredSpotBuyForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
                 <div className="mt-4 p-3 bg-gray-50 rounded-md"><p className="text-sm"><strong>Total Contract Value:</strong> ₹{totalValue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>
@@ -160,8 +217,8 @@ const SecuredSpotBuyForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
 };
 
 const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     const { totalValue, calculatedYield } = useMemo(() => {
         const yieldVal = (parseFloat(formData.farmingArea) || 0) * (parseFloat(formData.estimatedYield) || 0);
         const tons = convertToTons(yieldVal, crop?.unit);
@@ -171,7 +228,7 @@ const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onE
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
 
     return (
         <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
@@ -187,7 +244,7 @@ const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onE
                 <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm"><p><strong>Estimated Total Value:</strong> ₹{totalValue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>
@@ -195,8 +252,8 @@ const ForwardAgreementForm = ({ formData, setFormData, crop, buyer, setMode, onE
 };
 
 const InputFinancingForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     const { totalValue, calculatedQuantity } = useMemo(() => {
         const buybackPercent = (formData.milestones || []).find((m) => m.desc.includes("Buyback"))?.val || 60;
         const value = (parseFloat(formData.inputsValue) || 0) / (1 - buybackPercent / 100);
@@ -207,7 +264,7 @@ const InputFinancingForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
     
     return (
         <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
@@ -224,7 +281,7 @@ const InputFinancingForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
                 <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm"><p><strong>Estimated Total Value:</strong> ₹{totalValue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>
@@ -232,13 +289,13 @@ const InputFinancingForm = ({ formData, setFormData, crop, buyer, setMode, onEsc
 };
 
 const QualityTieredForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     const totalValue = useMemo(() => (parseFloat(formData.estimatedQuantity) || 0) * (parseFloat(formData.basePrice) || 0), [formData.estimatedQuantity, formData.basePrice]);
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
     
     const handleTierChange = (index, event) => {
         const { name, value } = event.target;
@@ -277,7 +334,7 @@ const QualityTieredForm = ({ formData, setFormData, crop, buyer, setMode, onEscr
                 </div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>
@@ -285,8 +342,8 @@ const QualityTieredForm = ({ formData, setFormData, crop, buyer, setMode, onEscr
 };
 
 const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     
     useEffect(() => {
         const numDeliveries = parseInt(formData.deliveries, 10);
@@ -295,7 +352,6 @@ const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, on
                 const percentage = 100 / numDeliveries;
                 return { desc: `Delivery ${i + 1} of ${numDeliveries}`, val: percentage.toFixed(2), type: "deliverable" };
             });
-            // Adjust last milestone to ensure total is exactly 100
             const totalVal = newMilestones.reduce((sum, m) => sum + parseFloat(m.val), 0);
             const remainder = 100 - totalVal;
             if (newMilestones.length > 0) {
@@ -311,7 +367,7 @@ const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, on
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
 
     return (
         <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
@@ -327,7 +383,7 @@ const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, on
                 <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm"><p><strong>Total Contract Value:</strong> ₹{totalValue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={false} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>
@@ -335,13 +391,13 @@ const StaggeredDeliveryForm = ({ formData, setFormData, crop, buyer, setMode, on
 };
 
 const CustomProjectForm = ({ formData, setFormData, crop, buyer, setMode, onEscrowChange, escrowProps }) => {
+    const { signatureUploading, signatureUploadError, handleSignatureSave } = useSignatureUpload(setFormData);
     const handleInputChange = (e) => setFormData({ [e.target.name]: e.target.value });
-    const handleSignatureSave = (file) => setFormData({ signature: file });
     const totalValue = useMemo(() => parseFloat(formData.totalValue) || 0, [formData.totalValue]);
     useEffect(() => { onEscrowChange(totalValue); }, [totalValue, onEscrowChange]);
     const totalPercentage = useMemo(() => (formData.milestones || []).reduce((acc, m) => acc + (parseFloat(m.val) || 0), 0), [formData.milestones]);
     const hasSufficientFunds = escrowProps.walletBalance >= totalValue;
-    const isValid = Math.round(totalPercentage) === 100 && formData.signature && hasSufficientFunds && escrowProps.termsAgreed;
+    const isValid = Math.round(totalPercentage) === 100 && formData.signature_url && hasSufficientFunds && escrowProps.termsAgreed;
     
     return (
         <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
@@ -354,7 +410,7 @@ const CustomProjectForm = ({ formData, setFormData, crop, buyer, setMode, onEscr
                 </div>
             </section>
             <DynamicMilestoneSection formData={formData} setFormData={setFormData} isEditable={true} />
-            <SignatureEditSection onSave={handleSignatureSave} />
+            <SignatureEditSection onSave={handleSignatureSave} signatureUrl={formData.signature_url} isUploading={signatureUploading} uploadError={signatureUploadError} />
             <EscrowAndApprovalSection {...escrowProps} requiredEscrow={totalValue} />
             <FormActions onPreview={() => setMode("preview")} isDisabled={!isValid} />
         </form>

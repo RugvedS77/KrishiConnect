@@ -76,6 +76,10 @@ class Contract(Base):
     price_per_unit_agreed = Column(Numeric(10, 2), nullable=False)
     status = Column(Enum(ContractStatus), default=ContractStatus.pending_farmer_approval, nullable=False)
     payment_terms = Column(String, default="final", nullable=False)
+
+    buyer_signature_url = Column(String, nullable=True)
+    farmer_signature_url = Column(String, nullable=True)
+
     summary = Column(Text, nullable=True)
     last_offer_by = Column(String, nullable=False, default='buyer')
     created_at = Column(DateTime(timezone=True), server_default=func.now())

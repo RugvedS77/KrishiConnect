@@ -20,7 +20,7 @@ from models.all_model import (
     NegotiationMessage as NegotiationMessageModel
 )
 from schemas.all_schema import (
-    ContractResponse, ContractCreate, TokenData, 
+    ContractResponse, ContractCreate, ContractAcceptRequest, TokenData, 
     Transaction as TransactionSchema, ContractDashboardResponse, AIAdvice as AIAdviceSchema, ContractOfferUpdate,
     NegotiationMessageSchema
 )
@@ -72,7 +72,8 @@ def propose_contract(request: ContractCreate, db: Session = Depends(get_db), cur
         farmer_id=listing.farmer_id,
         quantity_proposed=request.quantity_proposed,
         price_per_unit_agreed=request.price_per_unit_agreed,
-        payment_terms=request.payment_terms
+        payment_terms=request.payment_terms,
+        buyer_signature_url=request.buyer_signature_url
     )
     db.add(new_contract)
     db.commit()
@@ -80,7 +81,7 @@ def propose_contract(request: ContractCreate, db: Session = Depends(get_db), cur
     return new_contract
 
 @router.post("/{contract_id}/accept", response_model=ContractResponse)
-def accept_contract(contract_id: int, db: Session = Depends(get_db), current_user: TokenData = Depends(oauth2.get_current_user)):
+def accept_contract(contract_id: int, request: ContractAcceptRequest, db: Session = Depends(get_db), current_user: TokenData = Depends(oauth2.get_current_user)):
     """[FARMER ONLY] Accept a pending contract, locking buyer's funds in escrow."""
     farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
     contract = db.query(ContractModel).filter(ContractModel.id == contract_id).first()
@@ -109,6 +110,7 @@ def accept_contract(contract_id: int, db: Session = Depends(get_db), current_use
     contract.status = ContractStatus.ongoing
     # 2. Update the original listing's status to 'closed'
     contract.listing.status = 'closed'
+    contract.farmer_signature_url = request.farmer_signature_url
     # --------------------
     db.commit()
     db.refresh(contract)

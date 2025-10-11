@@ -4,12 +4,29 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.postgresConn import engine, Base
 from models import all_model
 
+from contextlib import asynccontextmanager
+from services.scheduler import send_daily_alerts # <-- Make sure this imports the right function
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 from router import user_routes, auth_routes, croplist_routes, wallet_routes, contract_routes, signature_routes, milestone_routes, logistics_routes, chat_routes, service_routes, community_routes
 
 all_model.Base.metadata.create_all(bind=engine)
 
+scheduler = AsyncIOScheduler()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Starting up the application...")
+    # For testing, run every 30 seconds. For production, change back to 'cron'.
+    scheduler.add_job(send_daily_alerts, 'interval', seconds=30)
+    scheduler.start()
+    yield
+    print("Shutting down the application...")
+    scheduler.shutdown()
+
 app = FastAPI(
-    title="Krishi Connect"
+    title="Krishi Connect",
+    lifespan=lifespan
 )
 
 origins = [
@@ -42,3 +59,4 @@ app.include_router(logistics_routes.router)
 app.include_router(chat_routes.router)
 app.include_router(service_routes.router)
 app.include_router(community_routes.router)
+# app.include_router(whatsapp_routes.router)

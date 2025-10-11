@@ -9,4 +9,4 @@ python -m alembic upgrade head
 
 # Start the Uvicorn server
 echo "--- Starting Uvicorn server ---"
-python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+python -m uvicorn main:app --host 0.0.0.0 --port 7860

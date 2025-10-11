@@ -1,5 +1,5 @@
 fastapi
-scarlette[full]
+starlette[full]
 starlette_session
 uvicorn[standard]
 sqlalchemy

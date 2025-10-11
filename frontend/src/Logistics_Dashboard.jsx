@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Truck, Package, MapPin, ArrowRight, Loader2, X, CheckCircle, Calendar, IndianRupee } from 'lucide-react';
-
+import { API_BASE_URL } from './api/apiConfig';
 // --- MOCK DATA & API SIMULATION ---
 // In your real app, this data would come from your API calls.
 // We keep it here to ensure the component is runnable and demonstrates all states.
@@ -73,7 +73,7 @@ const BookingModal = ({ contract, onClose, onBookingSuccess, token }) => {
         setIsLoading(true);
         setError('');
         try {
-            const response = await fetch(`http://localhost:8000/api/logistics/contract/${contract.id}/quote`, {
+            const response = await fetch(`${API_BASE_URL}/api/logistics/contract/${contract.id}/quote`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                 body: JSON.stringify({
@@ -96,7 +96,7 @@ const BookingModal = ({ contract, onClose, onBookingSuccess, token }) => {
         setIsLoading(true);
         setError('');
         try {
-            const response = await fetch(`http://localhost:8000/api/logistics/contract/${contract.id}/book`, {
+            const response = await fetch(`${API_BASE_URL}/api/logistics/contract/${contract.id}/book`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -267,7 +267,7 @@ export default function LogisticsDashboard() {
         setError('');
         try {
             // Replace with your actual API call to fetch ongoing contracts
-            // const response = await fetch('http://localhost:8000/api/contracts/ongoing', { headers: { Authorization: `Bearer ${token}` } });
+            // const response = await fetch('${API_BASE_URL}/api/contracts/ongoing', { headers: { Authorization: `Bearer ${token}` } });
             // if (!response.ok) throw new Error("Failed to fetch contracts.");
             // const data = await response.json();
             // setContracts(data);

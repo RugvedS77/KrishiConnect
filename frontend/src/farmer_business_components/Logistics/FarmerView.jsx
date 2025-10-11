@@ -19,7 +19,7 @@
 //         setIsLoading(true);
 //         setError('');
 //         try {
-//             const response = await fetch(`http://localhost:8000/api/logistics/milestone/${milestones.id}/quote`, {
+//             const response = await fetch(`${API_BASE_URL}/api/logistics/milestone/${milestones.id}/quote`, {
 //                 method: 'POST',
 //                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
 //                 body: JSON.stringify({
@@ -58,7 +58,7 @@
 //                 logistics_provider: quote.logistics_provider,
 //             };
 
-//             const response = await fetch(`http://localhost:8000/api/logistics/milestone/${milestone.id}/book`, {
+//             const response = await fetch(`${API_BASE_URL}/api/logistics/milestone/${milestone.id}/book`, {
 //                 method: 'POST',
 //                 // FIX: Add the headers and body to the request.
 //                 headers: {
@@ -187,7 +187,7 @@
 
 import React, { useState } from 'react';
 import { Loader2, X, CheckCircle, Calendar, MapPin, ArrowRight, RefreshCw } from 'lucide-react';
-
+import { API_BASE_URL } from '../../api/apiConfig';
 // --- Reusable UI Components ---
 
 const ShipmentStatusTracker = ({ status }) => {
@@ -229,7 +229,7 @@ const BookingModal = ({ contract, milestone, onClose, onBookingSuccess, token })
         setError('');
         try {
             // FIX: The API call now correctly uses the milestone ID
-            const response = await fetch(`http://localhost:8000/api/logistics/milestone/${milestone.id}/quote`, {
+            const response = await fetch(`${API_BASE_URL}/api/logistics/milestone/${milestone.id}/quote`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                 body: JSON.stringify({
@@ -265,7 +265,7 @@ const BookingModal = ({ contract, milestone, onClose, onBookingSuccess, token })
             };
 
             // FIX: The API call now correctly uses the milestone ID
-            const response = await fetch(`http://localhost:8000/api/logistics/milestone/${milestone.id}/book`, {
+            const response = await fetch(`${API_BASE_URL}/api/logistics/milestone/${milestone.id}/book`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                 body: JSON.stringify(bookingPayload)
@@ -341,7 +341,7 @@ export default function FarmerLogisticsView({ contracts, setContracts, token }) 
     const handleTrackStatus = async (shipmentId) => {
         setTrackingId(shipmentId);
         try {
-            const response = await fetch(`http://localhost:8000/api/logistics/shipment/${shipmentId}/track`, {
+            const response = await fetch(`${API_BASE_URL}/api/logistics/shipment/${shipmentId}/track`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (!response.ok) throw new Error("Failed to fetch latest shipment status.");

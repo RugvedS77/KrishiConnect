@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import RecommendationForm from "../farmer_daily_operation_components/CropRecommendation/RecommendationForm";
 import RecommendationResult from "../farmer_daily_operation_components/CropRecommendation/RecommendationResult";
 import { useAuthStore } from "../authStore";
+import { API_BASE_URL } from "../api/apiConfig";
 
 export default function CropRecommendationPage() {
   const [result, setResult] = useState(null);
@@ -16,7 +17,7 @@ export default function CropRecommendationPage() {
             Object.entries(payload).map(([key, value]) => [key, Number(value)])
         );
 
-      const res = await fetch("http://localhost:8000/api/services/recommend-crops", {
+      const res = await fetch(`${API_BASE_URL}/api/services/recommend-crops`, {
         method: "POST",
         headers: { 
             "Content-Type": "application/json",

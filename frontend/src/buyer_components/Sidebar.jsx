@@ -2,6 +2,7 @@ import { Link, useMatch, useResolvedPath } from 'react-router-dom';
 import { LayoutDashboard, Search, FileText, Banknote, User, Loader2, Truck} from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../authStore'; // Adjust path as needed
+import { API_BASE_URL } from '../api/apiConfig';
 
 // CustomLink function (Unchanged)
 function CustomLink({ to, icon, children, end = false }) {
@@ -36,7 +37,7 @@ const Sidebar = () => {
         return;
       }
       try {
-        const response = await fetch("http://localhost:8000/api/users/me", {
+        const response = await fetch(`${API_BASE_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (response.ok) {

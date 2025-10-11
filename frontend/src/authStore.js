@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
+import { API_BASE_URL } from './api/apiConfig';
 
 import { API_BASE_URL } from "./api/apiConfig";
 
@@ -75,6 +76,8 @@ export const useAuthStore = create((set, get) => ({
       });
       // --------------------
 
+      
+
       return { role: data.user.role }; // <-- FIX: Return the role from the user object
 
     } catch (err) {
@@ -82,6 +85,40 @@ export const useAuthStore = create((set, get) => ({
       throw err;
     }
   },
+  // --- NEW FUNCTION TO HANDLE GOOGLE LOGIN ---
+    loginWithToken: (token) => {
+        try {
+            const decoded = jwtDecode(token);
+            const user = {
+                id: decoded.user_id,
+                email: decoded.sub,
+                role: decoded.role,
+                // Add any other fields you have in your JWT, like full_name
+            };
+
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('user', JSON.stringify(user));
+
+            set({
+                token,
+                user,
+                farmerAuth: user.role === 'farmer',
+                buyerAuth: user.role === 'buyer',
+            });
+            
+            // Return the user object so the component can use it
+            return user;
+
+        } catch (error) {
+            console.error("Failed to process token:", error);
+            // Clear everything if the token is invalid
+            set({ user: null, token: null, farmerAuth: false, buyerAuth: false });
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            return null;
+        }
+    },
+    // ---------------------------------------------
 
   logout: () => {
     localStorage.removeItem('authToken');

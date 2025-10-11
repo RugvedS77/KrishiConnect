@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-
+from starlette_session import SessionMiddleware
+import os
 from database.postgresConn import engine, Base
 from models import all_model
 
@@ -27,6 +28,16 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Krishi Connect",
     lifespan=lifespan
+)
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("Missing SECRET_KEY environment variable for session middleware")
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=SECRET_KEY,
+    cookie_name="krishiconnect_session",
+    same_site="lax"
 )
 
 origins = [

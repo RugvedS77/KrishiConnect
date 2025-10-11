@@ -2,9 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuthStore } from '../authStore';
 import { X, Send, Loader2, Handshake } from 'lucide-react';
+import { API_BASE_URL } from '../api/apiConfig';
 
 const fetchNegotiationHistory = async (contractId, token) => {
-    const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/negotiation-history`, {
+    const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/negotiation-history`, {
         headers: { Authorization: `Bearer ${token}` },
     });
     if (!response.ok) throw new Error("Failed to fetch chat history.");
@@ -12,7 +13,7 @@ const fetchNegotiationHistory = async (contractId, token) => {
 };
 
 export const updateOfferApi = async (contractId, offerData, token) => {
-    const response = await fetch(`http://localhost:8000/api/contracts/${contractId}/update-offer`, {
+    const response = await fetch(`${API_BASE_URL}/api/contracts/${contractId}/update-offer`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(offerData),

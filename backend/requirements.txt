@@ -1,4 +1,6 @@
 fastapi
+scarlette[full]
+starlette_session
 uvicorn[standard]
 sqlalchemy
 psycopg2-binary
@@ -20,3 +22,5 @@ tensorflow-cpu
 numpy
 supabase
 apscheduler
+itsdangerous
+Authlib

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Truck, MapPin, Loader2, RefreshCw } from 'lucide-react';
-
+import { API_BASE_URL } from '../../api/apiConfig';
 /**
  * This file has been corrected to ensure the UI updates when tracking status is refreshed.
  * KEY CHANGES:
@@ -40,7 +40,7 @@ export default function BuyerView({ contracts, setContracts, token }) {
         setTrackingId(shipmentId);
         try {
             const response = await fetch(
-                `http://localhost:8000/api/logistics/shipment/${shipmentId}/track`,
+                `${API_BASE_URL}/api/logistics/shipment/${shipmentId}/track`,
                 {
                     headers: { Authorization: `Bearer ${token}` }
                 }

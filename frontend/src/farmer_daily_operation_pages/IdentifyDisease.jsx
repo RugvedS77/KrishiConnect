@@ -10,12 +10,13 @@ import {
 } from "@heroicons/react/24/outline";
 import SolutionTabs from "../farmer_daily_operation_components/DiseasePage/SolutionTabs";
 import diseaseData from "../assets/disease_chemicals_data.json";
+import { API_BASE_URL } from "../api/apiConfig";
 
 const CROP_CONFIG = {
   cotton: {
     name: "Cotton",
     emoji: "🌱",
-    apiEndpoint: "http://localhost:8000/api/services/cotton-predict",
+    apiEndpoint: `${API_BASE_URL}/api/services/cotton-predict`,
     commonDiseases: [
       "Bacterial Blight",
       "Powdery Mildew",
@@ -29,7 +30,7 @@ const CROP_CONFIG = {
   tomato: {
     name: "Tomato",
     emoji: "🍅",
-    apiEndpoint: "http://localhost:8000/api/services/tomato-predict",
+    apiEndpoint: `${API_BASE_URL}/api/services/tomato-predict`,
     commonDiseases: [
       "Bacterial spot",
       "Early blight",

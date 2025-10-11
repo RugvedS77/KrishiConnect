@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Leaf } from "lucide-react";
 import { useAuthStore } from '../authStore'; // <-- 1. IMPORT THE ZUSTAND STORE
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Reusable SVG Icons (Unchanged) ---
 const GoogleIcon = () => (
@@ -27,8 +28,9 @@ const BuyerLoginPage = () => {
   const navigate = useNavigate();
 
   // --- 2. GET ACTIONS AND STATE FROM THE STORE ---
-  const { login, isLoading } = useAuthStore((state) => ({
+  const { login, loginWithToken, isLoading } = useAuthStore((state) => ({
     login: state.login,
+    loginWithToken: state.loginWithToken,
     isLoading: state.loading,
   }));
 
@@ -59,6 +61,38 @@ const BuyerLoginPage = () => {
       console.error("Login failed:", err.message);
     }
   };
+
+  const handleGoogleLogin = () => {
+    // For the buyer page, we send '?role=buyer'.
+    const backendUrl = `${API_BASE_URL}/api/auth/login/google?role=buyer`;
+    window.open(backendUrl, "width=500,height=600");
+  };
+
+  useEffect(() => {
+        const handleAuthMessage = (event) => {
+            // if (event.origin !== "http://localhost:8000") return;
+
+            const { token } = event.data;
+            if (token) {
+                const user = loginWithToken(token);
+                
+                if (user && user.role === 'buyer') {
+                    console.log("Successful buyer login via Google. Navigating to dashboard.");
+                    // --- THIS IS THE REDIRECT ---
+                    navigate("/buyer", { replace: true });
+                } else {
+                    setError("This Google account is not registered as a buyer.");
+                    useAuthStore.getState().logout();
+                }
+            }
+        };
+
+        window.addEventListener("message", handleAuthMessage);
+
+        return () => {
+            window.removeEventListener("message", handleAuthMessage);
+        };
+    }, [loginWithToken, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-green-600 to-gray-900">
@@ -157,7 +191,7 @@ const BuyerLoginPage = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <button type="button" className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+          <button type="button" onClick={handleGoogleLogin} className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">
             <GoogleIcon />
             <span>Google</span>
           </button>

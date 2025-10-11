@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Leaf } from "lucide-react";
 import { useAuthStore } from '../authStore';
+import { API_BASE_URL } from "../api/apiConfig";
 
 // --- Reusable SVG Icons ---
 const GoogleIcon = () => (
@@ -66,8 +67,9 @@ const BackgroundLeaves = () => {
 
 const FarmerLoginPage = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuthStore((state) => ({
+  const { login, loginWithToken, isLoading } = useAuthStore((state) => ({
     login: state.login,
+    loginWithToken: state.loginWithToken,
     isLoading: state.loading,
   }));
   
@@ -93,6 +95,44 @@ const FarmerLoginPage = () => {
       console.error("Login failed:", err.message);
     }
   };
+
+  // --- NEW: Google Login Logic ---
+    const handleGoogleLogin = () => {
+    // Add '?role=farmer' to the URL to tell the backend what kind of user this is.
+    const backendUrl = `${API_BASE_URL}/api/auth/login/google?role=farmer`;
+    window.open(backendUrl, "oauth-login", "width=500,height=600");
+  };
+
+    useEffect(() => {
+        // This function will listen for the message sent from the pop-up
+        const handleAuthMessage = (event) => {
+            // Security: Only accept messages from your backend's origin
+            // if (event.origin !== "http://localhost:8000") return;
+
+            const { token } = event.data;
+            if (token) {
+                // Use our new store function to process the token
+                const user = loginWithToken(token);
+                
+                // Check the role, just like in your email login
+                if (user && user.role === 'farmer') {
+                    console.log("Successful Google login. Navigating to dashboard.");
+                    navigate("/farmer/os/dashboard", { replace: true });
+                } else {
+                    setError("This Google account is not registered as a farmer.");
+                    useAuthStore.getState().logout(); // Log them out if the role is wrong
+                }
+            }
+        };
+
+        window.addEventListener("message", handleAuthMessage);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("message", handleAuthMessage);
+        };
+    }, [loginWithToken, navigate]); // Dependencies for the effect
+    // ----------------------------
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-green-600 to-gray-900">
@@ -187,7 +227,7 @@ const FarmerLoginPage = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button type="button" className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+            <button type="button" onClick={handleGoogleLogin} className="w-full flex items-center justify-center space-x-3 py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors">
               <GoogleIcon />
               <span>Google</span>
             </button>

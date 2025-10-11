@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../authStore'; // <-- 1. Import Auth Store
 import { Loader2, Inbox, Sparkles, Calendar, MapPin, Package } from 'lucide-react'; // <-- 2. Import Icons
+import { API_BASE_URL } from '../api/apiConfig';
 
 // --- Main Component ---
 export default function FarmerListingsPage() {
@@ -29,7 +30,7 @@ export default function FarmerListingsPage() {
 
     try {
       // This route fetches ALL active listings
-      const response = await fetch("http://localhost:8000/api/croplists/", {
+      const response = await fetch(`${API_BASE_URL}/api/croplists/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

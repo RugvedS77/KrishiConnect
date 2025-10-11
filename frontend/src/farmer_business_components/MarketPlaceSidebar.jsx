@@ -83,16 +83,6 @@ export default function MarketPlaceSidebar() {
         <CustomLink to="/farmer/marketplace/profile" Icon={UserCircle}>
           Farmer Profile
         </CustomLink>
-        <CustomLink to="/farmer/marketplace/support" Icon={HelpCircle}>
-          Support
-        </CustomLink>
-        <button
-          onClick={handleLogout}
-          className="py-2.5 px-4 rounded-lg flex items-center w-full text-left text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200 group"
-        >
-          <LogOut className="mr-3 h-5 w-5 flex-shrink-0" aria-hidden="true" />
-          <span className="truncate">Logout</span>
-        </button>
       </div>
     </div>
   );

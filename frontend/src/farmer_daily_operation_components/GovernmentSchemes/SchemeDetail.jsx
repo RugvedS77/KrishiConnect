@@ -11,8 +11,8 @@ const TabButton = ({ id, title, activeTab, setActiveTab }) => {
       className={`py-3 px-5 text-sm md:text-base font-semibold whitespace-nowrap border-b-2
                   transition-colors duration-200
                   ${isActive
-                    ? 'text-green-600 border-green-600'
-                    : 'text-gray-500 border-transparent hover:text-green-500 hover:border-green-300'
+                    ? 'text-blue-600 border-blue-600'
+                    : 'text-gray-500 border-transparent hover:text-blue-500 hover:border-blue-300'
                   }`}
     >
       {title}
@@ -31,16 +31,16 @@ function SchemeDetail({ scheme }) {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'what_is_it':
-        // The 'prose-green' class themes the raw HTML with our green palette
-        return <div className="prose prose-green max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_what_is_it)} />;
+        // The 'prose-blue' class themes the raw HTML with our blue palette
+        return <div className="prose prose-blue max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_what_is_it)} />;
       case 'eligibility':
-        return <div className="prose prose-green max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_eligibility)} />;
+        return <div className="prose prose-blue max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_eligibility)} />;
       case 'documents':
         return (
           <ul className="space-y-4">
             {scheme.tab_documents.map((doc, index) => (
-              <li key={index} className="flex items-start bg-green-50/50 p-3 rounded-lg">
-                <svg className="flex-shrink-0 w-5 h-5 text-green-500 mr-3 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <li key={index} className="flex items-start bg-blue-50/50 p-3 rounded-lg">
+                <svg className="flex-shrink-0 w-5 h-5 text-blue-500 mr-3 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <span className="text-gray-700">{doc}</span>
@@ -49,7 +49,7 @@ function SchemeDetail({ scheme }) {
           </ul>
         );
       case 'how_to_apply':
-        return <div className="prose prose-green max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_how_to_apply)} />;
+        return <div className="prose prose-blue max-w-none" dangerouslySetInnerHTML={createMarkup(scheme.tab_how_to_apply)} />;
       default:
         return null;
     }
@@ -69,18 +69,18 @@ function SchemeDetail({ scheme }) {
       <h1 className="text-3xl font-bold text-gray-900 mb-4">{scheme.title}</h1>
 
       {/* --- Summary Box --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-green-50 border border-green-200 rounded-lg p-5 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-blue-50 border border-blue-200 rounded-lg p-5 mb-8">
         <div className="flex flex-col">
-          <strong className="text-xs font-medium text-green-700 uppercase tracking-wider mb-1">Benefit</strong>
-          <span className="text-base font-semibold text-green-900">{scheme.detail_summary_benefit}</span>
+          <strong className="text-xs font-medium text-blue-700 uppercase tracking-wider mb-1">Benefit</strong>
+          <span className="text-base font-semibold text-blue-900">{scheme.detail_summary_benefit}</span>
         </div>
         <div className="flex flex-col">
-          <strong className="text-xs font-medium text-green-700 uppercase tracking-wider mb-1">Type</strong>
-          <span className="text-base font-semibold text-green-900">{scheme.detail_summary_type}</span>
+          <strong className="text-xs font-medium text-blue-700 uppercase tracking-wider mb-1">Type</strong>
+          <span className="text-base font-semibold text-blue-900">{scheme.detail_summary_type}</span>
         </div>
         <div className="flex flex-col">
-          <strong className="text-xs font-medium text-green-700 uppercase tracking-wider mb-1">Govt</strong>
-          <span className="text-base font-semibold text-green-900">{scheme.government}</span>
+          <strong className="text-xs font-medium text-blue-700 uppercase tracking-wider mb-1">Govt</strong>
+          <span className="text-base font-semibold text-blue-900">{scheme.government}</span>
         </div>
       </div>
 
@@ -89,8 +89,8 @@ function SchemeDetail({ scheme }) {
         href={scheme.applyUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block bg-green-600 text-white text-base font-semibold no-underline py-3 px-8 rounded-lg mb-8
-                   transition-all duration-300 hover:bg-green-700 shadow-md hover:shadow-lg
+        className="inline-block bg-blue-600 text-white text-base font-semibold no-underline py-3 px-8 rounded-lg mb-8
+                   transition-all duration-300 hover:bg-blue-700 shadow-md hover:shadow-lg
                    hover:-translate-y-0.5 transform"
       >
         Apply on Official Website &rarr;

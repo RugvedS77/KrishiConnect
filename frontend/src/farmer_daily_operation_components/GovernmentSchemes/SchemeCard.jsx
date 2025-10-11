@@ -7,12 +7,12 @@ function SchemeCard({ scheme, onClick }) {
       onClick={onClick}
       className="flex flex-col h-full bg-white border border-gray-200 rounded-xl 
                  shadow-sm p-6 cursor-pointer transition-all duration-300 
-                 hover:shadow-lg hover:-translate-y-1.5 hover:border-green-300"
+                 hover:shadow-lg hover:-translate-y-1.5 hover:border-blue-300"
     >
       {/* --- Header with Tags --- */}
       <div className="flex flex-wrap gap-2 mb-4">
-        {/* Using a consistent green theme for tags */}
-        <span className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
+        {/* Using a consistent blue theme for tags */}
+        <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
           {scheme.government}
         </span>
         <span className="bg-gray-100 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">
@@ -39,7 +39,7 @@ function SchemeCard({ scheme, onClick }) {
       {/* --- Footer with Call to Action --- */}
       <div className="mt-6 pt-4 border-t border-gray-100">
         <div 
-          className="group text-green-600 font-bold text-sm inline-flex items-center"
+          className="group text-blue-600 font-bold text-sm inline-flex items-center"
         >
           See Details & Apply
           {/* Arrow icon moves slightly on hover for a dynamic feel */}

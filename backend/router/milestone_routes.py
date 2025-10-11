@@ -156,38 +156,38 @@ def get_milestones_for_contract(contract_id: int, db: Session = Depends(get_db),
     return milestones
 
 
-# @router.patch("/{milestone_id}/complete", response_model=MilestoneSchema)
-# def complete_milestone_as_farmer(
-#     milestone_id: int,
-#     request: MilestoneUpdateByFarmer,
-#     db: Session = Depends(get_db),
-#     current_user: TokenData = Depends(oauth2.get_current_user)
-# ):
-#     """
-#     [FARMER ONLY] Farmer submits an update for a milestone and marks it complete.
-#     """
-#     farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
-#     milestone = db.query(MilestoneModel).options(joinedload(MilestoneModel.contract)).filter(MilestoneModel.id == milestone_id).first()
+@router.patch("/{milestone_id}/complete", response_model=MilestoneSchema)
+def complete_milestone_as_farmer(
+    milestone_id: int,
+    request: MilestoneUpdateByFarmer,
+    db: Session = Depends(get_db),
+    current_user: TokenData = Depends(oauth2.get_current_user)
+):
+    """
+    [FARMER ONLY] Farmer submits an update for a milestone and marks it complete.
+    """
+    farmer = db.query(UserModel).filter(UserModel.email == current_user.username).first()
+    milestone = db.query(MilestoneModel).options(joinedload(MilestoneModel.contract)).filter(MilestoneModel.id == milestone_id).first()
 
-#     if not milestone:
-#         raise HTTPException(status_code=404, detail="Milestone not found")
+    if not milestone:
+        raise HTTPException(status_code=404, detail="Milestone not found")
 
-#     # Security check: Make sure the logged-in user is the farmer for this contract
-#     if milestone.contract.farmer_id != farmer.id:
-#         raise HTTPException(status_code=403, detail="You are not the farmer for this contract")
+    # Security check: Make sure the logged-in user is the farmer for this contract
+    if milestone.contract.farmer_id != farmer.id:
+        raise HTTPException(status_code=403, detail="You are not the farmer for this contract")
 
-#     if milestone.is_complete:
-#         raise HTTPException(status_code=400, detail="This milestone has already been marked complete")
+    if milestone.is_complete:
+        raise HTTPException(status_code=400, detail="This milestone has already been marked complete")
 
-#     # Run AI analysis on the provided image
-#     ai_notes = analyze_milestone_image(request.image_url) 
+    # Run AI analysis on the provided image
+    ai_notes = analyze_milestone_image(request.image_url) 
 
-#     # Update the milestone with the farmer's proof
-#     milestone.update_text = request.update_text
-#     milestone.image_url = request.image_url
-#     milestone.ai_notes = ai_notes
-#     milestone.is_complete = True  # Mark as complete, ready for buyer review
+    # Update the milestone with the farmer's proof
+    milestone.update_text = request.update_text
+    milestone.image_url = request.image_url
+    milestone.ai_notes = ai_notes
+    milestone.is_complete = True  # Mark as complete, ready for buyer review
     
-#     db.commit()
-#     db.refresh(milestone)
-#     return milestone
+    db.commit()
+    db.refresh(milestone)
+    return milestone

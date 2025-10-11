@@ -61,14 +61,6 @@ export default function FarmOSSidebar() {
             {/* Footer Section with User Links */}
             <div className="p-4 border-t border-slate-700">
                 <NavLink to="/farmer/os/profile" icon={<User size={20} />}>My Profile</NavLink>
-                <NavLink to="/farmer/os/support" icon={<CircleHelp size={20} />}>Support</NavLink>
-                 <button
-                    onClick={logout}
-                    className="flex items-center w-full p-3 my-1 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all duration-200"
-                >
-                    <LogOut size={20} />
-                    <span className="ml-4 text-sm font-medium">Logout</span>
-                </button>
             </div>
         </div>
     );

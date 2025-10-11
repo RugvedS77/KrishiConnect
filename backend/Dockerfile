@@ -1,14 +1,19 @@
-#/backend/Dockerfile
+# backend/Dockerfile
+
 FROM python:3.12-slim
 
 WORKDIR /app
 
 COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r  requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+# Make the startup script executable
+RUN chmod +x start.sh
 
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose the correct port for Hugging Face
+EXPOSE 7860
+
+# This is the PRODUCTION command
+CMD ["./start.sh"]

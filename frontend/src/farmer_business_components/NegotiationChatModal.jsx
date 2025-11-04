@@ -48,15 +48,31 @@ export default function NegotiationChatModal({ proposal, onClose, onOfferUpdated
     useEffect(() => {
         if (!user?.id || !proposal?.id) return;
 
+        let wsUrl;
+                if (API_BASE_URL != 'http://localhost:8000') {
+                    // We are in production (on Vercel)
+                    // Replace 'https://' with 'wss://'
+                    wsUrl = API_BASE_URL.replace(/^https:/i, 'wss:');
+                } else {
+                    // We are in local development
+                    wsUrl = 'ws://localhost:8000';
+                }
+            
+                // 2. Build the full URL
+                const socketURL = `${wsUrl}/ws/negotiate/${proposal.id}/${user.id}`;
+                console.log("Connecting to WebSocket at:", socketURL);
+
+                
+
         const connect = async () => {
             try {
                 const history = await fetchNegotiationHistory(proposal.id, token);
                 setMessages(history);
                 setLoadingHistory(false);
 
-                const socket = new WebSocket(`ws://localhost:8000/ws/negotiate/${proposal.id}/${user.id}`);
+                const socket = new WebSocket(socketURL);
                 socketRef.current = socket;
-
+                
                 socket.onopen = () => console.log("WebSocket connected!");
                 socket.onclose = () => console.log("WebSocket disconnected.");
                 socket.onerror = () => setError("WebSocket error. Please refresh.");

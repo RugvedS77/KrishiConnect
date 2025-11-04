@@ -16,6 +16,7 @@ import {
   LifeBuoy,
   LogOut,
 } from 'lucide-react';
+import { API_BASE_URL } from '../api/apiConfig';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);

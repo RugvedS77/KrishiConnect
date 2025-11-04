@@ -19,7 +19,7 @@ router = APIRouter(
     tags=["Crop Lists"]
 )
 
-@router.post("/", response_model=CropListResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=CropListResponse, status_code=status.HTTP_201_CREATED)
 def create_croplist(
     request: CropListCreate,
     db: Session = Depends(get_db),
